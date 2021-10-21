@@ -8,21 +8,21 @@ use Illuminate\Contracts\Routing\UrlRoutable;
 
 class DiscordID implements UrlRoutable
 {
-    public string $username = '';
+    public string $discordID = '';
 
     public function getRouteKey(): string
     {
-        return $this->username;
+        return $this->discordID;
     }
 
     public function getRouteKeyName(): string
     {
-        return 'username';
+        return 'discordID';
     }
 
     public function resolveRouteBinding($value, $field = null): self
     {
-        return tap(new self, fn (self $instance) => $instance->username = $value);
+        return tap(new self, fn (self $instance) => $instance->discordID = $value);
     }
 
     public function resolveChildRouteBinding($childType, $value, $field): void
@@ -32,6 +32,6 @@ class DiscordID implements UrlRoutable
 
     public function __toString()
     {
-        return $this->username;
+        return $this->discordID;
     }
 }

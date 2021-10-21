@@ -10,28 +10,41 @@
 /** @var \App\Models\WikiPage $page */
 @endphp
 
+@section('actions')
+    <input type="submit" class="menu-item form-submit" value="@lang('app.form.save')" form="page-editor">
+@endsection
+
 @section('body')
-    <form class="form">
-        @csrf
-        <div>
-            Title: <input class="form-input" type="text" name="slug" value="{{$page->title}}">
+    <div class="layout-center">
+        <div class="layout-page">
+            <form id="page-editor" class="form" method="post" action="{{route('wiki.store', ['slug' => $page->slug, 'locale' => app()->getLocale()])}}" enctype="multipart/form-data">
+                @csrf
+                <div class="form-row">
+                    <label>Title</label>
+                    <input class="form-input" type="text" name="title" value="{{$page->title}}">
+                </div>
+                <div class="form-row">
+                    <label>Locale</label>
+                    <input class="form-input" type="text" name="locale" value="{{$page->locale}}">
+                </div>
+                <div class="form-row">
+                    <label>Slug</label>
+                    <input class="form-input" type="text" name="slug" value="{{$page->slug}}">
+                </div>
+                <div class="form-row">
+                    <label>Content</label>
+                    <input type="hidden" id="editor-input" name="content" value="{{$page->content}}">
+                    <div class="form-input" style="min-width: 100%;min-height: 12rem">
+                        <div id="editor">{{$page->content}}</div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label>Preview</label>
+                    <div id="preview" class="form-preview form-input article"></div>
+                </div>
+            </form>
         </div>
-        <div>
-            Locale: <input class="form-input" type="text" name="slug" value="{{$page->locale}}">
-        </div>
-        <div>
-            Slug: <input class="form-input" type="text" name="slug" value="{{$page->slug}}">
-        </div>
-        <div style="display: flex; flex-direction: row">
-            <div style="min-height: 12rem; min-width: 50%;" class="form-input">
-                <textarea name="editor" id="editor">{{$page->content}}</textarea>
-            </div>
-            <div id="preview" class="form-preview form-input"></div>
-        </div>
-        <div>
-            <input type="submit" value="@lang('app.form.save')">
-        </div>
-    </form>
+    </div>
     <script>
         const editor = ace.edit("editor", {
             theme: "ace/theme/twilight",
@@ -55,6 +68,7 @@
             document.getElementById('preview').innerHTML = preview.content;
         };
         editor.on('change', async function() {
+            document.getElementById('editor-input').value = editor.getValue();
             if (interval) {
                 clearTimeout(interval);
             }

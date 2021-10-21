@@ -11,7 +11,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Spatie\RouteAttributes\Attributes\Get;
 
-final class Profile extends Action
+final class ViewProfile extends Action
 {
     #[Get(uri: '/{locale}/u/{discordID}', name: 'profile', middleware: 'web')]
     public function __invoke(Locale $locale, DiscordID $discordID): \Illuminate\Contracts\View\View

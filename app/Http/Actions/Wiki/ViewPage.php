@@ -24,7 +24,7 @@ final class ViewPage extends Action
     public function __invoke(Request $request, Locale $locale, Slug $slug): View
     {
         $page = $this->pageRepository->findBySlug($locale, $slug) ?? $this->pageRepository->make404($slug);
-        return view($page->getKey() ? 'wiki.page' : 'wiki.page_editor', [
+        return view($page->getKey() && $request->get('mode') !== 'edit' ? 'wiki.page' : 'wiki.page_editor', [
             'page' => $page,
             'errors' => null,
         ]);

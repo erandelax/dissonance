@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Concerns\HasUUIDKey;
+use App\Services\Wiki\MarkupRender;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $title
  * @property string $content
  * @property string $refs
+ * @property-read string $html
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|WikiPage newModelQuery()
@@ -31,7 +34,14 @@ use Illuminate\Database\Eloquent\Model;
  */
 class WikiPage extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUUIDKey;
+
+    protected $primaryKey = 'guid';
 
     protected $guarded = ['guid'];
+
+    public function getHtmlAttribute(): string
+    {
+        return app()->make(MarkupRender::class)->toHtml($this->content ?? '');
+    }
 }

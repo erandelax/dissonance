@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Actions\Pages;
 
 use App\Entities\DiscordID;
+use App\Entities\Locale;
 use App\Http\Actions\Action;
-use App\Http\Requests\UpdateProfileRequest;
+use App\Http\Requests\StoreProfileRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\UploadedFile;
@@ -14,10 +15,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Spatie\RouteAttributes\Attributes\Post;
 
-final class UpdateProfile extends Action
+final class StoreProfile extends Action
 {
     #[Post(uri: '/{locale}/u/{discordID}', name: 'profile', middleware: 'web')]
-    public function __invoke(DiscordID $discordID, UpdateProfileRequest $updateRequest): RedirectResponse
+    public function __invoke(Locale $locale, DiscordID $discordID, StoreProfileRequest $updateRequest): RedirectResponse
     {
         $user = Auth::user();
         $profileOwner = User::whereDiscordId($discordID)->firstOrFail();
@@ -35,6 +36,6 @@ final class UpdateProfile extends Action
             }
             $profileOwner->save();
         }
-        return redirect(route('profile', ['discordID' => $profileOwner->discord_id]));
+        return redirect(route('profile', ['discordID' => $profileOwner->discord_id, 'locale' => $locale]));
     }
 }

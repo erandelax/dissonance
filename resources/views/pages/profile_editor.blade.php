@@ -5,12 +5,14 @@
 @php
 use Illuminate\Support\Facades\Session;
 @endphp
-
+@section('actions')
+    <input type="submit" class="menu-item form-submit" value="@lang('app.form.save')" form="profile-editor">
+@endsection
 @section('body')
     <div class="layout-center">
         <div class="layout-page">
             <a href="{{route('oauth.logout')}}">@lang('app.auth.logout')</a>
-            <form class="form" method="post" action="{{route('profile', ['discordID' => $user->discord_id, 'locale' => app()->getLocale()])}}" enctype="multipart/form-data">
+            <form id="profile-editor" class="form" method="post" action="{{route('profile', ['discordID' => $user->discord_id, 'locale' => app()->getLocale()])}}" enctype="multipart/form-data">
                 @csrf
                 <p>
                     <label for="profile-avatar" style="cursor:pointer"><img id="profile-avatar-preview" class="user-avatar--large" src="{{$user->avatar}}"/></label>
@@ -30,7 +32,6 @@ use Illuminate\Support\Facades\Session;
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
-                <p><input type="submit" value="@lang('app.form.save')" class="form-submit"></p>
             </form>
             <script>
                 document.getElementById('profile-avatar').addEventListener('change', function(e) {
