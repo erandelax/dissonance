@@ -2,7 +2,7 @@
 
 @section('title', $page->title)
 
-@can('update-page')
+@can('update-page', $page)
 @section('actions')
 <a class="menu-item" href="{{route('wiki', ['locale' => app()->getLocale(), 'slug' => $page->slug, 'mode' => 'edit'])}}">Edit</a>
 @endsection
