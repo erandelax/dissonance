@@ -60,6 +60,13 @@
                 <a href="#" class="nav-link">Docs</a>
             </li>
             --}}
+            <form class="form-inline d-none d-lg-flex ml-auto" action="{{route('search', ['locale' => app()->getLocale()])}}" method="get">
+                <input type="text" class="form-control" placeholder="Search" required="required" id="navbar-search" name="q" value="{{request()->get('q')}}">
+                <label class="nav-link" for="navbar-search">
+                    <i class="fa fa-search"></i>
+                    <input type="submit" name="submit" form="profile-editor" style="display: none">
+                </label>
+            </form>
             @yield('actions')
             @guest
             <li class="nav-item dropdown with-arrow">
@@ -113,7 +120,24 @@
 
     <!-- Sidebar start -->
     <div class="sidebar">
-        <!-- Reference: https://www.gethalfmoon.com/docs/sidebar -->
+        <div class="sidebar-menu">
+            <form class="sidebar-content" method="get" action="{{route('search', ['locale' => app()->getLocale()])}}">
+                <input type="text" class="form-control" placeholder="Search" name="q" value="{{request()->get('q')}}">
+                <input type="submit" name="submit" form="profile-editor" style="display: none">
+                <div class="mt-10 font-size-12">
+                    Press <kbd>Enter</kbd> to search
+                </div>
+            </form>
+            {{--<h5 class="sidebar-title">Getting started</h5>
+            <div class="sidebar-divider"></div>
+            <a href="#" class="sidebar-link active">Installation</a>
+            <a href="#" class="sidebar-link">CLI commands</a>
+            <br>--}}
+            <h5 class="sidebar-title">{{config('app.name')}}</h5>
+            <div class="sidebar-divider"></div>
+            <a href="{{route('profile.list', ['locale' => app()->getLocale()])}}" class="sidebar-link"><i class="fas fa-users"></i>&nbsp;Users</a>
+            <a href="{{route('wiki', ['locale' => app()->getLocale()])}}" class="sidebar-link"><i class="fas fa-question"></i>&nbsp;Wiki</a>
+        </div>
     </div>
     <!-- Sidebar end -->
 
