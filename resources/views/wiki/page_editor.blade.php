@@ -31,8 +31,12 @@
 @push('scripts')
 <script>
     window.addEventListener('DOMContentLoaded', function(){
+        var theme = "ace/theme/tomorrow_night"
+        if (halfmoon.getPreferredMode() == "light-mode" || halfmoon.getPreferredMode() == "not-set") {
+            theme = "ace/theme/chrome"
+        }
         const editor = ace.edit("field-content-ace", {
-            theme: "ace/theme/tomorrow_night",
+            theme: theme,
             mode: "ace/mode/markdown",
             minLines: 10,
             maxLines: 30,
