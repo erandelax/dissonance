@@ -32,10 +32,10 @@
                     @endforeach
                 </select>
             </div>
-            <div class="form-group">
+            {{--<div class="form-group">
                 <label for="field-email">Email</label>
                 <input type="text" class="form-control" id="field-email" placeholder="Locale"value="{{$user->email}}" disabled>
-            </div>
+            </div>--}}
             <div class="form-group">
                 <label for="field-discord_id">DiscordID</label>
                 <input type="text" class="form-control" id="field-discord_id" placeholder="DiscordID" value="{{$user->discord_id}}" disabled>
