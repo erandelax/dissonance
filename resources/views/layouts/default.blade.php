@@ -47,7 +47,7 @@
             <span class="d-none d-sm-flex">{{config('app.name')}}</span>
         </a>
         <ul class="navbar-nav d-none d-lg-flex"> <!-- d-none = display: none, d-lg-flex = display: flex on large screens and up (width > 992px) -->
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a href="{{route('wiki', ['locale' => app()->getLocale()])}}" class="nav-link"><i class="fas fa-question"></i>&nbsp;Wiki</a>
             </li>
             <li class="nav-item">
