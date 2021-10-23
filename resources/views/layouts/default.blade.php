@@ -16,7 +16,11 @@
     <link href="{{asset('vendor/halfmoon/css/halfmoon-variables.css')}}" rel="stylesheet"/>
     <script src="https://kit.fontawesome.com/7bc3a55a74.js" crossorigin="anonymous"></script>
     <script src="{{asset('js/app.js')}}"></script>
-
+    <style>
+        p img {
+            max-width: 100%;
+        }
+    </style>
     @stack('styles')
     @stack('scripts')
 </head>
