@@ -15,7 +15,7 @@ final class Preview extends Action
     public function __invoke(MarkupRender $markupRender, Request $request)
     {
         return response()->json([
-            'content' => $markupRender->toHtml($request->input('content','')),
+            'content' => $markupRender->toHtml($request->input('content','') ?? ''),
         ]);
     }
 }

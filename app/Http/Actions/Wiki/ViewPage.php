@@ -81,12 +81,12 @@ final class ViewPage extends Action
         //     HTML renderers: Combined, Inline, JsonHtml, SideBySide
         $renderer = RendererFactory::make('Combined',  [
             // how detailed the rendered HTML in-line diff is? (none, line, word, char)
-            'detailLevel' => 'none',
+            'detailLevel' => 'line',
             // renderer language: eng, cht, chs, jpn, ...
             // or an array which has the same keys with a language file
             'language' => 'eng',
             // show line numbers in HTML renderers
-            'lineNumbers' => false,
+            'lineNumbers' => true,
             // show a separator between different diff hunks in HTML renderers
             'separateBlock' => false,
             // show the (table) header

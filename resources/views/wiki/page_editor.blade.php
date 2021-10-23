@@ -12,47 +12,31 @@
 
 @section('actions')
     @include('partials.page_revisions_menu', ['page' => $page])
-    <input type="submit" name="submit" class="menu-item form-submit" value="@lang('app.form.save')" form="page-editor">
+    <li class="nav-item">
+        <label class="nav-link">
+            @lang('app.form.save')
+            <input type="submit" name="submit" form="page-editor" style="display: none">
+        </label>
+    </li>
 @endsection
 
-@section('body')
-    <div class="layout-columns">
-        <form class="column form" id="page-editor" method="post" action="{{route('wiki.store', ['slug' => $page->slug, 'locale' => app()->getLocale()])}}" enctype="multipart/form-data">
-            @csrf
-            <div class="form-row">
-                <label>Title</label>
-                <input class="form-input" type="text" name="title" value="{{$page->title}}">
-            </div>
-            <div class="form-row">
-                <label>Locale</label>
-                <input class="form-input" type="text" name="locale" value="{{$page->locale}}">
-            </div>
-            <div class="form-row">
-                <label>Slug</label>
-                <input class="form-input" type="text" name="slug" value="{{$page->slug}}">
-            </div>
-            <div class="form-row fill">
-                <label>Content</label>
-                <input type="hidden" id="editor-input" name="content" value="{{$page->content}}">
-                <div class="form-input" style="min-width: 100%;padding:0">
-                    <div id="editor">{{$page->content}}</div>
-                </div>
-            </div>
-        </form>
-        <div class="column form">
-            <div class="form-row">
-                <label>Preview</label>
-                <div id="preview" class="form-preview form-input article"></div>
-            </div>
-        </div>
-    </div>
-    <script>
-        const editor = ace.edit("editor", {
-            theme: "ace/theme/twilight",
+@push('styles')
+<style>
+    .ace-tomorrow-night {
+        background: transparent;
+    }
+</style>
+@endpush
+
+@push('scripts')
+<script>
+    window.addEventListener('DOMContentLoaded', function(){
+        const editor = ace.edit("field-content-ace", {
+            theme: "ace/theme/tomorrow_night",
             mode: "ace/mode/markdown",
-            minLines: 1,
-            maxLines: Infinity,
-            //showLineNumbers: false,
+            minLines: 10,
+            maxLines: 30,
+            showLineNumbers: true,
             cursorStyle: "smooth",
             fontSize: "14px",
             fontFamily: "monospace",
@@ -61,7 +45,7 @@
             printMargin: true,
             wrap: true,
             indentedSoftWrap: true,
-            showGutter:false,
+            showGutter: false,
         })
         let interval = null;
         const refresher = async function() {
@@ -71,7 +55,7 @@
             document.getElementById('preview').innerHTML = preview.content;
         };
         editor.on('change', async function() {
-            document.getElementById('editor-input').value = editor.getValue();
+            document.getElementById('field-content').value = editor.getValue();
             if (interval) {
                 clearTimeout(interval);
             }
@@ -81,5 +65,40 @@
         window.addEventListener('resize',function(){
             editor.resize()
         })
-    </script>
+    })
+</script>
+@endpush
+
+@section('body')
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-4">
+                    <form action="{{route('wiki.store', ['slug' => $page->slug, 'locale' => app()->getLocale()])}}" enctype="multipart/form-data" method="post" class="w-400 mw-full" id="page-editor">
+                        @csrf
+                        <div class="form-group">
+                            <label for="field-title" class="required">Title</label>
+                            <input type="text" class="form-control" id="field-title" placeholder="Full name" name="title" required="required" value="{{$page->title}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="field-locale" class="required">Locale</label>
+                            <input type="text" class="form-control" id="field-locale" placeholder="Full name" name="locale" required="required" value="{{$page->locale}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="field-slug">Slug</label>
+                            <input type="text" class="form-control" id="field-slug" placeholder="Full name" name="slug" value="{{$page->slug}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="field-content">Content</label>
+                            <input type="hidden" class="form-control" id="field-content" name="content" value="{{$page->content}}">
+                            <div class="form-control" style="height:auto"><div id="field-content-ace">{{$page->content}}</div></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-6">
+                    <div id="preview" class="content">{!! $page->content !!}</div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

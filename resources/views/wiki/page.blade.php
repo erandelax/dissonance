@@ -4,15 +4,14 @@
 
 @can('update-page', $page)
 @section('actions')
-<a class="menu-item" href="{{route('wiki', ['locale' => app()->getLocale(), 'slug' => $page->slug, 'mode' => 'edit'])}}">Edit</a>
+<li class="nav-item">
+    <a href="{{route('wiki', ['locale' => app()->getLocale(), 'slug' => $page->slug, 'mode' => 'edit'])}}" class="nav-link">Edit</a>
+</li>
 @endsection
 @endcan
 
 @section('body')
-
-    <div class="layout-center">
-        <div class="layout-page article">
+    <div class="content">
         {!! $page->html !!}
-        </div>
     </div>
 @endsection

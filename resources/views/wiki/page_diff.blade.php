@@ -8,40 +8,67 @@
 
 @section('actions')
     @include('partials.page_revisions_menu', ['page' => $page])
-    <input name="submit" type="submit" class="menu-item form-submit" value="@lang('app.form.restore')" form="page-editor">
+    <li class="nav-item">
+        <label class="nav-link">
+            @lang('app.form.restore')
+            <input type="submit" name="submit" form="page-editor" style="display: none">
+        </label>
+    </li>
 @endsection
 
+@push('styles')
+<style>
+    .diff-wrapper tr[data-type='-'] {
+       background: rgba(255,0,0,.1)
+    }
+    .diff-wrapper tr[data-type='+'] {
+        background: rgba(0,255,0,.1)
+    }
+    .diff-wrapper tr[data-type='!'] {
+        background: rgba(0,0,0,.05);
+    }
+    .diff-wrapper del, .diff-wrapper ins {
+        text-decoration: none;
+    }
+    .diff-wrapper del {
+        background: rgba(255,0,0,.1);
+    }
+    .diff-wrapper ins {
+        background: rgba(0,255,0,.1);
+    }
+</style>
+@endpush
+
 @section('body')
-    <div class="layout-columns">
-        <form class="column form" id="page-editor" method="post" action="{{route('wiki.store', ['slug' => $page->slug, 'locale' => app()->getLocale()])}}" enctype="multipart/form-data">
-            @csrf
-            <input type="hidden" name="revision" value="{{$revision->id}}">
-            <div class="form-row">
-                <label>Title</label>
-                <input class="form-input" type="text" value="{{$page->title}}" disabled>
-            </div>
-            <div class="form-row">
-                <label>Locale</label>
-                <input class="form-input" type="text" value="{{$page->locale}}" disabled>
-            </div>
-            <div class="form-row">
-                <label>Slug</label>
-                <input class="form-input" type="text" value="{{$page->slug}}" disabled>
-            </div>
-            <div class="form-row fill">
-                <label>Content</label>
-                <div class="form-input" style="min-width: 100%;padding:0">
-                    <div id="editor">
-                        {!! $diff !!}
-                    </div>
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-4">
+                    <form action="{{route('wiki.store', ['slug' => $page->slug, 'locale' => app()->getLocale()])}}" enctype="multipart/form-data" method="post" class="w-400 mw-full" id="page-editor">
+                        @csrf
+                        <input type="hidden" name="revision" value="{{$revision->id}}">
+                        <div class="form-group">
+                            <label for="field-title" class="required">Title</label>
+                            <input type="text" class="form-control" id="field-title" placeholder="Full name" name="title" required="required" value="{{$page->title}}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="field-locale" class="required">Locale</label>
+                            <input type="text" class="form-control" id="field-locale" placeholder="Full name" name="locale" required="required" value="{{$page->locale}}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="field-slug">Slug</label>
+                            <input type="text" class="form-control" id="field-slug" placeholder="Full name" name="slug" value="{{$page->slug}}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="field-content">Content</label>
+                            <div class="form-control" style="height:auto">
+                                {!! $diff !!}
+                            </div>
+                        </div>
+                    </form>
                 </div>
-            </div>
-        </form>
-        <div class="column form">
-            <div class="form-row">
-                <label>Preview</label>
-                <div id="preview" class="form-preview form-input article">
-                    {!! $html !!}
+                <div class="col-6">
+                    <div id="preview" class="content">{!! $html !!}</div>
                 </div>
             </div>
         </div>

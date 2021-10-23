@@ -15,6 +15,8 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'logo' => env('APP_LOGO', 'https://avatars.githubusercontent.com/u/49849627?s=200&v=4'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
