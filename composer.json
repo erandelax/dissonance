@@ -17,13 +17,14 @@
         "laravel/tinker": "^2.5",
         "socialiteproviders/discord": "^4.1",
         "spatie/laravel-route-attributes": "^1.8",
+        "spiral/roadrunner": "^2.5",
         "tightenco/ziggy": "^1.4"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.10",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
-        "laravel/sail": "^1.0.1",
+        "laravel/sail": "^1.12",
         "mockery/mockery": "^1.4.2",
         "nunomaduro/collision": "^5.0",
         "phpunit/phpunit": "^9.3.3"
