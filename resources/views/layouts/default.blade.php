@@ -62,9 +62,9 @@
             --}}
             <form class="form-inline d-none d-lg-flex ml-auto" action="{{route('search', ['locale' => app()->getLocale()])}}" method="get">
                 <input type="text" class="form-control" placeholder="Search" required="required" id="navbar-search" name="q" value="{{request()->get('q')}}">
-                <label class="nav-link" for="navbar-search">
+                <label class="nav-link">
                     <i class="fa fa-search"></i>
-                    <input type="submit" name="submit" form="profile-editor" style="display: none">
+                    <input type="submit" name="submit" style="display: none">
                 </label>
             </form>
             @yield('actions')
