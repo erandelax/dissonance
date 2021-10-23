@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Concerns\HasUUIDKey;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -51,6 +53,12 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string|null $character_id
+ * @property-read \App\Models\Character|null $character
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Character[] $characters
+ * @property-read int|null $characters_count
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCharacterId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereLocale($value)
  */
 class User extends Authenticatable
 {
@@ -66,4 +74,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function characters(): HasMany
+    {
+        return $this->hasMany(Character::class, 'user_id');
+    }
+
+    public function character(): BelongsTo
+    {
+        return $this->belongsTo(Character::class, 'character_id');
+    }
 }

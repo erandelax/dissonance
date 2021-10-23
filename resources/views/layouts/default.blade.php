@@ -53,6 +53,9 @@
             <li class="nav-item">
                 <a href="{{config('services.discord.invite_uri')}}" class="nav-link"><i class="fab fa-discord"></i>&nbsp;Discord</a>
             </li>
+            <li class="nav-item">
+                <a href="{{route('characters.list', ['locale' => app()->getLocale()])}}" class="nav-link"><i class="fas fa-city"></i>&nbsp;C&O</a>
+            </li>
         </ul>
         <ul class="navbar-nav ml-auto"> <!-- ml-auto = margin-left: auto -->
             {{--
@@ -137,6 +140,7 @@
             <div class="sidebar-divider"></div>
             <a href="{{route('profile.list', ['locale' => app()->getLocale()])}}" class="sidebar-link"><i class="fas fa-users"></i>&nbsp;Users</a>
             <a href="{{route('wiki', ['locale' => app()->getLocale()])}}" class="sidebar-link"><i class="fas fa-question"></i>&nbsp;Wiki</a>
+            <a href="{{route('characters.list', ['locale' => app()->getLocale()])}}" class="sidebar-link"><i class="fas fa-city"></i>&nbsp;Characters & Organizations</a>
         </div>
     </div>
     <!-- Sidebar end -->

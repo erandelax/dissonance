@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Spatie\RouteAttributes\Attributes\Get;
 
-final class BrowserProfiles extends Action
+final class BrowseProfiles extends Action
 {
     #[Get(uri: '/{locale}/u', name: 'profile.list', middleware: 'web')]
     public function __invoke(Locale $locale, DiscordID $discordID): \Illuminate\Contracts\View\View
