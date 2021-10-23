@@ -7,6 +7,7 @@ namespace App\Repositories\Wiki;
 use App\Entities\Locale;
 use App\Entities\Wiki\Page\Slug;
 use App\Models\Page;
+use Illuminate\Support\Facades\Gate;
 
 class PageRepository
 {
@@ -16,7 +17,7 @@ class PageRepository
             'slug' => (string)$slug,
             'title' => 'Page not found',
             'locale' => app()->getLocale(),
-            'content' => 'Seems like this page does not exist it. Want to create it?',
+            'content' => Gate::check('update-page') ? 'Seems like this page does not exist yet. Want to create it?' : 'Seems like this page does not exist yet. Authorize if you want to change it.',
         ]);
     }
 

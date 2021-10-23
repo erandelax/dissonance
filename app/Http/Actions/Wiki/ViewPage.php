@@ -13,6 +13,7 @@ use App\Repositories\Wiki\PageRepository;
 use App\Services\Wiki\MarkupRender;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Jfcherng\Diff\Differ;
 use Jfcherng\Diff\Factory\RendererFactory;
 use Jfcherng\Diff\Renderer\RendererConstant;
@@ -32,25 +33,27 @@ final class ViewPage extends Action
     {
         $mode = $request->get('mode');
         $view = 'wiki.page';
-        if ('edit' === $mode) {
-            $view = 'wiki.page_editor';
-        }
-
         $page = $this->pageRepository->findBySlug($locale, $slug) ?? $this->pageRepository->make404($slug);
-        if ('restore' === $mode && $revisionID = $request->get('revision')) {
-            /** @var PageRevision $revision */
-            $revision = $this->pageRevisionRepository->findByID($revisionID);
-            $from = $page->content;
-            $to = $revision->data['content'] ?? $page->content;
-            $diff = $this->getDifference($from, $to);
-            if (null !== $revision) {
-                return view('wiki.page_diff', [
-                    'page' => $page->fill($revision->data),
-                    'revision' => $revision,
-                    'diff' => $diff,
-                    'html' =>  $markupRender->toHtml($page->content ?? ''),
-                    'errors' => null,
-                ]);
+        if (Gate::allows('update-page', $page)) {
+            if ('edit' === $mode) {
+                $view = 'wiki.page_editor';
+            }
+
+            if ('restore' === $mode && $revisionID = $request->get('revision')) {
+                /** @var PageRevision $revision */
+                $revision = $this->pageRevisionRepository->findByID($revisionID);
+                $from = $page->content;
+                $to = $revision->data['content'] ?? $page->content;
+                $diff = $this->getDifference($from, $to);
+                if (null !== $revision) {
+                    return view('wiki.page_diff', [
+                        'page' => $page->fill($revision->data),
+                        'revision' => $revision,
+                        'diff' => $diff,
+                        'html' =>  $markupRender->toHtml($page->content ?? ''),
+                        'errors' => null,
+                    ]);
+                }
             }
         }
 

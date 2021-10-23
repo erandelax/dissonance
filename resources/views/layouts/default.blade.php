@@ -212,7 +212,7 @@
         @endauth
         @guest
             <a class="menu-item" href="{{route('oauth.discord')}}">
-                <img class="user-avatar" src=""/><div>{{__('app.auth.guest')}}</div>
+                <img class="user-avatar" src="https://www.gravatar.com/avatar"/><div>{{__('app.auth.guest')}}</div>
             </a>
         @endguest
         </span>

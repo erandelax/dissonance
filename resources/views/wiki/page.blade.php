@@ -2,19 +2,17 @@
 
 @section('title', $page->title)
 
+@can('update-page')
 @section('actions')
 <a class="menu-item" href="{{route('wiki', ['locale' => app()->getLocale(), 'slug' => $page->slug, 'mode' => 'edit'])}}">Edit</a>
 @endsection
+@endcan
 
 @section('body')
 
     <div class="layout-center">
         <div class="layout-page article">
-        @if (null === $page)
-                ERROR: PAGE NOT FOUND
-        @else
-            {!! $page->html !!}
-        @endif
+        {!! $page->html !!}
         </div>
     </div>
 @endsection
