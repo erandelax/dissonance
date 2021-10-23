@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Actions\Pages;
+namespace App\Http\Actions\Profiles;
 
 use App\Entities\DiscordID;
 use App\Entities\Locale;

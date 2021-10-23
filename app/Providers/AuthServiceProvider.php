@@ -30,5 +30,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('update-page', function (User $user, Page $page) {
             return $user->getKey() !== null;
         });
+
+        Gate::define('update-user', function (User $user, User $target) {
+            return $user->getKey() === $target->getKey();
+        });
     }
 }
