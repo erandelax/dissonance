@@ -8,6 +8,7 @@ return [
     ],
     'form' => [
         'save' => 'Save',
+        'restore' => 'Restore',
     ],
     'profile' => [
         'name' => 'Name',

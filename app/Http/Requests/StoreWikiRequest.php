@@ -27,6 +27,7 @@ class StoreWikiRequest extends FormRequest
             'slug' => ['nullable','string'],
             'title' => ['nullable','string'],
             'content' => ['nullable','string'],
+            'revision' => ['nullable','uuid'],
         ];
     }
 }

@@ -6,13 +6,13 @@ namespace App\Repositories\Wiki;
 
 use App\Entities\Locale;
 use App\Entities\Wiki\Page\Slug;
-use App\Models\WikiPage;
+use App\Models\Page;
 
 class PageRepository
 {
-    public function make404(Slug $slug): WikiPage
+    public function make404(Slug $slug): Page
     {
-        return WikiPage::make([
+        return Page::make([
             'slug' => (string)$slug,
             'title' => 'Page not found',
             'locale' => app()->getLocale(),
@@ -20,8 +20,8 @@ class PageRepository
         ]);
     }
 
-    public function findBySlug(Locale $locale, Slug $slug): ?WikiPage
+    public function findBySlug(Locale $locale, Slug $slug): ?Page
     {
-        return WikiPage::whereLocale($locale)->whereSlug($slug)->first();
+        return Page::whereLocale($locale)->whereSlug($slug)->first();
     }
 }

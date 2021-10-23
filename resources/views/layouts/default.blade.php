@@ -6,30 +6,6 @@
     <title>@yield('title') - {{ config('app.name') }}</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" type="text/css" rel="stylesheet">
     @routes
-    <script>
-        class Card extends HTMLElement {
-            constructor() {
-                super();
-            }
-            connectedCallback(){
-                this.attachShadow({mode: 'open'});
-                const card = document.createElement('DIV');
-                card.classList.add('wiki-card');
-                card.innerHTML = '<div style="border-bottom:1px solid white;padding:.1rem .2rem;">About</div><div style="padding:.1rem .2rem;">Just something about it</div>';
-                const style = document.createElement('style');
-                style.textContent = '.wiki-card { border: 1px solid white; float:right; min-width: 180px; display:flex; flex-direction: column }';
-                const image = this.getAttribute('img')
-                console.log(this)
-                if (image) {
-                    const img = document.createElement('IMG');
-                    img.src = image;
-                    card.prepend(img)
-                }
-                this.shadowRoot.append(style, card);
-            }
-        }
-        customElements.define('wiki-card', Card);
-    </script>
     <style>
         html {
             font-family: monospace;
@@ -51,6 +27,9 @@
             overflow-y: auto;
             display: flex;
             flex-direction: column;
+        }
+        .layout-center {
+            height: 100%;
         }
         .layout-center, .layout-status-bar {
             width: 100%;
@@ -136,6 +115,75 @@
         }
         .article a {
             text-decoration: underline;
+        }
+        .layout-columns {
+            height: 100%;
+            display: flex;
+            padding: .5rem 1rem;
+        }
+        .layout-columns .column {
+            flex-grow: 50;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: space-between;
+        }
+        .form.column .form-row {
+            flex-grow: 1;
+        }
+        .form.column .form-row.fill {
+            flex-grow: 1000;
+        }
+        .form.column .form-row.fill .form-input{
+            height: 100%;
+        }
+        .layout-columns .column + .column {
+            margin-left: 1rem;
+        }
+        .menu-popup {
+            cursor: default;
+        }
+        .menu-popup .menu {
+            display: none;
+        }
+        .menu-popup:hover .menu {
+            display: block;
+            flex-direction: column;
+            position: fixed;
+            top: 2.3rem;
+            background: #131313;
+        }
+        .diff-wrapper .n-old, .diff-wrapper .old, .diff-wrapper .n-new, .diff-wrapper .new {
+            background: transparent;
+        }
+        .diff-wrapper td {
+            display: block;
+            min-height: 1rem;
+        }
+        .diff-wrapper del, .diff-wrapper tr[data-type='-'] {
+            background: #633;
+            text-decoration: none;
+        }
+        .diff-wrapper ins, .diff-wrapper tr[data-type='+'] {
+            background: #363;
+            text-decoration: none;
+        }
+        .diff-wrapper tr[data-type='!'] {
+            background: rgba(255,0,0,.1);
+        }
+        .diff-wrapper thead {
+            display: none;
+        }
+        .diff-wrapper {
+            width: 100%;
+            padding: 1rem;
+            border-spacing:0;
+            border-collapse: collapse;
+        }
+        #editor{
+            max-height:90%;
+            min-height:90%;
         }
     </style>
     <script src="{{asset('js/app.js')}}"></script>

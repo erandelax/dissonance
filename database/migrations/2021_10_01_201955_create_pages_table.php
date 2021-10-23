@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWikiPagesTable extends Migration
+class CreatePagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateWikiPagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('wiki_pages', function (Blueprint $table) {
-            $table->uuid('guid')->primary();
+        Schema::create('pages', function (Blueprint $table) {
+            $table->uuid('id')->primary();
             $table->string('locale');
             $table->string('slug');
             $table->string('title')->default('');
             $table->text('content')->default('');
-            $table->jsonb('refs')->default('[]');
             $table->timestamps();
 
             $table->index(['locale','slug']);
@@ -33,6 +32,6 @@ class CreateWikiPagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('wiki_pages');
+        Schema::dropIfExists('pages');
     }
 }

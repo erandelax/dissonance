@@ -21,8 +21,7 @@ final class MarkupConverter extends MarkdownConverter
     public function __construct(array $config = [])
     {
         $environment = new Environment($config);
-        $environment->addExtension(new WikiMarkupExtension());
-        $environment->addExtension(new CommonMarkCoreExtension());
+        $environment->addExtension(new ExtendedMarkdownSchema());
         parent::__construct($environment);
     }
 
