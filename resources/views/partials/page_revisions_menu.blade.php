@@ -8,7 +8,7 @@
         @foreach($page->revisions as $revision)
             <a
                 target="_blank"
-                href="{{route('wiki', ['locale' => app()->getLocale(), 'slug' => $page->slug, 'mode' => 'restore', 'revision' => $revision->id])}}"
+                href="{{scoped_route('pages.edit', ['locale' => app()->getLocale(), 'page' => $page->slug, 'mode' => 'restore', 'revision' => $revision->id])}}"
                 class="dropdown-item">
                 {{$revision?->created_at?->format('Y-m-d H:i:s')}}, {{$revision?->user?->name}}
             </a>

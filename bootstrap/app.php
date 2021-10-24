@@ -52,4 +52,11 @@ $app->singleton(
 |
 */
 
+if (!function_exists('scoped_route')) {
+    function scoped_route($name, $parameters = [], $absolute = true)
+    {
+        return \App\Factories\ScopedRouteFactory::make($name, $parameters, $absolute);
+    }
+}
+
 return $app;

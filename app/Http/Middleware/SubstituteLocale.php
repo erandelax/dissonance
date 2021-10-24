@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
-use App\Entities\Locale;
+use App\Entities\LocaleReference;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +17,7 @@ final class SubstituteLocale
         /** @var User $user */
         $user = Auth::user();
 
-        /** @var Locale $locale */
+        /** @var LocaleReference $locale */
         $locale = $request->route('locale') ?? null;
         if (null === $locale && $request->route()?->getName() === 'home') {
             return redirect(route('home', ['locale' => config('app.locale')]));
@@ -26,7 +26,7 @@ final class SubstituteLocale
             $locale = $user?->locale;
         }
         if (null === $locale) {
-            $locale = app()->make(Locale::class);
+            $locale = app()->make(LocaleReference::class);
             $locale->setLocale(app()->getLocale());
             $request->merge(['locale' => $locale]);
         }

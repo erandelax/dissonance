@@ -27,7 +27,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('update-page', function (User $user, Page $page) {
+        Gate::define('update-page', function (User $user, Page $target) {
             return $user->getKey() !== null;
         });
 

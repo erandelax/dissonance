@@ -17,6 +17,8 @@ return [
 
     'logo' => env('APP_LOGO', 'https://avatars.githubusercontent.com/u/49849627?s=200&v=4'),
 
+    'locales' => ['en', 'ru'],
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment

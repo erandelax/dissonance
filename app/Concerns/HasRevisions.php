@@ -22,6 +22,9 @@ trait HasRevisions
     public static function bootHasRevisions()
     {
         self::saving(static function(self $model): void {
+            if (empty($model->getDirty())) {
+                return;
+            }
             $dirty = $model->attributesToArray();
             if (isset($dirty['id'])) unset($dirty['id']);
             if ($model->getKey() && !empty($dirty)) {

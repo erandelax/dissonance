@@ -7,6 +7,7 @@ use App\Concerns\HasUUIDKey;
 use App\Services\Wiki\MarkupRender;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 
 /**
@@ -33,6 +34,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Page whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Page whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string|null $project_id
+ * @property-read \App\Models\Project|null $project
+ * @method static \Illuminate\Database\Eloquent\Builder|Page whereProjectId($value)
  */
 final class Page extends Model
 {
@@ -43,6 +47,11 @@ final class Page extends Model
     public function getRevisionModelClass(): string
     {
         return PageRevision::class;
+    }
+
+    public function project(): BelongsTo
+    {
+        return $this->belongsTo(Project::class, 'project_id');
     }
 
     public function getHtmlAttribute(): string

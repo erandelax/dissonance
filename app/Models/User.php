@@ -59,6 +59,8 @@ use Laravel\Sanctum\HasApiTokens;
  * @property-read int|null $characters_count
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCharacterId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereLocale($value)
+ * @property string|null $auth_token
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereAuthToken($value)
  */
 class User extends Authenticatable
 {
