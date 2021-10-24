@@ -8,6 +8,7 @@ use App\Entities\ProjectReference;
 use App\Factories\ScopedRouteFactory;
 use App\Repositories\ProjectRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 
 final class SubstituteProject
 {
@@ -25,6 +26,7 @@ final class SubstituteProject
             $this->projectReference->setPort($request->getPort())->setHost($request->getHost());
         }
         $project = $this->projectRepository->findByReference($this->projectReference);
+        View::share('project', $project);
         if (null === $project) {
             $request->merge(['project' => null]);
         } else {

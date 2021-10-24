@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\View;
 
 final class SubstituteLocale
 {
@@ -37,6 +38,7 @@ final class SubstituteLocale
         }
         $request->merge(['locale' => $locale]);
         app()->setLocale((string)$locale);
+        View::share('locale', $locale);
 
         if ($user !== null && (string)$locale !== $user->locale) {
             $user->locale = (string)$locale;
