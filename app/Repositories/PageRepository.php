@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
+use App\Entities\LocaleReference;
 use App\Entities\PageReference;
 use App\Models\Page;
 use App\Models\Project;
@@ -19,6 +20,22 @@ final class PageRepository
     public function findByReference(Project|null $project, PageReference $pageReference): ?Page
     {
         return Page::whereProjectId($project?->getKey())->whereSlug($pageReference)->first();
+    }
+
+    /**
+     * @param string|null $projectID
+     * @param string|null $locale
+     * @param array $slugs
+     *
+     * @return array
+     */
+    public function findSlugs(string|null $projectID, string|null $locale, array $slugs): array
+    {
+        return Page::whereProjectId($projectID)
+            ->whereLocale($locale)
+            ->whereIn('slug', $slugs)
+            ->pluck('slug', 'slug')
+            ->all();
     }
 
     /**

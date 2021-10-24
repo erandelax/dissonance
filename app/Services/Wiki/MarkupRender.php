@@ -4,21 +4,38 @@ declare(strict_types=1);
 
 namespace App\Services\Wiki;
 
+use App\Repositories\PageRepository;
 use App\Services\Wiki\Markup\MarkupConverter;
 use Illuminate\Support\Str;
 use League\CommonMark\Extension\CommonMark\Node\Block\Heading;
-use League\CommonMark\Node\Block\AbstractBlock;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
 use League\CommonMark\Node\Block\Document;
 use League\CommonMark\Node\Inline\Text;
 use Ramsey\Uuid\Uuid;
 
 final class MarkupRender
 {
+    private string|null $projectID = null;
+    private string|null $locale = null;
+
     public function __construct(
         private MarkupConverter $converter,
+        private PageRepository $pageRepository,
         private array $lastHeaders = [],
     ) {
         $this->converter->setDocumentMorpher([$this, 'morphDocument']);
+    }
+
+    public function setLocale(string|null $locale): self
+    {
+        $this->locale = $locale;
+        return $this;
+    }
+
+    public function setProjectID(string|null $projectID): self
+    {
+        $this->projectID = $projectID;
+        return $this;
     }
 
     public function getLastHeaders(): array
@@ -26,18 +43,30 @@ final class MarkupRender
         return $this->lastHeaders;
     }
 
-    private function getInnerText($abstractBlock): string
+    private function getInnerText($block): string
     {
-        /** @var AbstractBlock $result */
         $result = [];
-        if ($abstractBlock instanceof Text) {
-            $result[] = $abstractBlock->getLiteral();
+        if ($block instanceof Text) {
+            $result[] = $block->getLiteral();
         } else {
-            foreach ($abstractBlock->children() as $child) {
+            foreach ($block->children() as $child) {
                 $result[] = $this->getInnerText($child);
             }
         }
         return implode('', $result);
+    }
+
+    private function getLinks($block): array
+    {
+        $result = [];
+        if ($block instanceof Link) {
+            $result[] = $block;
+        } else {
+            foreach ($block->children() as $child) {
+                $result = array_merge($result, $this->getLinks($child));
+            }
+        }
+        return $result;
     }
 
     public function morphDocument(Document $document): void
@@ -45,8 +74,7 @@ final class MarkupRender
         $this->lastHeaders = [];
 
         $counts = [];
-        $children = $document->children();
-        foreach ($children as $element) {
+        foreach ($document->children() as $element) {
             if ($element instanceof Heading) {
                 $text = $this->getInnerText($element);
                 $id = Str::slug($text);
@@ -63,6 +91,28 @@ final class MarkupRender
                     'level' => $element->getLevel(),
                 ];
             }
+        }
+        /** @var Link[] $links */
+        $links = $this->getLinks($document);
+        $slugs = array_map(static function(Link $link): string {
+            return $link->getUrl();
+        }, $links);
+        $confirmedSlugs = $this->pageRepository->findSlugs($this->projectID, $this->locale, $slugs);
+        foreach ($links as $link) {
+            $url = $link->getUrl();
+            if (isset($confirmedSlugs[$url])) {
+                $link->data->set('attributes', [
+                    'class' => 'ex',
+                ]);
+            } else {
+                $link->data->set('attributes', [
+                    'class' => 'nex',
+                ]);
+            }
+            $link->setUrl(scoped_route('pages.read', [
+                'page' => $url,
+                'locale' => $this->locale ?? config('app.locale'),
+            ]));
         }
     }
 

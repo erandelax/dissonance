@@ -4,6 +4,7 @@
     @include('partials.layout_head')
     @routes
     @stack('styles')
+    @include('partials.dynamic_styles')
     @stack('scripts')
 </head>
 <body class="with-custom-webkit-scrollbars with-custom-css-scrollbars" data-dm-shortcut-enabled="true" data-sidebar-shortcut-enabled="true" data-set-preferred-mode-onload="true">

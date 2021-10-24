@@ -34,6 +34,7 @@ final class ReadPage
 
         $projectModel = $this->projectRepository->findByReference($project);
         $pageModel = $this->pageRepository->findByReference($projectModel, $page);
+        $this->markupRender->setLocale((string)$locale)->setProjectID($projectModel?->getKey());
 
         if (null === $pageModel) {
             $pageModel = $this->pageRepository->make404($projectModel, $page);
