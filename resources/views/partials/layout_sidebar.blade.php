@@ -7,6 +7,7 @@
                 Press <kbd>Enter</kbd> to search
             </div>
         </form>
+        @stack('sidebar')
         {{--<h5 class="sidebar-title">Getting started</h5>
         <div class="sidebar-divider"></div>
         <a href="#" class="sidebar-link active">Installation</a>

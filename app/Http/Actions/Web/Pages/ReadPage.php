@@ -59,6 +59,7 @@ final class ReadPage
                     'html' => $this->markupRender->toHtml($to),
                     'revision' => $revision,
                     'diff' => $diff,
+                    'headers' => $this->markupRender->getLastHeaders(),
                 ]);
             }
         }
@@ -67,6 +68,7 @@ final class ReadPage
             'page' => $pageModel,
             'pageReference' => $page,
             'html' => $this->markupRender->toHtml($pageModel->content),
+            'headers' => $this->markupRender->getLastHeaders(),
         ]);
     }
 }
