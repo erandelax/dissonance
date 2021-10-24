@@ -14,6 +14,10 @@ $scopedRoutesFactory = static function (string $namePrefix): callable {
     return static function (Router $router) use($namePrefix): void {
         // edit here start
         $router->get('/', Web\Projects\ReadProject::class)->name("$namePrefix:projects.read");
+        // authorization
+        $router->group(['prefix' => '/a'], static function (Router $router) use($namePrefix): void {
+            $router->get('/logout', Web\Auths\Logout::class)->name("$namePrefix:auths.logout");
+        });
         // localized routes
         $router->group(['prefix' => '/{locale}'], static function (Router $router) use($namePrefix): void {
             // search
@@ -30,7 +34,7 @@ $scopedRoutesFactory = static function (string $namePrefix): callable {
                 $router->get('/{id}', Web\Entities\ReadEntity::class)->name("$namePrefix:entities.read");
             });
             // admin
-            $router->group(['prefix' => '/a'], static function (Router $router) use($namePrefix): void {
+            $router->group(['prefix' => '/x'], static function (Router $router) use($namePrefix): void {
                 $router->get('/', Web\Admins\BrowseAdmins::class)->name("$namePrefix:admins.browse");
             });
             // pages
@@ -73,7 +77,7 @@ Route::domain(
             $router->get('/{id}', Web\Entities\ReadEntity::class)->name("$namePrefixRoot:entities.read");
         });
         // admin
-        $router->group(['prefix' => '/a'], static function (Router $router) use($namePrefixRoot): void {
+        $router->group(['prefix' => '/x'], static function (Router $router) use($namePrefixRoot): void {
             $router->get('/', Web\Admins\BrowseAdmins::class)->name("$namePrefixRoot:admins.browse");
         });
         // pages

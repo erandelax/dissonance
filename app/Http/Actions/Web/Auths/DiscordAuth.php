@@ -40,7 +40,7 @@ final class DiscordAuth
         if ($returnHost !== $request->getHost() || $returnPort !== $request->getPort()) {
             $token = $this->userRepository->createAuthToken($user);
             $parts = explode('?', $returnURL, 2);
-            $returnURL = implode('?', [$parts[0], implode('&', array_filter(["access_token=$token", $parts[1] ?? null]))]);
+            $returnURL = implode('?', [$parts[0], implode('&', array_filter(["auth_token=$token", $parts[1] ?? null]))]);
         } else {
             Auth::login($user);
         }
