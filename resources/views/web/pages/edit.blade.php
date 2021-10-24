@@ -27,6 +27,10 @@
         .ace-tomorrow-night {
             background: transparent;
         }
+        #preview {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
     </style>
 @endpush
 
@@ -41,7 +45,7 @@
                 theme: theme,
                 mode: "ace/mode/markdown",
                 minLines: 10,
-                maxLines: 30,
+                maxLines: 25,
                 showLineNumbers: true,
                 cursorStyle: "smooth",
                 fontSize: "14px",
@@ -71,6 +75,14 @@
             window.addEventListener('resize',function(){
                 editor.resize()
             })
+            editor.session.on("changeScrollTop", function() {
+                const percent = editor.session.getScrollTop() / (editor.session.getScreenLength() * editor.renderer.lineHeight);
+                document.getElementById('preview').scrollTop = percent * document.getElementById('preview').scrollHeight;
+            })
+            document.getElementById('preview').addEventListener('scroll', function(event) {
+                const percent = event.target.scrollTop / event.target.scrollHeight;
+                editor.session.setScrollTop((editor.session.getScreenLength() * editor.renderer.lineHeight) * percent);
+            });
         })
     </script>
 @endpush
@@ -79,8 +91,8 @@
     <div class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-4">
-                    <form action="{{scoped_route('pages.edit', ['page' => $pageReference, 'locale' => app()->getLocale()])}}" enctype="multipart/form-data" method="post" class="w-400 mw-full" id="page-editor">
+                <div class="col-6">
+                    <form action="{{scoped_route('pages.edit', ['page' => $pageReference, 'locale' => app()->getLocale()])}}" enctype="multipart/form-data" method="post" class="p-10 mw-full" id="page-editor">
                         @csrf
                         <div class="form-group">
                             <label for="field-title" class="required">Title</label>
@@ -101,8 +113,8 @@
                         </div>
                     </form>
                 </div>
-                <div class="col-6">
-                    <div id="preview" class="content">{!! $page?->content !!}</div>
+                <div class="col-6 m-0 p-0">
+                    <div id="preview" >{!! $page?->content !!}</div>
                 </div>
             </div>
         </div>

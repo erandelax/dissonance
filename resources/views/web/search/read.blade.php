@@ -1,4 +1,4 @@
-@extends('layouts.default')
+@extends('layouts.sidebar')
 
 @section('title', 'Users')
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" style="background:#111">
+<html lang="en">
 <head>
     @include('partials.layout_head')
     @routes
@@ -11,13 +11,12 @@
 <!-- Reference: https://www.gethalfmoon.com/docs/modal -->
 
 <!-- Page wrapper start -->
-<div class="page-wrapper with-navbar with-sidebar {{-- with-navbar-fixed-bottom --}}" data-sidebar-type="overlayed-all">
+<div class="page-wrapper with-navbar with-sidebar {{--with-navbar-fixed-bottom--}}">
     @include('partials.layout_sticky_alerts')
     @include('partials.layout_navbar')
-    @include('partials.layout_sidebar_overlay')
     @include('partials.layout_sidebar')
     @include('partials.layout_content_wrapper')
-    {{-- @include('partials.layout_fixed_bottom') --}}
+    {{--@include('partials.layout_fixed_bottom')--}}
 </div>
 <!-- Page wrapper end -->
 

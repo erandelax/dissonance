@@ -45,8 +45,8 @@
     <div class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-4">
-                    <form action="{{scoped_route('pages.edit', ['page' => $page->slug, 'locale' => app()->getLocale()])}}" enctype="multipart/form-data" method="post" class="w-400 mw-full" id="page-editor">
+                <div class="col-6">
+                    <form action="{{scoped_route('pages.edit', ['page' => $page->slug, 'locale' => app()->getLocale()])}}" enctype="multipart/form-data" method="post" class="p-10 mw-full" id="page-editor">
                         @csrf
                         <input type="hidden" name="revision" value="{{$revision->id}}">
                         <div class="form-group">

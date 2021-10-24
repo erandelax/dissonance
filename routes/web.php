@@ -31,7 +31,7 @@ $scopedRoutesFactory = static function (string $namePrefix): callable {
             });
             // admin
             $router->group(['prefix' => '/a'], static function (Router $router) use($namePrefix): void {
-                $router->get('/', fn() => Web\Admins\BrowseAdmins::class)->name("$namePrefix:admins.browse");
+                $router->get('/', Web\Admins\BrowseAdmins::class)->name("$namePrefix:admins.browse");
             });
             // pages
             $router->get('/{page?}', Web\Pages\ReadPage::class)->name("$namePrefix:pages.read");
