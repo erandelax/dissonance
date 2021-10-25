@@ -14,7 +14,8 @@ final class QueryTable implements FormContract
 {
     private array $columns = [];
     private array $batchActions = [];
-    private array $actionCallbacks = [];
+    private array $batchActionCallbacks = [];
+    private array $modelActionCallbacks = [];
 
     public function __construct(
         private Builder      $query,
@@ -24,18 +25,26 @@ final class QueryTable implements FormContract
         private Notice|null  $notice = null,
         array                $columns = [],
         array                $batchActions = [],
-        array                $actionCallbacks = [],
+        array                $batchActionCallbacks = [],
+        array                $modelActionCallbacks = [],
     )
     {
         foreach ($columns as $column) $this->addColumn($column);
         foreach ($batchActions as $batchAction) $this->addBatchAction($batchAction);
-        foreach ($actionCallbacks as $action => $actionCallback) $this->setActionCallback($action, $actionCallback);
+        foreach ($batchActionCallbacks as $action => $actionCallback) $this->setBatchActionCallback($action, $actionCallback);
+        foreach ($modelActionCallbacks as $action => $actionCallback) $this->setModelActionCallback($action, $actionCallback);
         if (null === $this->request) $this->request = request();
     }
 
-    public function setActionCallback(string $action, callable $callback): self
+    public function setBatchActionCallback(string $action, callable $callback): self
     {
-        $this->actionCallbacks[$action] = $callback;
+        $this->batchActionCallbacks[$action] = $callback;
+        return $this;
+    }
+
+    public function setModelActionCallback(string $action, callable $callback): self
+    {
+        $this->modelActionCallbacks[$action] = $callback;
         return $this;
     }
 
@@ -58,7 +67,7 @@ final class QueryTable implements FormContract
 
     public function addBatchAction(BatchAction $batchAction): self
     {
-        $this->batchActions[] = $batchAction;
+        $this->batchActions[spl_object_id($batchAction)] = $batchAction;
         return $this;
     }
 
@@ -123,15 +132,30 @@ final class QueryTable implements FormContract
         if ($this->request->input('form') === $this->getID()) {
             $items = array_keys(array_filter($this->request->input('form-item', []), fn($value) => $value === 'on'));
             if ($action = $this->request->input('form-action')) {
-                if (empty($items)) {
+                if (isset($this->modelActionCallbacks[$action]) && $modelID = $this->request->input('form-model')) {
+                    $model = (clone $this->query)->find($modelID);
+                    try {
+                        $this->modelActionCallbacks[$action]($model);
+                        $this->notice = new Notice(
+                            message: 'Action complete.',
+                            style: Notice::STYLE_SUCCESS
+                        );
+                    } catch (FormError $error) {
+                        $this->notice = new Notice(
+                            message: $error->getMessage(),
+                            style: Notice::STYLE_DANGER
+                        );
+                    }
+                }
+                else if (empty($items)) {
                     $this->notice = new Notice(
                         message: 'Action was not performed because no items are selected.',
                         style: Notice::STYLE_WARNING
                     );
-                } else if (isset($this->actionCallbacks[$action])) {
+                } else if (isset($this->batchActionCallbacks[$action])) {
                     $itemModels = (clone $this->query)->whereIn($this->query->getModel()->getKeyName(), $items)->get();
                     try {
-                        $this->actionCallbacks[$action]($itemModels);
+                        $this->batchActionCallbacks[$action]($itemModels);
                         $this->notice = new Notice(
                             message: 'Action complete.',
                             style: Notice::STYLE_SUCCESS

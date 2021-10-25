@@ -9,6 +9,7 @@ $notice = $table->getNotice();
 <form id="{{$table->getID()}}" action="{{request()->url()}}" method="get" class="mw-full" enctype="multipart/form-data">
     <input type="hidden" name="form" value="{{$table->getID()}}">
     <input type="hidden" name="form-action" value="">
+    <input type="hidden" name="form-model" value="">
     <input type="submit" style="display: none">
     <div class="card p-0">
         @if ($table->hasNotice())
@@ -65,7 +66,25 @@ $notice = $table->getNotice();
                             </th>
                         @endif
                         @foreach($columns as $column)
-                        <th>{{$column->getValue($item)}}</th>
+                        <th>
+                            @if ($column->isAttribute())
+                            {{$column->getValue($item)}}
+                            @endif
+                            @if ($column->hasModelActions())
+                            <div class="btn-group" role="group" aria-label="row actions">
+                                @foreach ($column->getModelActions() as $modelAction)
+                                    @if ($modelAction instanceof \App\Forms\ModelUrlAction)
+                                        <a class="btn btn-block {{$modelAction->getStyle()}}" type="button" target="_blank" href="{{$modelAction->makeUrl($item)}}">{!! $modelAction->getTitle() !!}</a>
+                                    @elseif($modelAction->isModal())
+                                        @push('modals'){!! $modelAction->getAction()->render() !!}@endpush
+                                        <a class="btn btn-block {{$modelAction->getStyle()}}" type="button" href="#{{$modelAction->getAction()->getID()}}">{!! $modelAction->getTitle() !!}</a>
+                                    @else
+                                        <button class="btn btn-block {{$modelAction->getStyle()}}" type="button" data-submit-form-model="{{$item->getKey()}}" data-submit-form-action="{{$modelAction->getAction()}}">{!! $modelAction->getTitle() !!}</button>
+                                    @endif
+                                @endforeach
+                            </div>
+                            @endif
+                        </th>
                         @endforeach
                     </tr>
                     @endforeach

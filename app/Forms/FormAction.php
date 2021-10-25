@@ -8,11 +8,24 @@ use App\Contracts\FormContract;
 
 class FormAction
 {
+    public const STYLE_DEFAULT = '';
+    public const STYLE_INFO = 'btn-primary';
+    public const STYLE_SUCCESS = 'btn-success';
+    public const STYLE_WARNING = 'btn-secondary';
+    public const STYLE_DANGER = 'btn-danger';
+
     public function __construct(
-        private string $title,
-        private string|FormModal $action,
+        private string            $title,
+        private string|FormModal  $action,
         private FormContract|null $forForm = null,
-    ) {
+        private string            $style = self::STYLE_DEFAULT,
+    )
+    {
+    }
+
+    public function getStyle(): string
+    {
+        return $this->style;
     }
 
     public function isForForm(): bool

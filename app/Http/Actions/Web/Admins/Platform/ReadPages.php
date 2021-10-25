@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Actions\Web\Admins\Platform;
 
 use App\Contracts\FormContract;
+use App\Forms\ModelAction;
+use App\Forms\ModelUrlAction;
 use App\Forms\QueryFilter;
 use App\Forms\FormAction;
 use App\Forms\FormModal;
@@ -33,6 +35,21 @@ final class ReadPages
             id: 'pages',
             pageSize: 10,
             columns: [
+                new ModelColumn(
+                    title: 'Actions',
+                    actions: [
+                        new ModelUrlAction(
+                            title: '<i class="fa fa-pencil"></i>',
+                            urlMaker: fn(Page $model) => scoped_route('pages.read', [
+                                'page' => $model->slug,
+                                'locale' => app()->getLocale(),
+                                'mode' => 'edit',
+                            ]),
+                            style: ModelUrlAction::STYLE_WARNING,
+                        ),
+                        new ModelAction(title: '<i class="fa fa-trash"></i>', action: 'delete', style: ModelAction::STYLE_DANGER),
+                    ],
+                ),
                 new ModelColumn(
                     attribute: 'id',
                     title: 'ID',
@@ -77,9 +94,14 @@ final class ReadPages
                     filter: new QueryFilter(style: QueryFilter::STYLE_DATE, id: 'updated_at'),
                 ),
             ],
-            actionCallbacks: [
+            batchActionCallbacks: [
                 'delete' => static function (Collection $models) {
                     $models->each(fn(Model $model) => $model->delete());
+                }
+            ],
+            modelActionCallbacks: [
+                'delete' => static function (Model $model) {
+                    $model->delete();
                 }
             ],
         ));
@@ -93,7 +115,8 @@ final class ReadPages
                         new FormAction(title: 'Cancel', action: 'cancel'),
                         new FormAction(title: 'Delete', action: 'delete', forForm: $table),
                     ],
-                )
+                ),
+                style: BatchAction::STYLE_DANGER
             )
         );
         return $table;

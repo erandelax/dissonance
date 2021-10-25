@@ -5,15 +5,15 @@
     @if(!empty($batchActions))
     <div class="dropdown">
         <button class="btn" data-toggle="dropdown" type="button" id="dropdown-toggle-btn-1" aria-haspopup="true" aria-expanded="false">
-            Do <i class="fa fa-angle-down ml-5" aria-hidden="true"></i> <!-- ml-5 = margin-left: 0.5rem (5px) -->
+            Batch actions <i class="fa fa-angle-down ml-5" aria-hidden="true"></i>
         </button>
         <div class="dropdown-menu" aria-labelledby="table actions">
             @foreach ($batchActions as $batchAction)
                 @if($batchAction->isModal())
                 @push('modals'){!! $batchAction->getAction()->render() !!}@endpush
-                <a class="btn btn-block" type="button" href="#{{$batchAction->getAction()->getID()}}">{!! $batchAction->getTitle() !!}</a>
+                <a class="btn btn-block {{$batchAction->getStyle()}}" type="button" href="#{{$batchAction->getAction()->getID()}}">{!! $batchAction->getTitle() !!}</a>
                 @else
-                <button class="btn btn-block" type="submit" name="form-action" value="{{$batchAction->getAction()}}">{!! $batchAction->getTitle() !!}</button>
+                <button class="btn btn-block {{$batchAction->getStyle()}}" type="submit" name="form-action" value="{{$batchAction->getAction()}}">{!! $batchAction->getTitle() !!}</button>
                 @endif
             @endforeach
         </div>

@@ -30,6 +30,7 @@ document.addEventListener('click', function(e) {
     }
     if (target.dataset.submitFormAction && target.form !== undefined && target.form.elements['form-action']) {
         target.form.elements['form-action'].value = target.dataset.submitFormAction;
+        target.form.elements['form-model'].value = target.dataset.submitFormModel;
         target.form.submit();
     }
     if (target.dataset.nameFlush && target.form !== undefined) {
