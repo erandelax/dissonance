@@ -18,6 +18,42 @@ async function postData(url = '', data = {}) {
     return response.json(); // parses JSON response into native JavaScript objects
 }
 
+window.submitFormAction = function(e) {
+    // e.target.elements[form-action].value
+    console.log(e);
+}
+
+document.addEventListener('click', function(e) {
+    var target = e.target;
+    if (target.tagName === 'I') {
+        target = target.parentElement;
+    }
+    if (target.dataset.submitFormAction && target.form !== undefined && target.form.elements['form-action']) {
+        target.form.elements['form-action'].value = target.dataset.submitFormAction;
+        target.form.submit();
+    }
+    if (target.dataset.nameFlush && target.form !== undefined) {
+        const field = target.form.elements[target.dataset.nameFlush];
+        if (field && field.value) {
+            field.value = '';
+            if (field.dispatchEvent && window.Event) {
+                field.dispatchEvent(new Event('change'));
+            }
+            field.focus();
+        }
+    }
+    if (target.dataset.switchAll && target.form !== undefined && target.htmlFor) {
+        const ref = document.getElementById(target.htmlFor);
+        if (!ref) return;
+        for (const element of target.form.elements) {
+            const name = element.name;
+            if (name && name.startsWith && name.startsWith(target.dataset.switchAll)) {
+                element.checked = !ref.checked;
+            }
+        }
+    }
+})
+
 window.api = {
     wiki: {
         preview: async function ({content}) {

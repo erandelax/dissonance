@@ -48,4 +48,12 @@ class Project extends Model
     {
         return app()->make(ProjectReference::class)->setHost($this->host)->setPort($this->port);
     }
+
+    /**
+     * @return string
+     */
+    public function getDisplayNameAttribute(): string
+    {
+        return $this->name ?? implode(':', array_filter([$this->host, $this->port]));
+    }
 }

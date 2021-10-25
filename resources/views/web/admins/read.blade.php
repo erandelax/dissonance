@@ -1,13 +1,13 @@
 @extends('layouts.sidebar')
 
-@section('title', 'Admin panel')
+@section('title', $title)
 
 @push('sidebar')
-@include('partials.sidebar_admin_menu')
+    @include('partials.sidebar_admin_menu')
 @endpush
 
 @section('body')
     <div class="content">
-        Admin panel
+        {{$form->render()}}
     </div>
 @endsection

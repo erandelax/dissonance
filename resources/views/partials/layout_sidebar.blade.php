@@ -1,5 +1,6 @@
 <div class="sidebar">
     <div class="sidebar-menu">
+        @if($search)
         <form class="sidebar-content" method="get" action="{{scoped_route('search.read', ['locale' => app()->getLocale()])}}">
             <input type="text" class="form-control" placeholder="Search" name="q" value="{{request()->get('q')}}">
             <input type="submit" name="submit" form="profile-editor" style="display: none">
@@ -7,6 +8,7 @@
                 Press <kbd>Enter</kbd> to search
             </div>
         </form>
+        @endif
         @stack('sidebar')
         {{--<h5 class="sidebar-title">Getting started</h5>
         <div class="sidebar-divider"></div>

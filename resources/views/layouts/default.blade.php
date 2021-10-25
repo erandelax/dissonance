@@ -9,6 +9,7 @@
 </head>
 <body class="with-custom-webkit-scrollbars with-custom-css-scrollbars" data-dm-shortcut-enabled="true" data-sidebar-shortcut-enabled="true" data-set-preferred-mode-onload="true">
 <!-- Modals go here -->
+@stack('modals')
 <!-- Reference: https://www.gethalfmoon.com/docs/modal -->
 
 <!-- Page wrapper start -->
@@ -16,7 +17,7 @@
     @include('partials.layout_sticky_alerts')
     @include('partials.layout_navbar')
     @include('partials.layout_sidebar_overlay')
-    @include('partials.layout_sidebar')
+    @include('partials.layout_sidebar', ['search' => true])
     @include('partials.layout_content_wrapper')
     {{-- @include('partials.layout_fixed_bottom') --}}
 </div>
