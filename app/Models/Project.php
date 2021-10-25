@@ -33,6 +33,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Project whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Project whereUserId($value)
  * @mixin \Eloquent
+ * @property-read string $address
+ * @property-read string $display_name
  */
 class Project extends Model
 {
@@ -54,6 +56,11 @@ class Project extends Model
      */
     public function getDisplayNameAttribute(): string
     {
-        return $this->name ?? implode(':', array_filter([$this->host, $this->port]));
+        return $this->name ?? $this->address;
+    }
+
+    public function getAddressAttribute(): string
+    {
+        return implode(':', array_filter([$this->host, $this->port]));
     }
 }

@@ -36,7 +36,7 @@ final class ReadUsers
                         new ModelUrlAction(
                             title: '<i class="fa fa-eye"></i>',
                             urlMaker: fn(User $model) => scoped_route('users.read', [
-                                'user' => $model,
+                                'user' => $model->getKey(),
                                 'locale' => app()->getLocale(),
                             ]),
                         ),
