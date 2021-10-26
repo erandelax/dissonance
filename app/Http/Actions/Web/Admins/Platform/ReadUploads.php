@@ -8,6 +8,6 @@ final class ReadUploads
 {
     public function browse()
     {
-        return view('web.admins.read', ['form' => null]);
+        return self::class;
     }
 }

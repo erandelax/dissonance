@@ -8,6 +8,6 @@ final class ReadSettings
 {
     public function read()
     {
-        return view('web.admins.read', ['form' => null]);
+        return self::class;
     }
 }
