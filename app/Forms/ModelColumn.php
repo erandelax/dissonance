@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Forms;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 
 final class ModelColumn
 {
@@ -53,7 +54,7 @@ final class ModelColumn
 
     public function getValue(Model $model): mixed
     {
-        return $model->{$this->attribute} ?? 'N/A';
+        return Arr::get($model, $this->attribute, 'N/A');
     }
 
     public function isAttribute(): bool

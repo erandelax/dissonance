@@ -19,7 +19,7 @@ class CreatePagesTable extends Migration
             $table->string('slug');
             $table->string('title')->default('');
             $table->text('content')->default('');
-            $table->timestamps();
+            $table->timestampsTz();
 
             $table->index(['locale','slug']);
         });

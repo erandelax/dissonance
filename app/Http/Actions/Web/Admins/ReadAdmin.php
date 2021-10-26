@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace App\Http\Actions\Web\Admins;
 
-use App\Entities\LocaleReference;
+use App\Entities\Locale;
 use App\Entities\PageReference;
 use App\Entities\ProjectReference;
 use App\Http\Actions\Web\Admins\Platform;
 use App\Http\Actions\Web\Admins\Project;
+use App\Models\Config;
 
 final class ReadAdmin
 {
     private const PAGES = [
-        'settings' => [Platform\ReadSettings::class, 'read'],
+        'settings' => [Platform\AdminSettings::class, 'read'],
         'projects' => [Platform\ReadProjects::class, 'browse'],
-        'users' => [Platform\ReadUsers::class, 'browse'],
+        'users' => [Platform\AdminUsers::class, 'browse'],
         'pages' => [Platform\ReadPages::class, 'browse'],
         'posts' => [Platform\ReadPosts::class, 'browse'],
         'uploads' => [Platform\ReadUploads::class, 'browse'],
@@ -26,7 +27,7 @@ final class ReadAdmin
         'project-uploads' => [Project\ReadUploads::class, 'browse'],
     ];
 
-    public function __invoke(ProjectReference $project, LocaleReference $locale, PageReference $page, string|null $id = null)
+    public function __invoke(ProjectReference $project, Locale $locale, PageReference $page, Config $config, string|null $id = null)
     {
         $callable = self::PAGES[(string)$page] ?? null;
         if (null === $callable) {
@@ -36,10 +37,14 @@ final class ReadAdmin
         if ($id !== null) {
             $callable[1] = 'read';
         }
+        if (request()->method() === 'POST') {
+            $callable[1] = 'edit';
+        }
         return app()->call($callable, [
             'project' => $project,
             'locale' => $locale,
             'page' => $page,
+            'config' => $config,
             'id' => $id,
         ]);
     }

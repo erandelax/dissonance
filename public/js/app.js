@@ -2089,6 +2089,73 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
+var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+var eventer = window[eventMethod];
+var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
+var frameCallbacks = {};
+window.app = {
+  isFrame: function isFrame() {
+    return window.parent || window.opener;
+  },
+  modal: {
+    frame: function frame(src, callback) {
+      var sessionID = 'iframe-' + Math.floor(Math.random() * 100000000);
+      var iframe = document.getElementById('iframe-modal-body');
+      iframe.src = src + '?iframe=' + sessionID + '#' + sessionID;
+
+      iframe.onload = function () {
+        iframe.onload = null;
+        halfmoon.toggleModal('iframe-modal-popup');
+
+        frameCallbacks[sessionID] = function (data) {
+          var popup = document.getElementById('iframe-modal-popup');
+
+          if (popup.classList.contains('show')) {
+            halfmoon.toggleModal('iframe-modal-popup');
+          }
+
+          iframe.innerHTML = '';
+          callback(data.data);
+        };
+      };
+    }
+  }
+};
+eventer(messageEvent, function (e) {
+  var data = e.data ? e.data : e.message;
+
+  if (data.sessionID) {
+    if (frameCallbacks[data.sessionID]) {
+      frameCallbacks[data.sessionID](data);
+      delete frameCallbacks[data.sessionID];
+    }
+  }
+});
+
+if (window.app.isFrame()) {
+  window.app.modal.frame.reply = function (data) {
+    var sessionID = window.location.hash.substr(1);
+
+    if (window.parent) {
+      window.parent.postMessage({
+        sessionID: sessionID,
+        data: data
+      }, "*");
+    } else if (window.opener) {
+      window.opener.postMessage({
+        sessionID: sessionID,
+        data: data
+      }, "*");
+      window.close();
+    }
+  };
+} else {
+  window.app.modal.frame.reply = function (data) {
+    console.warn('I cant reply if there is no parent window :(');
+  };
+} // ....
+
+
 function postData() {
   return _postData.apply(this, arguments);
 }
@@ -2156,11 +2223,24 @@ document.addEventListener('change', function (e) {
     }
   }
 });
+document.addEventListener('DOMContentLoaded', function () {
+  document.body.addEventListener("error", function (event) {
+    if (event.target.tagName === 'IMG') {
+      event.target.src = '/img/404.svg';
+    }
+  }, true);
+});
 document.addEventListener('click', function (e) {
   var target = e.target;
 
   if (target.tagName === 'I') {
     target = target.parentElement;
+  }
+
+  if (target.dataset.iframeInput) {
+    window.app.modal.frame(target.dataset.iframeInput, function (data) {
+      target.value = data.value;
+    });
   }
 
   if (target.dataset.submitFormAction && target.form !== undefined && target.form.elements['form-action']) {

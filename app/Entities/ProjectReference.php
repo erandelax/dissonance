@@ -4,12 +4,24 @@ declare(strict_types=1);
 
 namespace App\Entities;
 
+use App\Models\Project;
+use App\Repositories\ProjectRepository;
 use Illuminate\Contracts\Routing\UrlRoutable;
 
 final class ProjectReference implements UrlRoutable
 {
     private string|null $host = null;
     private int|null $port = null;
+
+    public function __construct(
+        private ProjectRepository $projectRepository,
+    ) {
+    }
+
+    public function getModel(): Project|null
+    {
+        return $this->projectRepository->findByReference($this);
+    }
 
     public function isRoot(): bool
     {
@@ -55,7 +67,9 @@ final class ProjectReference implements UrlRoutable
 
     public function resolveRouteBinding($value, $field = null): self
     {
-        return tap(new self, function (self $instance) use($value) {
+        return tap(new self(
+            projectRepository: $this->projectRepository,
+        ), function (self $instance) use($value) {
             $parts = explode(':', $value);
             if (!isset($parts[1])) $parts[1] = null;
             if ($parts[1]) $parts[1] = (int) $parts[1];

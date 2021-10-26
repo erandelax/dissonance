@@ -5,8 +5,8 @@
         </button>
     </div>
     <a href="{{scoped_route('projects.browse')}}" class="navbar-brand ml-10 ml-sm-20">
-        <img src="{{config('app.logo')}}" alt="fake-logo">
-        <span class="d-none d-sm-flex">{{config('app.name')}}</span>
+        <img src="{{$config->get('app.logo', config('app.logo'))}}" alt="fake-logo">
+        <span class="d-none d-sm-flex">{{$config->get('app.name', config('app.name'))}}</span>
     </a>
     <ul class="navbar-nav d-none d-lg-flex"> <!-- d-none = display: none, d-lg-flex = display: flex on large screens and up (width > 992px) -->
         <li class="nav-item">

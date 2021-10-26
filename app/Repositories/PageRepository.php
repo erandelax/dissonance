@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
-use App\Entities\LocaleReference;
+use App\Entities\Locale;
 use App\Entities\PageReference;
 use App\Models\Page;
 use App\Models\Project;

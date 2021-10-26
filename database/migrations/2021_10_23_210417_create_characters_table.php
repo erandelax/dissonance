@@ -21,7 +21,7 @@ class CreateCharactersTable extends Migration
             $table->string('name');
             $table->tinyInteger('status')->default(0);
             $table->jsonb('data');
-            $table->timestamps();
+            $table->timestampsTz();
         });
         Schema::table('users', function (Blueprint $table) {
             $table->foreignUuid('character_id')->index()->nullable()->references('id')->on('characters')->cascadeOnUpdate()->cascadeOnDelete();

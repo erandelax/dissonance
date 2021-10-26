@@ -22,13 +22,14 @@ class CreateUsersTable extends Migration
             $table->string('banner')->nullable();
             $table->string('banner_color')->nullable();
             $table->string('accent_color')->nullable();
-            $table->string('discord_id')->nullable();
+            $table->string('discord_id')->nullable()->unique();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('auth_token')->nullable();
+            $table->string('timezone')->nullable();
             $table->rememberToken();
-            $table->timestamps();
+            $table->timestampsTz();
         });
     }
 

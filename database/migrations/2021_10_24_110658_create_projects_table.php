@@ -21,7 +21,7 @@ final class CreateProjectsTable extends Migration
             $table->string('title')->nullable();
             $table->string('description',2048)->nullable();
             $table->string('avatar')->nullable();
-            $table->timestamps();
+            $table->timestampsTz();
         });
     }
 

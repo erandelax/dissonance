@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Actions\Web\Users;
 
-use App\Entities\LocaleReference;
+use App\Entities\Locale;
 use App\Entities\ProjectReference;
 use App\Entities\UserReference;
 use App\Http\Requests\StoreProfileRequest;
@@ -20,7 +20,7 @@ final class EditUser
         private UserRepository $userRepository
     ) {}
 
-    public function __invoke(ProjectReference $project, LocaleReference $locale, UserReference $user, StoreProfileRequest $request)
+    public function __invoke(ProjectReference $project, Locale $locale, UserReference $user, StoreProfileRequest $request)
     {
         $currentUser = Auth::user();
         $userModel = $this->userRepository->findByReference($user);

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" style="background:#111">
 <head>
     @include('partials.layout_head')
     @routes
@@ -10,6 +10,7 @@
 <body class="with-custom-webkit-scrollbars with-custom-css-scrollbars" data-dm-shortcut-enabled="true" data-sidebar-shortcut-enabled="true" data-set-preferred-mode-onload="true">
 <!-- Modals go here -->
 @stack('modals')
+@include('partials.iframe_modal')
 <!-- Reference: https://www.gethalfmoon.com/docs/modal -->
 
 <!-- Page wrapper start -->

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Actions\Web\Users;
 
-use App\Entities\LocaleReference;
+use App\Entities\Locale;
 use App\Entities\ProjectReference;
 use App\Entities\UserReference;
 use App\Models\User;
@@ -17,7 +17,7 @@ final class ReadUser
         private UserRepository $userRepository,
     ) {}
 
-    public function __invoke(ProjectReference $project, LocaleReference $locale, UserReference $user)
+    public function __invoke(ProjectReference $project, Locale $locale, UserReference $user)
     {
         $user = $this->userRepository->findByReference($user);
         return view(Gate::check('update-user', $user) ? 'web.users.edit' : 'web.users.read', [

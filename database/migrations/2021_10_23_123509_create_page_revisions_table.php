@@ -18,7 +18,7 @@ class CreatePageRevisionsTable extends Migration
             $table->foreignUuid('item_id')->references('id')->on('pages')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignUuid('user_id')->nullable()->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->jsonb('data');
-            $table->timestamps();
+            $table->timestampsTz();
         });
     }
 

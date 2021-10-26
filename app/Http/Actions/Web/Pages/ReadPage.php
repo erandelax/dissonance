@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Actions\Web\Pages;
 
-use App\Entities\LocaleReference;
+use App\Entities\Locale;
 use App\Entities\PageReference;
 use App\Entities\ProjectReference;
 use App\Factories\ScopedRouteFactory;
@@ -26,7 +26,7 @@ final class ReadPage
         private DiffRender $diffRender,
     ) {}
 
-    public function __invoke(ProjectReference $project, LocaleReference $locale, PageReference $page, Request $request)
+    public function __invoke(ProjectReference $project, Locale $locale, PageReference $page, Request $request)
     {
         $user = Auth::user();
 

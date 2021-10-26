@@ -5,7 +5,13 @@ declare(strict_types=1);
 namespace App\Forms;
 
 use App\Contracts\FormContract;
+use App\Repositories\UploadRepository;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 final class ModelField implements FormContract
@@ -84,6 +90,36 @@ final class ModelField implements FormContract
         if (null === $model) {
             return null;
         }
-        return $model->{$this->attribute};
+        return Arr::get($model, $this->attribute);
+    }
+
+    public function setValue(Model|null $model, mixed $value): self
+    {
+        $path = explode('.', $this->attribute, 2);
+        if (isset($path[1])) {
+            $data = $model->{$path[0]};
+            Arr::set($data, $path[1], $value);
+            $model->{$path[0]} = $data;
+        } else {
+            Arr::set($model, $this->attribute, $value);
+        }
+
+        return $this;
+    }
+
+    public function submitValue(Model|null $model, mixed $value): self
+    {
+        $validator = Validator::make(['value' => $value], ['value' => $this->rules]);
+        if ($validator->fails()) {
+            $this->errors = $validator->getMessageBag()->all();
+        } else {
+            $this->setValue($model, $value);
+        }
+        return $this;
+    }
+
+    public function isForFiles(): bool
+    {
+        return $this->style === self::STYLE_IMAGE;
     }
 }

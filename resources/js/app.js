@@ -1,5 +1,66 @@
 require('./bootstrap');
 
+const eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+const eventer = window[eventMethod];
+const messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
+const frameCallbacks = {};
+window.app = {
+    isFrame() {
+        return window.parent || window.opener;
+    },
+    modal: {
+        frame(src, callback) {
+            const sessionID = 'iframe-' + Math.floor(Math.random() * 100000000);
+            const iframe = document.getElementById('iframe-modal-body');
+            iframe.src = src + '?iframe=' + sessionID + '#' + sessionID;
+            iframe.onload = function () {
+                iframe.onload = null;
+                halfmoon.toggleModal('iframe-modal-popup');
+                frameCallbacks[sessionID] = function(data) {
+                    const popup = document.getElementById('iframe-modal-popup');
+                    if (popup.classList.contains('show')) {
+                        halfmoon.toggleModal('iframe-modal-popup');
+                    }
+                    iframe.innerHTML = '';
+                    callback(data.data);
+                };
+            }
+        }
+    },
+};
+eventer(messageEvent, function (e) {
+    const data = e.data ? e.data : e.message;
+    if (data.sessionID) {
+        if (frameCallbacks[data.sessionID]) {
+            frameCallbacks[data.sessionID](data);
+            delete frameCallbacks[data.sessionID];
+        }
+    }
+});
+if (window.app.isFrame()) {
+    window.app.modal.frame.reply = function (data) {
+        const sessionID = window.location.hash.substr(1);
+        if (window.parent) {
+            window.parent.postMessage({
+                sessionID: sessionID,
+                data: data,
+            }, "*")
+        } else if (window.opener) {
+            window.opener.postMessage({
+                sessionID: sessionID,
+                data: data,
+            }, "*")
+            window.close();
+        }
+    }
+} else {
+    window.app.modal.frame.reply = function (data) {
+        console.warn('I cant reply if there is no parent window :(');
+    }
+}
+// ....
+
+
 async function postData(url = '', data = {}) {
     // Default options are marked with *
     const response = await fetch(url, {
@@ -30,11 +91,26 @@ document.addEventListener('change', function(e) {
         }
     }
 })
-
+document.addEventListener('DOMContentLoaded', function(){
+    document.body.addEventListener(
+        "error",
+        function(event) {
+            if (event.target.tagName === 'IMG') {
+                event.target.src = '/img/404.svg';
+            }
+        },
+        true
+    );
+})
 document.addEventListener('click', function(e) {
     var target = e.target;
     if (target.tagName === 'I') {
         target = target.parentElement;
+    }
+    if(target.dataset.iframeInput) {
+        window.app.modal.frame(target.dataset.iframeInput, function(data){
+            target.value = data.value;
+        })
     }
     if (target.dataset.submitFormAction && target.form !== undefined && target.form.elements['form-action']) {
         target.form.elements['form-action'].value = target.dataset.submitFormAction;
@@ -62,6 +138,7 @@ document.addEventListener('click', function(e) {
         }
     }
 })
+
 
 window.api = {
     wiki: {

@@ -2,7 +2,9 @@
 $fields = $form->getFields();
 $model = $form->getModel();
 @endphp
-<form action="..." method="..." class="mw-full"> <!-- w-400 = width: 40rem (400px), mw-full = max-width: 100% -->
+<input type="text" data-iframe-input="{{scoped_route('uploads.browse', ['locale' => $locale])}}">
+<form action="{{$form->getAction()}}" method="{{$form->getMethod()}}" class="mw-full" enctype="multipart/form-data">
+    @csrf
     @foreach ($fields as $field)
     <div class="form-group @if($field->hasErrors()) is-invalid @endif">
         <label for="username" class="@if($field->isRequired()) required @endif">{{$field->getTitle()}}</label>
@@ -17,19 +19,19 @@ $model = $form->getModel();
         @endif
         @switch($field->getStyle())
         @case(\App\Forms\ModelField::STYLE_TEXT)
-        <input type="text" class="form-control" id="{{$field->getID()}}" placeholder="{{$field->getTitle()}}" @if($field->isRequired()) required="required" @endif value="{{$field->getValue($model)}}">
+        <input type="text" name="{{$form->getID()}}[{{$field->getID()}}]" class="form-control" id="{{$field->getID()}}" placeholder="{{$field->getTitle()}}" @if($field->isRequired()) required="required" @endif value="{{$field->getValue($model)}}">
         @break
         @case(\App\Forms\ModelField::STYLE_IMAGE)
         <div class="d-flex">
             <img src="{{$field->getValue($model)}}" class="w-300 rounded" id="{{$field->getID()}}-preview" style="object-fit: contain">
             <div class="custom-file p-10">
-                <input type="file" data-img-preview="{{$field->getID()}}-preview" class="form-control" id="{{$field->getID()}}" @if($field->isRequired()) required="required" @endif value="{{$field->getValue($model)}}">
+                <input name="{{$form->getID()}}[{{$field->getID()}}]" type="file" data-img-preview="{{$field->getID()}}-preview" class="form-control" id="{{$field->getID()}}" @if($field->isRequired()) required="required" @endif>
                 <label for="{{$field->getID()}}">Choose picture</label>
             </div>
         </div>
         @break
         @case(\App\Forms\ModelField::STYLE_SELECT)
-        <select class="form-control">
+        <select name="{{$form->getID()}}[{{$field->getID()}}]" class="form-control">
             @foreach($field->getOptions() as $key => $label)
                 <option @if($key === $field->getValue($model)) selected @endif value="{{$key}}">{{$label}}</option>
             @endforeach

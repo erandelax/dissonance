@@ -14,13 +14,11 @@
 <!-- Reference: https://www.gethalfmoon.com/docs/modal -->
 
 <!-- Page wrapper start -->
-<div class="page-wrapper with-navbar with-sidebar {{-- with-navbar-fixed-bottom --}}" data-sidebar-type="overlayed-all">
+<div class="page-wrapper with-navbar-fixed-bottom with-navbar">
+    @include('partials.iframe_navbar')
     @include('partials.layout_sticky_alerts')
-    @include('partials.layout_navbar')
-    @include('partials.layout_sidebar_overlay')
-    @include('partials.layout_sidebar', ['search' => true])
     @include('partials.layout_content_wrapper')
-    {{-- @include('partials.layout_fixed_bottom') --}}
+    @include('partials.layout_fixed_bottom')
 </div>
 <!-- Page wrapper end -->
 

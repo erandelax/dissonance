@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use App\Concerns\HasUUIDKey;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Repositories\UploadRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -61,6 +62,11 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereLocale($value)
  * @property string|null $auth_token
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAuthToken($value)
+ * @property string|null $timezone
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereTimezone($value)
+ * @property string|null $custom_avatar_id
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCustomAvatarId($value)
+ * @property-read \App\Models\Upload|null $customAvatar
  */
 class User extends Authenticatable
 {
@@ -86,4 +92,25 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Character::class, 'character_id');
     }
+
+   public function customAvatar(): BelongsTo
+   {
+       return $this->belongsTo(Upload::class, 'custom_avatar_id');
+   }
+
+   public function getDisplayAvatarAttribute(): string|null
+   {
+       return  $this->customAvatar?->getURL() ?? $this->avatar;
+   }
+
+   public function setDisplayAvatarAttribute(UploadedFile|null $file): void
+   {
+       if (null === $file) {
+           $this->custom_avatar_id = null;
+       } else {
+           $uploadRepository = app()->make(UploadRepository::class);
+           $upload = $uploadRepository->upload($file);
+           $this->custom_avatar_id = $upload->getKey();
+       }
+   }
 }

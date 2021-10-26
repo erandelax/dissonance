@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Actions\Web\Pages;
 
-use App\Entities\LocaleReference;
+use App\Entities\Locale;
 use App\Entities\PageReference;
 use App\Entities\ProjectReference;
 use App\Http\Requests\StoreWikiRequest;
@@ -23,7 +23,7 @@ final class EditPage
     {
     }
 
-    public function __invoke(ProjectReference $project, LocaleReference $locale, PageReference $page, StoreWikiRequest $request)
+    public function __invoke(ProjectReference $project, Locale $locale, PageReference $page, StoreWikiRequest $request)
     {
         $data = $request->validated();
         $projectModel = $this->projectRepository->findByReference($project);

@@ -13,8 +13,9 @@ use App\Forms\QueryFilter;
 use App\Forms\QueryTable;
 use App\Helpers\LocaleHelper;
 use App\Models\User;
+use Illuminate\Http\Request;
 
-final class ReadUsers
+final class AdminUsers
 {
     public function browse()
     {
@@ -98,14 +99,22 @@ final class ReadUsers
         ]);
     }
 
-    public function form(string $id): FormContract
+    public function edit(string $id, Request $request)
+    {
+        return view('web.admins.read', [
+            'title' => 'Users',
+            'form' => $this->form($id)->submitRequest($request),
+        ]);
+    }
+
+    public function form(string $id): ModelForm
     {
         $form = new ModelForm(
             id: $id,
             model: User::find($id),
             fields: [
                 new ModelField(attribute: 'name', title: 'Name'),
-                new ModelField(attribute: 'avatar', style: ModelField::STYLE_IMAGE, title: 'Avatar'),
+                new ModelField(attribute: 'displayAvatar', style: ModelField::STYLE_IMAGE, title: 'Avatar'),
                 new ModelField(attribute: 'locale', style: ModelField::STYLE_SELECT, title: 'Locale', options: LocaleHelper::getOptions()),
             ],
         );

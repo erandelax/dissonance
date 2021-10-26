@@ -37,6 +37,12 @@ $scopedRoutesFactory = static function (string $namePrefix): callable {
             $router->group(['prefix' => '/x'], static function (Router $router) use($namePrefix): void {
                 $router->get('/', Web\Admins\BrowseAdmins::class)->name("$namePrefix:admins.browse");
                 $router->get('/{page}/{id?}', Web\Admins\ReadAdmin::class)->name("$namePrefix:admins.read");
+                $router->post('/{page}/{id?}', Web\Admins\ReadAdmin::class)->name("$namePrefix:admins.edit");
+            });
+            // uploads/storage
+            $router->group(['prefix' => '/s'], static function (Router $router) use($namePrefix): void {
+                $router->get('/', Web\Uploads\BrowseUploads::class)->name("$namePrefix:uploads.browse");
+                $router->post('/', Web\Uploads\PushUpload::class)->name("$namePrefix:uploads.push");
             });
             // pages
             $router->get('/{page?}', Web\Pages\ReadPage::class)->name("$namePrefix:pages.read");
@@ -81,6 +87,12 @@ Route::domain(
         $router->group(['prefix' => '/x'], static function (Router $router) use($namePrefixRoot): void {
             $router->get('/', Web\Admins\BrowseAdmins::class)->name("$namePrefixRoot:admins.browse");
             $router->get('/{page}/{id?}', Web\Admins\ReadAdmin::class)->name("$namePrefixRoot:admins.read");
+            $router->post('/{page}/{id?}', Web\Admins\ReadAdmin::class)->name("$namePrefixRoot:admins.edit");
+        });
+        // uploads/storage
+        $router->group(['prefix' => '/s'], static function (Router $router) use($namePrefixRoot): void {
+            $router->get('/', Web\Uploads\BrowseUploads::class)->name("$namePrefixRoot:uploads.browse");
+            $router->post('/', Web\Uploads\PushUpload::class)->name("$namePrefixRoot:uploads.push");
         });
         // pages
         $router->get('/{page?}', Web\Pages\ReadPage::class)->name("$namePrefixRoot:pages.read");

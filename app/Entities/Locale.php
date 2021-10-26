@@ -6,7 +6,7 @@ namespace App\Entities;
 
 use Illuminate\Contracts\Routing\UrlRoutable;
 
-class LocaleReference implements UrlRoutable
+final class Locale implements UrlRoutable
 {
     public string $locale = 'en';
 
