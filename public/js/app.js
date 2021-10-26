@@ -2141,11 +2141,21 @@ function _postData() {
   return _postData.apply(this, arguments);
 }
 
-window.submitFormAction = function (e) {
-  // e.target.elements[form-action].value
-  console.log(e);
-};
+document.addEventListener('change', function (e) {
+  var target = e.target;
 
+  if (target.tagName === 'INPUT' && target.type === 'file') {
+    var file = e.target.files[0];
+
+    if (target.dataset.imgPreview) {
+      var preview = document.getElementById(target.dataset.imgPreview);
+
+      if (preview) {
+        preview.src = URL.createObjectURL(file);
+      }
+    }
+  }
+});
 document.addEventListener('click', function (e) {
   var target = e.target;
 

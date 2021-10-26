@@ -18,10 +18,18 @@ async function postData(url = '', data = {}) {
     return response.json(); // parses JSON response into native JavaScript objects
 }
 
-window.submitFormAction = function(e) {
-    // e.target.elements[form-action].value
-    console.log(e);
-}
+document.addEventListener('change', function(e) {
+    const target = e.target;
+    if (target.tagName === 'INPUT' && target.type === 'file') {
+        const file = e.target.files[0];
+        if (target.dataset.imgPreview) {
+            const preview = document.getElementById(target.dataset.imgPreview);
+            if (preview) {
+                preview.src = URL.createObjectURL(file);
+            }
+        }
+    }
+})
 
 document.addEventListener('click', function(e) {
     var target = e.target;

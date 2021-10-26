@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\Http\Actions\Web\Admins\Platform;
 
 use App\Contracts\FormContract;
-use App\Forms\ModelAction;
 use App\Forms\ModelColumn;
+use App\Forms\ModelField;
+use App\Forms\ModelForm;
 use App\Forms\ModelUrlAction;
 use App\Forms\QueryFilter;
 use App\Forms\QueryTable;
-use App\Models\Page;
+use App\Helpers\LocaleHelper;
 use App\Models\User;
 
 final class ReadUsers
@@ -38,6 +39,14 @@ final class ReadUsers
                             urlMaker: fn(User $model) => scoped_route('users.read', [
                                 'user' => $model->getKey(),
                                 'locale' => app()->getLocale(),
+                            ]),
+                        ),
+                        new ModelUrlAction(
+                            title: '<i class="fa fa-pencil"></i>',
+                            urlMaker: fn(User $model) => scoped_route('admins.read', [
+                                'locale' => app()->getLocale(),
+                                'page' => 'users',
+                                'id' => $model->getKey(),
                             ]),
                         ),
                     ],
@@ -79,5 +88,27 @@ final class ReadUsers
             ],
         );
         return $table;
+    }
+
+    public function read(string $id)
+    {
+        return view('web.admins.read', [
+            'title' => 'Users',
+            'form' => $this->form($id),
+        ]);
+    }
+
+    public function form(string $id): FormContract
+    {
+        $form = new ModelForm(
+            id: $id,
+            model: User::find($id),
+            fields: [
+                new ModelField(attribute: 'name', title: 'Name'),
+                new ModelField(attribute: 'avatar', style: ModelField::STYLE_IMAGE, title: 'Avatar'),
+                new ModelField(attribute: 'locale', style: ModelField::STYLE_SELECT, title: 'Locale', options: LocaleHelper::getOptions()),
+            ],
+        );
+        return $form;
     }
 }

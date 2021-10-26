@@ -26,13 +26,21 @@ final class ReadAdmin
         'project-uploads' => [Project\ReadUploads::class, 'browse'],
     ];
 
-    public function __invoke(ProjectReference $project, LocaleReference $locale, PageReference $page)
+    public function __invoke(ProjectReference $project, LocaleReference $locale, PageReference $page, string|null $id = null)
     {
         $callable = self::PAGES[(string)$page] ?? null;
         if (null === $callable) {
             abort(404);
         }
         $callable[0] = app()->make($callable[0]);
-        return app()->call($callable);
+        if ($id !== null) {
+            $callable[1] = 'read';
+        }
+        return app()->call($callable, [
+            'project' => $project,
+            'locale' => $locale,
+            'page' => $page,
+            'id' => $id,
+        ]);
     }
 }

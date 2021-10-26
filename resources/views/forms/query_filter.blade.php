@@ -13,7 +13,7 @@
                value="{{$value}}">
         @break
         @case(\App\Forms\QueryFilter::STYLE_OPTIONS)
-        <select class="form-control {{$errorClass}}" id="if-6-select" name="form-filter[{{$filter->getID()}}]" onchange="event.target.form.submit()">
+        <select class="form-control {{$errorClass}}"  name="form-filter[{{$filter->getID()}}]" onchange="event.target.form.submit()">
             @foreach($filter->getOptions() as $key => $label)
                 <option @if($key === $value) selected @endif value="{{$key}}">{{$label}}</option>
             @endforeach

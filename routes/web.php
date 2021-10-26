@@ -36,7 +36,7 @@ $scopedRoutesFactory = static function (string $namePrefix): callable {
             // admin
             $router->group(['prefix' => '/x'], static function (Router $router) use($namePrefix): void {
                 $router->get('/', Web\Admins\BrowseAdmins::class)->name("$namePrefix:admins.browse");
-                $router->get('/{page}', Web\Admins\ReadAdmin::class)->name("$namePrefix:admins.read");
+                $router->get('/{page}/{id?}', Web\Admins\ReadAdmin::class)->name("$namePrefix:admins.read");
             });
             // pages
             $router->get('/{page?}', Web\Pages\ReadPage::class)->name("$namePrefix:pages.read");
@@ -80,7 +80,7 @@ Route::domain(
         // admin
         $router->group(['prefix' => '/x'], static function (Router $router) use($namePrefixRoot): void {
             $router->get('/', Web\Admins\BrowseAdmins::class)->name("$namePrefixRoot:admins.browse");
-            $router->get('/{page}', Web\Admins\ReadAdmin::class)->name("$namePrefixRoot:admins.read");
+            $router->get('/{page}/{id?}', Web\Admins\ReadAdmin::class)->name("$namePrefixRoot:admins.read");
         });
         // pages
         $router->get('/{page?}', Web\Pages\ReadPage::class)->name("$namePrefixRoot:pages.read");
