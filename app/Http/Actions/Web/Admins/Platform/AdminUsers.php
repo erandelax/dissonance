@@ -113,9 +113,71 @@ final class AdminUsers
             id: $id,
             model: User::find($id),
             fields: [
-                new ModelField(attribute: 'name', title: 'Name'),
-                new ModelField(attribute: 'displayAvatar', style: ModelField::STYLE_UPLOAD, title: 'Avatar'),
-                new ModelField(attribute: 'locale', style: ModelField::STYLE_SELECT, title: 'Locale', options: LocaleHelper::getOptions()),
+                new ModelField(
+                    attribute: 'id',
+                    title: 'ID',
+                    readOnly: true,
+                ),
+                new ModelField(
+                    attribute: 'name',
+                    title: 'Name'
+                ),
+                new ModelField(
+                    attribute: 'displayAvatar',
+                    style: ModelField::STYLE_UPLOAD, title:
+                    'Avatar'
+                ),
+                new ModelField(
+                    attribute: 'custom_avatar_id',
+                    title: 'Avatar upload ID',
+                    readOnly: true,
+                ),
+                new ModelField(
+                    attribute: 'timezone',
+                    style: ModelField::STYLE_SELECT,
+                    title: 'Timezone',
+                    options: array_combine($timezones = \DateTimeZone::listIdentifiers(), $timezones)
+                ),
+                new ModelField(
+                    attribute: 'locale',
+                    style: ModelField::STYLE_SELECT,
+                    title: 'Locale',
+                    options: LocaleHelper::getOptions()
+                ),
+                new ModelField(
+                    attribute: 'email',
+                    title: 'Email',
+                    description: 'Not editable (is imported from Discord on every auth)',
+                    readOnly: true,
+                ),
+                new ModelField(
+                    attribute: 'discord_id',
+                    title: 'Discord ID',
+                    description: 'Not editable (is imported from Discord on every auth)',
+                    readOnly: true,
+                ),
+                new ModelField(
+                    attribute: 'nickname',
+                    title: 'Discord Nickname',
+                    description: 'Not editable (is imported from Discord on every auth)',
+                    readOnly: true,
+                ),
+                new ModelField(
+                    attribute: 'avatar',
+                    title: 'Discord avatar',
+                    description: 'Not editable (is imported from Discord on every auth)',
+                    readOnly: true,
+                ),
+                new ModelField(
+                    attribute: 'created_at',
+                    title: 'Created at',
+                    readOnly: true,
+                ),
+                new ModelField(
+                    attribute: 'created_at',
+                    title: 'Updated at',
+                    readOnly: true,
+                ),
             ],
         );
         return $form;

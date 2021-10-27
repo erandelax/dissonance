@@ -52,9 +52,9 @@ $items = $uploads->items();
 @section('body')
     <div class="container-fluid d-flex flex-wrap" style="justify-content: center">
         @foreach ($items as $upload)
-        <div class="w-200 mw-full" data-upload-id="{{$upload->id}}"  data-upload-url="{{$upload->getURL()}}">
+        <div class="w-200 mw-full" data-upload-id="{{$upload->id}}"  data-upload-url="{{$upload->preview_url}}">
             <div class="btn-card card m-10 p-0"> <!-- p-0 = padding: 0 -->
-                <img src="{{$upload->getURL()}}" class="h-150 w-300 img-fluid rounded-top" style="object-fit: cover">
+                <img src="{{$upload->preview_url}}" class="h-150 w-300 img-fluid rounded-top" style="object-fit: cover">
                 <!-- Nested content container inside card -->
                 <div class="content m-10 mt-0">
                     <h2 class="content-title m-0" style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;">

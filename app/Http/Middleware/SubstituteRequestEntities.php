@@ -61,7 +61,6 @@ final class SubstituteRequestEntities
 
         if ($user !== null && (string)$locale !== $user->locale) {
             $user->locale = (string)$locale;
-            $user->save();
         }
 
         //
@@ -102,6 +101,10 @@ final class SubstituteRequestEntities
         $config = $this->configRepository->acquire($project, 'app');
         View::share('config', $config);
         app()->singleton(Config::class, fn() => $config);
+
+        if (!empty($user->getDirty())) {
+            $user->save();
+        }
 
         return $next($request);
     }

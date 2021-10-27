@@ -24,7 +24,13 @@ final class ModelField implements FormContract
         private array $options = [],
         private array $errors = [],
         private array $rules = [],
+        private bool $readOnly = false,
     ) {}
+
+    public function isReadOnly(): bool
+    {
+        return $this->readOnly;
+    }
 
     public function getOptions(): array
     {

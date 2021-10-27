@@ -12,6 +12,8 @@ $namePrefixSubdomain = ScopedRouteFactory::SCOPE_SUBDOMAIN;
 // Project-scope routes ------------------------------------------------------
 $scopedRoutesFactory = static function (string $namePrefix): callable {
     return static function (Router $router) use($namePrefix): void {
+        // svg placeholder
+        $router->get('/placeholder.svg', Web\Uploads\ReadSVGPlaceholder::class)->name("$namePrefix:svg");
         // edit here start
         $router->get('/', Web\Projects\ReadProject::class)->name("$namePrefix:projects.read");
         // authorization
@@ -62,6 +64,8 @@ Route::domain(
 )->group(static function (Router $router) use($namePrefixRoot): void {
     // edit here start
     $router->get('/', Web\Projects\BrowseProjects::class)->name("$namePrefixRoot:projects.browse");
+    // svg placeholder
+    $router->get('/placeholder.svg', Web\Uploads\ReadSVGPlaceholder::class)->name("$namePrefixRoot:svg");
     // authorization
     $router->group(['prefix' => '/a'], static function (Router $router) use($namePrefixRoot): void {
         $router->get('/', Web\Auths\BrowseAuths::class)->name("$namePrefixRoot:auths.browse");

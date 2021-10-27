@@ -2152,7 +2152,8 @@ window.app = {
 
     document.body.addEventListener('error', function (event) {
       if (event.target.tagName === 'IMG') {
-        event.target.src = '/img/404.svg';
+        var extension = event.target.src.split('.').reverse()[0] || 'N/A';
+        event.target.src = '/placeholder.svg?value=.' + extension.toUpperCase();
       }
     }, true);
   },

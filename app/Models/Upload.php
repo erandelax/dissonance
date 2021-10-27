@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Concerns\HasUUIDKey;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -34,6 +35,8 @@ use Illuminate\Support\Facades\Storage;
  * @method static \Illuminate\Database\Eloquent\Builder|Upload whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Upload whereUserId($value)
  * @mixin \Eloquent
+ * @property-read string $preview_url
+ * @property-read string $url
  */
 final class Upload extends Model
 {
@@ -41,7 +44,7 @@ final class Upload extends Model
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
-    public function getURL(): string
+    public function getUrlAttribute(): string
     {
         $url = Storage::disk($this->disk)->url($this->path);
         if (str_starts_with($url, config('app.url'))) {
@@ -54,7 +57,7 @@ final class Upload extends Model
     {
         parent::boot();
 
-        self::deleted(function(self $model) {
+        self::deleted(function (self $model) {
             if (
                 Storage::disk($model->disk)->exists($model->path)
                 && Storage::disk($model->disk)->size($model->path) === $model->size
@@ -62,5 +65,19 @@ final class Upload extends Model
                 Storage::disk($model->disk)->delete($model->path);
             }
         });
+    }
+
+    public function isImage(): bool
+    {
+        return str_starts_with(strtolower($this->mime), 'image/');
+    }
+
+    public function getPreviewUrlAttribute(): string
+    {
+        return $this->isImage()
+            ? $this->url
+            : scoped_route('svg', [
+                'value' => '[.' . strtoupper(File::extension($this->name)) . ']'
+            ]);
     }
 }

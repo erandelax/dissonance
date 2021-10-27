@@ -102,13 +102,13 @@ class User extends Authenticatable
 
    public function getDisplayAvatarAttribute(): string|null
    {
-       return  $this->customAvatar?->getURL() ?? $this->avatar;
+       return  $this->customAvatar?->url ?? $this->avatar;
    }
 
    public function setDisplayAvatarAttribute(UploadedFile|string|null $file): void
    {
        if (null === $file) {
-           $this->custom_avatar_id = null;
+           //$this->custom_avatar_id = null;
        } else if (is_string($file)) {
            try {
                Uuid::fromString($file);
