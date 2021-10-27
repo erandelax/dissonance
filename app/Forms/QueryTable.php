@@ -117,7 +117,7 @@ final class QueryTable implements FormContract
 
     private function processRequest(): void
     {
-        $filters = $this->request->input('form-filter');
+        $filters = $this->request->input('form-filter', []);
         /** @var \App\Forms\ModelColumn|null $column */
         foreach ($this->columns as $column) {
             if ($column && $column->hasFilter()) {

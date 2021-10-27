@@ -60,7 +60,7 @@ final class BrowseReadAndEditUsers
                 new ModelColumn(
                     attribute: 'discord_id',
                     title: 'DiscordID',
-                    filter: new QueryFilter(id: 'discord_id', rules: ['number'])
+                    filter: new QueryFilter(id: 'discord_id', rules: ['numeric'])
                 ),
                 new ModelColumn(
                     attribute: 'email',

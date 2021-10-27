@@ -10,7 +10,6 @@ use App\Forms\ModelUrlAction;
 use App\Forms\QueryFilter;
 use App\Forms\QueryTable;
 use App\Models\Upload;
-use App\Models\User;
 
 final class BrowseAndReadUploads
 {
@@ -27,8 +26,8 @@ final class BrowseAndReadUploads
     {
         $table = new QueryTable(
             query: Upload::query(),
-            id: 'browse-uploads',
-            pageSize: 5,
+            id: 'uploads',
+            pageSize: 6,
             columns: [
                 new ModelColumn(
                     title: 'Actions',
@@ -47,17 +46,30 @@ final class BrowseAndReadUploads
                 new ModelColumn(
                     attribute: 'mime',
                     title: 'Mime type',
-                    filter: new QueryFilter(id: 'id', rules: [])
+                    filter: new QueryFilter(id: 'mime', rules: [])
+                ),
+                new ModelColumn(
+                    attribute: 'disk',
+                    title: 'Mime type',
+                    filter: new QueryFilter(id: 'disk', rules: [])
                 ),
                 new ModelColumn(
                     attribute: 'size',
                     title: 'Size',
-                    filter: new QueryFilter(id: 'id', rules: ['numeric'])
+                    filter: new QueryFilter(id: 'size', rules: ['numeric'])
                 ),
                 new ModelColumn(
                     attribute: 'preview_url',
                     title: 'Preview',
                     style: ModelColumn::STYLE_IMAGE,
+                ),
+                new ModelColumn(
+                    attribute: 'user_id',
+                    title: 'User ID',
+                ),
+                new ModelColumn(
+                    attribute: 'project_id',
+                    title: 'Project ID',
                 ),
                 new ModelColumn(
                     attribute: 'created_at',
