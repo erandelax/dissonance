@@ -43,19 +43,14 @@ final class ReadOrEditUser
             canSubmit: !$isReadOnly,
             fields: [
                 new ModelField(
-                    attribute: 'id',
-                    title: 'ID',
-                    readOnly: true,
+                    attribute: 'displayAvatar',
+                    style: ModelField::STYLE_UPLOAD,
+                    title: 'Avatar',
+                    readOnly: $isReadOnly,
                 ),
                 new ModelField(
                     attribute: 'name',
                     title: 'Name',
-                    readOnly: $isReadOnly,
-                ),
-                new ModelField(
-                    attribute: 'displayAvatar',
-                    style: ModelField::STYLE_UPLOAD,
-                    title: 'Avatar',
                     readOnly: $isReadOnly,
                 ),
                 new ModelField(
@@ -77,7 +72,12 @@ final class ReadOrEditUser
                     options: LocaleHelper::getOptions(),
                     readOnly: $isReadOnly,
                 ),
-                $isReadOnly ? new ModelField(
+                new ModelField(
+                    attribute: 'id',
+                    title: 'ID',
+                    readOnly: true,
+                ),
+                !$isReadOnly ? new ModelField(
                     attribute: 'email',
                     title: 'Email',
                     readOnly: true,
@@ -92,11 +92,11 @@ final class ReadOrEditUser
                     title: 'Discord Nickname',
                     readOnly: true,
                 ),
-                new ModelField(
+                !$isReadOnly ? new ModelField(
                     attribute: 'avatar',
                     title: 'Discord avatar',
                     readOnly: true,
-                ),
+                ) : null,
                 new ModelField(
                     attribute: 'created_at',
                     title: 'Created at',
