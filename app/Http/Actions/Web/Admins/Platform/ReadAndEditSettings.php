@@ -9,7 +9,7 @@ use App\Forms\ModelForm;
 use App\Models\Config;
 use Illuminate\Http\Request;
 
-final class AdminSettings
+final class ReadAndEditSettings
 {
     public function __construct (
     ) {}
@@ -37,11 +37,13 @@ final class AdminSettings
                 ),
                 new ModelField (
                     attribute: 'data.app.logo',
+                    style: ModelField::STYLE_UPLOAD,
                     title: 'Site logo',
                     rules: [],
                 ),
                 new ModelField (
                     attribute: 'data.app.icon',
+                    style: ModelField::STYLE_UPLOAD,
                     title: 'Site icon',
                     rules: [],
                 ),

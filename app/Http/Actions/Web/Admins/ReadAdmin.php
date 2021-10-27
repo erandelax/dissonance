@@ -14,7 +14,7 @@ use App\Models\Config;
 final class ReadAdmin
 {
     private const PAGES = [
-        'settings' => [Platform\AdminSettings::class, 'read'],
+        'settings' => [Platform\ReadAndEditSettings::class, 'read'],
         'projects' => [Platform\BrowseReadAndEditProjects::class, 'browse'],
         'users' => [Platform\BrowseReadAndEditUsers::class, 'browse'],
         'pages' => [Platform\ReadPages::class, 'browse'],

@@ -75,7 +75,7 @@ final class ModelField implements FormContract
 
     public function getID(): string
     {
-        return 'field-'. $this->attribute;
+        return 'field-'. str_replace('.','-', $this->attribute);
     }
 
     public function getAttribute(): string
@@ -98,6 +98,9 @@ final class ModelField implements FormContract
 
     public function setValue(Model|null $model, mixed $value): self
     {
+        if (self::STYLE_UPLOAD === $this->style && null === $value) {
+            return $this;
+        }
         $path = explode('.', $this->attribute, 2);
         if (isset($path[1])) {
             $data = $model->{$path[0]};

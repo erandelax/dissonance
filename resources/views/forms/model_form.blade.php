@@ -1,5 +1,6 @@
 @php
 /** @var \App\Forms\ModelForm $form */
+/** @var \App\Forms\ModelField $field */
     $fields = $form->getFields();
     $model = $form->getModel();
 @endphp
@@ -7,7 +8,7 @@
 <form action="{{$form->getAction()}}" method="{{$form->getMethod()}}" class="container-fluid" enctype="multipart/form-data">
     @csrf
 @else
-<form class="container-fluid">
+<div class="container-fluid">
 @endif
     @foreach ($fields as $field)
         <div class="row form-group @if($field->hasErrors()) is-invalid @endif">
@@ -49,8 +50,15 @@
                         data-iframe-return-url="src{{'@#'.$field->getID()}}-preview"
                         @endif
                     >
+                        @php
+                        $previewUrl = $field->getValue($model) ?? scoped_route('svg', ['value' => 'N/A']);
+                        try {
+                            \Ramsey\Uuid\Uuid::fromString($previewUrl);
+                            $previewUrl = \App\Models\Upload::find($previewUrl)?->preview_url;
+                        } catch (\Ramsey\Uuid\Exception\InvalidUuidStringException) {}
+                        @endphp
                         <img
-                            src="{{$field->getValue($model)}}"
+                            src="{{$previewUrl}}"
                             class="w-full h-200 rounded"
                             id="{{$field->getID()}}-preview"
                             style="object-fit: contain"
@@ -113,4 +121,4 @@
             Must match the above password exactly.
         </div>
     </div>--}}
-@if ($form->hasSubmit()) </form> @else </div> @endif
+@if ($form->hasSubmit()) </div> @else </form> @endif
