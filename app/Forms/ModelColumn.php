@@ -11,14 +11,31 @@ final class ModelColumn
 {
     private array $modelActions = [];
 
+    public const STYLE_TEXT = 'text';
+    public const STYLE_IMAGE = 'image';
+
+    private mixed $style = null;
+
     public function __construct(
         private string|null      $attribute = null,
         private string|null      $title = null,
         private QueryFilter|null $filter = null,
+        string|callable          $style = self::STYLE_TEXT,
         array                    $actions = [],
     )
     {
         foreach ($actions as $action) $this->addModelAction($action);
+        $this->style = $style;
+    }
+
+    public function getStyle(): string|callable
+    {
+        return $this->style;
+    }
+
+    public function isStyleCallable(): bool
+    {
+        return $this->style instanceof \Closure;
     }
 
     public function hasModelActions(): bool

@@ -19,7 +19,7 @@
             </span>
                 @else
                     <a class="btn btn-square" href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="@lang('pagination.previous')">
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <i class="fa fa-angle-double-left" aria-hidden="true"></i>
                         <span class="sr-only">&lsaquo;</span> <!-- sr-only = only for screen readers -->
                     </a>
                 @endif
@@ -55,7 +55,7 @@
                 @endif
                 @if($paginator->lastPage() >= $paginator->currentPage()+5)
                     <a class="btn btn-square" href="{{ $paginator->url( $paginator->currentPage() + 5 ) }}" rel="prev" aria-label="Skip 5  &rsaquo;">
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>
                         <span class="sr-only">Skip 5 &rsaquo;</span>
                     </a>
                 @endif

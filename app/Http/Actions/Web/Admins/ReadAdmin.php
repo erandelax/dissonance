@@ -19,7 +19,7 @@ final class ReadAdmin
         'users' => [Platform\BrowseReadAndEditUsers::class, 'browse'],
         'pages' => [Platform\ReadPages::class, 'browse'],
         'posts' => [Platform\ReadPosts::class, 'browse'],
-        'uploads' => [Platform\ReadUploads::class, 'browse'],
+        'uploads' => [Platform\BrowseAndReadUploads::class, 'browse'],
         'project-settings' => [Project\ReadSettings::class, 'read'],
         'project-users' => [Project\ReadUsers::class, 'browse'],
         'project-pages' => [Project\ReadPages::class, 'browse'],

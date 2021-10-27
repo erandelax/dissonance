@@ -20,12 +20,12 @@
     </div>
     @endif
     @if($paginator->hasPages())
-    <div class="input-group ml-auto"> <!-- ml-auto = margin-left: auto -->
+    <div class="input-group ml-0">
         <div class="btn-group" role="group" aria-label="Button group as pagination">
             {{-- Previous Page Link --}}
             @if($paginator->currentPage() > 5)
                 <a class="btn btn-square" href="{{$paginator->url( $paginator->currentPage() - 5 )}}" rel="prev" aria-label="&lsaquo; Skip 5">
-                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <i class="fa fa-angle-double-left" aria-hidden="true"></i>
                     <span class="sr-only">&lsaquo; Skip 5 </span> <!-- sr-only = only for screen readers -->
                 </a>
             @endif
@@ -72,7 +72,7 @@
             @endif
             @if($paginator->lastPage() >= $paginator->currentPage()+5)
                 <a class="btn btn-square" href="{{ $paginator->url( $paginator->currentPage() + 5 ) }}" rel="prev" aria-label="Skip 5  &rsaquo;">
-                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    <i class="fa fa-angle-double-right" aria-hidden="true"></i>
                     <span class="sr-only">Skip 5 &rsaquo;</span>
                 </a>
             @endif

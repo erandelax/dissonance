@@ -1,4 +1,6 @@
 @php
+/** @var \App\Forms\QueryTable $table */
+/** @var \App\Forms\ModelColumn $column */
 $paginator = $table->getPaginator();
 $items = $paginator->items();
 $columns = $table->getColumns();
@@ -68,7 +70,18 @@ $notice = $table->getNotice();
                         @foreach($columns as $column)
                         <th>
                             @if ($column->isAttribute())
-                            {{$column->getValue($item)}}
+                                @if ($column->isStyleCallable())
+                                    {!! $column->getStyle()($column->getValue($item)) !!}
+                                @else
+                                    @switch($column->getStyle())
+                                        @case(\App\Forms\ModelColumn::STYLE_TEXT)
+                                        {{$column->getValue($item)}}
+                                        @break
+                                        @case(\App\Forms\ModelColumn::STYLE_IMAGE)
+                                        <img class="img-fluid w-100" src="{{$column->getValue($item)}}" style="object-fit: contain">
+                                        @break
+                                    @endswitch
+                                @endif
                             @endif
                             @if ($column->hasModelActions())
                             <div class="btn-group" role="group" aria-label="row actions">
