@@ -27,8 +27,8 @@ $scopedRoutesFactory = static function (string $namePrefix): callable {
             // users (accounts)
             $router->group(['prefix' => '/u'], static function (Router $router) use($namePrefix): void {
                 $router->get('/', Web\Users\BrowseUsers::class)->name("$namePrefix:users.browse");
-                $router->get('/{user}', Web\Users\ReadUser::class)->name("$namePrefix:users.read");
-                $router->post('/{user}', Web\Users\EditUser::class)->name("$namePrefix:users.edit");
+                $router->get('/{user}', Web\Users\ReadOrEditUser::class)->name("$namePrefix:users.read");
+                $router->post('/{user}', Web\Users\ReadOrEditUser::class)->name("$namePrefix:users.edit");
             });
             // characters, groups and organizations (entities)
             $router->group(['prefix' => '/e'], static function (Router $router) use($namePrefix): void {
@@ -79,8 +79,8 @@ Route::domain(
         // users (accounts)
         $router->group(['prefix' => '/u'], static function (Router $router) use($namePrefixRoot): void {
             $router->get('/', Web\Users\BrowseUsers::class)->name("$namePrefixRoot:users.browse");
-            $router->get('/{user}', Web\Users\ReadUser::class)->name("$namePrefixRoot:users.read");
-            $router->post('/{user}', Web\Users\EditUser::class)->name("$namePrefixRoot:users.edit");
+            $router->get('/{user}', Web\Users\ReadOrEditUser::class)->name("$namePrefixRoot:users.read");
+            $router->post('/{user}', Web\Users\ReadOrEditUser::class)->name("$namePrefixRoot:users.edit");
         });
         // characters, groups and organizations (entities)
         $router->group(['prefix' => '/e'], static function (Router $router) use($namePrefixRoot): void {

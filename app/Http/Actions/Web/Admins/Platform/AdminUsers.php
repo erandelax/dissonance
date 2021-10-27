@@ -174,7 +174,7 @@ final class AdminUsers
                     readOnly: true,
                 ),
                 new ModelField(
-                    attribute: 'created_at',
+                    attribute: 'updated_at',
                     title: 'Updated at',
                     readOnly: true,
                 ),

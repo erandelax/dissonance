@@ -1,10 +1,14 @@
 @php
+/** @var \App\Forms\ModelForm $form */
     $fields = $form->getFields();
     $model = $form->getModel();
 @endphp
-<form action="{{$form->getAction()}}" method="{{$form->getMethod()}}" class="container-fluid"
-      enctype="multipart/form-data">
+@if ($form->hasSubmit())
+<form action="{{$form->getAction()}}" method="{{$form->getMethod()}}" class="container-fluid" enctype="multipart/form-data">
     @csrf
+@else
+<form class="container-fluid">
+@endif
     @foreach ($fields as $field)
         <div class="row form-group @if($field->hasErrors()) is-invalid @endif">
             <div class="column col-2 text-right p-5 pr-20">
@@ -27,7 +31,7 @@
                     @break
                     @case(\App\Forms\ModelField::STYLE_UPLOAD)
                     <label
-                        class="d-flex btn h-200"
+                        class="d-flex h-200 @if (!$field->isReadOnly()) btn @endif "
                         for="{{$field->getID()}}"
                         @if (!$field->isReadOnly())
                         data-iframe-modal="{{scoped_route('uploads.browse', ['locale' => $locale])}}"
@@ -79,7 +83,9 @@
             </div>
         </div>
     @endforeach
+    @if ($form->hasSubmit())
     <input class="btn btn-primary btn-block" type="submit" value="Save">
+    @endif
     {{--<div class="form-group">
         <label for="password" class="required">Password</label>
         <input type="password" class="form-control" id="password" placeholder="Password" required="required" value="my-password">
@@ -97,4 +103,4 @@
             Must match the above password exactly.
         </div>
     </div>--}}
-</form>
+@if ($form->hasSubmit()) </form> @else </div> @endif

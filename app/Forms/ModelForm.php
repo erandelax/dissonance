@@ -15,9 +15,10 @@ final class ModelForm extends Form
         protected Model|null $model,
         string|null $action = null,
         string $method = 'post',
+        bool $canSubmit = true,
         array $fields = [],
     ) {
-        parent::__construct(id: $id, action: $action, method: $method, fields: $fields);
+        parent::__construct(id: $id, action: $action, method: $method, canSubmit: $canSubmit, fields: $fields);
     }
 
     public function render(): View|string
@@ -32,6 +33,9 @@ final class ModelForm extends Form
 
     public function submitRequest(Request $request): self
     {
+        if (!$this->canSubmit) {
+            return $this;
+        }
         $data = array_merge(
             $request->file($this->getID(), []),
             $request->input($this->getID(), []),
@@ -43,6 +47,9 @@ final class ModelForm extends Form
         /** @var \App\Forms\ModelField $field */
         $hasErrors = false;
         foreach ($this->fields as $field) {
+            if ($field->isReadOnly()) {
+                continue;
+            }
             $field->submitValue($model, $data[$field->getID()] ?? null);
             if ($field->hasErrors()) {
                 $hasErrors = true;

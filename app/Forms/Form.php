@@ -15,10 +15,16 @@ abstract class Form implements FormContract
         protected string $id,
         protected string|null $action = null,
         protected string $method = 'post',
+        protected bool $canSubmit = true,
         array $fields = [],
     ) {
         foreach ($fields as $field) $this->addField($field);
         if (null === $this->action) $this->action = url()->current();
+    }
+
+    public function hasSubmit(): bool
+    {
+        return $this->canSubmit;
     }
 
     public function getAction(): string|null
@@ -31,8 +37,11 @@ abstract class Form implements FormContract
         return $this->method;
     }
 
-    public function addField(ModelField $field): self
+    public function addField(ModelField|null $field): self
     {
+        if (null === $field) {
+            return $this;
+        }
         $this->fields[spl_object_id($field)] = $field;
         return $this;
     }

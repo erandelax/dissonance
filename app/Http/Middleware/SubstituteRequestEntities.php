@@ -102,7 +102,7 @@ final class SubstituteRequestEntities
         View::share('config', $config);
         app()->singleton(Config::class, fn() => $config);
 
-        if (!empty($user->getDirty())) {
+        if (!empty($user?->getDirty())) {
             $user->save();
         }
 
