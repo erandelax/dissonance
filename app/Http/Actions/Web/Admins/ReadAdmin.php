@@ -15,8 +15,8 @@ final class ReadAdmin
 {
     private const PAGES = [
         'settings' => [Platform\AdminSettings::class, 'read'],
-        'projects' => [Platform\ReadProjects::class, 'browse'],
-        'users' => [Platform\AdminUsers::class, 'browse'],
+        'projects' => [Platform\BrowseReadAndEditProjects::class, 'browse'],
+        'users' => [Platform\BrowseReadAndEditUsers::class, 'browse'],
         'pages' => [Platform\ReadPages::class, 'browse'],
         'posts' => [Platform\ReadPosts::class, 'browse'],
         'uploads' => [Platform\ReadUploads::class, 'browse'],

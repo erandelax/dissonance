@@ -29,6 +29,16 @@
                         @if ($field->isReadOnly()) readonly @endif
                     >
                     @break
+                    @case(\App\Forms\ModelField::STYLE_TEXTAREA)
+                    <textarea
+                        type="text"
+                        @if (!$field->isReadOnly()) name="{{$form->getID()}}[{{$field->getID()}}]" @endif
+                        class="form-control" id="{{$field->getID()}}"
+                        placeholder="{{$field->getTitle()}}"
+                        @if($field->isRequired()) required="required" @endif
+                        @if ($field->isReadOnly()) readonly @endif
+                    >{{$field->getValue($model)}}</textarea>
+                    @break
                     @case(\App\Forms\ModelField::STYLE_UPLOAD)
                     <label
                         class="d-flex h-200 @if (!$field->isReadOnly()) btn @endif "

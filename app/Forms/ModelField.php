@@ -13,6 +13,7 @@ use Illuminate\View\View;
 final class ModelField implements FormContract
 {
     public const STYLE_TEXT = 'text';
+    public const STYLE_TEXTAREA = 'textarea';
     public const STYLE_UPLOAD = 'upload';
     public const STYLE_SELECT = 'select';
 

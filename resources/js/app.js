@@ -33,7 +33,7 @@ window.app = {
         // 2. Replace failed to load images with default 404 image
         document.body.addEventListener('error', function (event) {
             if (event.target.tagName === 'IMG') {
-                const extension = event.target.src.split('.').reverse()[0] || 'N/A';
+                const extension = event.target.src ? event.target.src.split('.').reverse()[0] || 'N/A' : 'N/A';
                 event.target.src = '/placeholder.svg?value=.'+extension.toUpperCase();
             }
         },true);

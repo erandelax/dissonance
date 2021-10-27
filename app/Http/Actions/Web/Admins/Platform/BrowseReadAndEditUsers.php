@@ -15,7 +15,7 @@ use App\Helpers\LocaleHelper;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-final class AdminUsers
+final class BrowseReadAndEditUsers
 {
     public function browse()
     {
@@ -124,8 +124,8 @@ final class AdminUsers
                 ),
                 new ModelField(
                     attribute: 'displayAvatar',
-                    style: ModelField::STYLE_UPLOAD, title:
-                    'Avatar'
+                    style: ModelField::STYLE_UPLOAD,
+                    title: 'Avatar'
                 ),
                 new ModelField(
                     attribute: 'custom_avatar_id',
