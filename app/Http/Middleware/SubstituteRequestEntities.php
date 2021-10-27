@@ -11,6 +11,7 @@ use App\Models\Config;
 use App\Models\User;
 use App\Repositories\ProjectRepository;
 use App\Repositories\ConfigRepository;
+use App\Utils\Alert;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;

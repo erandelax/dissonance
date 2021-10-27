@@ -37,6 +37,11 @@ window.app = {
                 event.target.src = '/placeholder.svg?value=.'+extension.toUpperCase();
             }
         },true);
+        // 3. Show load alerts
+        const alerts = window.alerts || [];
+        for (const alert of alerts) {
+            halfmoon.initStickyAlert(alert);
+        }
     },
     // Return if this window is popup / iframe
     isFrame() {

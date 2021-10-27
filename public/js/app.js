@@ -2155,7 +2155,23 @@ window.app = {
         var extension = event.target.src.split('.').reverse()[0] || 'N/A';
         event.target.src = '/placeholder.svg?value=.' + extension.toUpperCase();
       }
-    }, true);
+    }, true); // 3. Show load alerts
+
+    var alerts = window.alerts || [];
+
+    var _iterator3 = _createForOfIteratorHelper(alerts),
+        _step3;
+
+    try {
+      for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+        var alert = _step3.value;
+        halfmoon.initStickyAlert(alert);
+      }
+    } catch (err) {
+      _iterator3.e(err);
+    } finally {
+      _iterator3.f();
+    }
   },
   // Return if this window is popup / iframe
   isFrame: function isFrame() {
@@ -2333,12 +2349,12 @@ document.addEventListener('click', function (e) {
     var ref = document.getElementById(target.htmlFor);
     if (!ref) return;
 
-    var _iterator3 = _createForOfIteratorHelper(target.form.elements),
-        _step3;
+    var _iterator4 = _createForOfIteratorHelper(target.form.elements),
+        _step4;
 
     try {
-      for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-        var element = _step3.value;
+      for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+        var element = _step4.value;
         var name = element.name;
 
         if (name && name.startsWith && name.startsWith(target.dataset.switchAll)) {
@@ -2346,9 +2362,9 @@ document.addEventListener('click', function (e) {
         }
       }
     } catch (err) {
-      _iterator3.e(err);
+      _iterator4.e(err);
     } finally {
-      _iterator3.f();
+      _iterator4.f();
     }
   }
 });

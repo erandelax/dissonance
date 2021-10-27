@@ -25,5 +25,6 @@
 
 <!-- POST-BODY-SCRIPTS -->
 <script src="{{asset('vendor/halfmoon/js/halfmoon.min.js')}}"></script>
+<script>window.alerts = JSON.parse('{!! \App\Utils\Alert::serialize() !!}')</script>
 </body>
 </html>
