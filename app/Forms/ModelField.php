@@ -5,19 +5,15 @@ declare(strict_types=1);
 namespace App\Forms;
 
 use App\Contracts\FormContract;
-use App\Repositories\UploadRepository;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 final class ModelField implements FormContract
 {
     public const STYLE_TEXT = 'text';
-    public const STYLE_IMAGE = 'image';
+    public const STYLE_UPLOAD = 'upload';
     public const STYLE_SELECT = 'select';
 
     public function __construct(
@@ -116,10 +112,5 @@ final class ModelField implements FormContract
             $this->setValue($model, $value);
         }
         return $this;
-    }
-
-    public function isForFiles(): bool
-    {
-        return $this->style === self::STYLE_IMAGE;
     }
 }

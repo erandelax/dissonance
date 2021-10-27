@@ -11,6 +11,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Ramsey\Uuid\Exception\InvalidUuidStringException;
+use Ramsey\Uuid\Uuid;
 
 
 /**
@@ -103,11 +105,19 @@ class User extends Authenticatable
        return  $this->customAvatar?->getURL() ?? $this->avatar;
    }
 
-   public function setDisplayAvatarAttribute(UploadedFile|null $file): void
+   public function setDisplayAvatarAttribute(UploadedFile|string|null $file): void
    {
        if (null === $file) {
            $this->custom_avatar_id = null;
-       } else {
+       } else if (is_string($file)) {
+           try {
+               Uuid::fromString($file);
+               // it is a valid uuid
+               $this->custom_avatar_id = $file;
+           } catch (InvalidUuidStringException) {
+               // it is just a string
+           }
+       } else if ($file instanceof UploadedFile) {
            $uploadRepository = app()->make(UploadRepository::class);
            $upload = $uploadRepository->upload($file);
            $this->custom_avatar_id = $upload->getKey();

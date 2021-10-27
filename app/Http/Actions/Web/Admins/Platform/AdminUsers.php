@@ -114,7 +114,7 @@ final class AdminUsers
             model: User::find($id),
             fields: [
                 new ModelField(attribute: 'name', title: 'Name'),
-                new ModelField(attribute: 'displayAvatar', style: ModelField::STYLE_IMAGE, title: 'Avatar'),
+                new ModelField(attribute: 'displayAvatar', style: ModelField::STYLE_UPLOAD, title: 'Avatar'),
                 new ModelField(attribute: 'locale', style: ModelField::STYLE_SELECT, title: 'Locale', options: LocaleHelper::getOptions()),
             ],
         );

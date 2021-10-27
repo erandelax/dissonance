@@ -2077,15 +2077,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 
 
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
@@ -2094,14 +2094,93 @@ var eventer = window[eventMethod];
 var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
 var frameCallbacks = {};
 window.app = {
+  init: function init() {
+    // 1. Iframe modal window:
+    // use <data-frame-modal=URL> to call for IFRAME popup and then use
+    // <data-iframe-return-url="attribute@selector"> to map the values
+    // send back from iframe via {window.app.frame.reply}.
+    var iframeModals = document.querySelectorAll('[data-iframe-modal]');
+
+    if (iframeModals) {
+      var _iterator = _createForOfIteratorHelper(iframeModals),
+          _step;
+
+      try {
+        var _loop = function _loop() {
+          var iframeModal = _step.value;
+          iframeModal.addEventListener('click', function () {
+            var iframeURL = iframeModal.dataset.iframeModal;
+            window.app.modal.frame(iframeURL, function (data) {
+              for (var key in data) {
+                var param = 'iframeReturn' + key.charAt(0).toUpperCase() + key.substr(1);
+                var targetQuery = iframeModal.dataset[param];
+
+                if (targetQuery) {
+                  var parts = targetQuery.split('@');
+                  var targetSelector = parts.length > 0 ? parts[1] : parts[0];
+                  var targetAttribute = parts.length > 0 ? parts[0] : 'value';
+
+                  var _iterator2 = _createForOfIteratorHelper(document.querySelectorAll(targetSelector)),
+                      _step2;
+
+                  try {
+                    for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+                      var target = _step2.value;
+                      target[targetAttribute] = data[key];
+                    }
+                  } catch (err) {
+                    _iterator2.e(err);
+                  } finally {
+                    _iterator2.f();
+                  }
+                }
+              }
+            });
+          });
+        };
+
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          _loop();
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+    } // 2. Replace failed to load images with default 404 image
+
+
+    document.body.addEventListener('error', function (event) {
+      if (event.target.tagName === 'IMG') {
+        event.target.src = '/img/404.svg';
+      }
+    }, true);
+  },
+  // Return if this window is popup / iframe
   isFrame: function isFrame() {
     return window.parent || window.opener;
   },
+  // Request helpers
+  request: {
+    // Request get parameters getter
+    get: function get(name) {
+      var url = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : window.location.href;
+      name = name.replace(/[\[\]]/g, '\\$&');
+      var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+          results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }
+  },
+  // Modal helpers
   modal: {
+    // Open URL in iframe and expect return values from it
     frame: function frame(src, callback) {
       var sessionID = 'iframe-' + Math.floor(Math.random() * 100000000);
       var iframe = document.getElementById('iframe-modal-body');
-      iframe.src = src + '?iframe=' + sessionID + '#' + sessionID;
+      var hasGetParameters = src.split('?').length > 1;
+      iframe.src = src + (hasGetParameters ? '&' : '?') + 'iframe=' + sessionID;
 
       iframe.onload = function () {
         iframe.onload = null;
@@ -2120,7 +2199,8 @@ window.app = {
       };
     }
   }
-};
+}; // Listen for return values from popups and iframes
+
 eventer(messageEvent, function (e) {
   var data = e.data ? e.data : e.message;
 
@@ -2134,7 +2214,7 @@ eventer(messageEvent, function (e) {
 
 if (window.app.isFrame()) {
   window.app.modal.frame.reply = function (data) {
-    var sessionID = window.location.hash.substr(1);
+    var sessionID = window.app.request.get('iframe');
 
     if (window.parent) {
       window.parent.postMessage({
@@ -2149,12 +2229,10 @@ if (window.app.isFrame()) {
       window.close();
     }
   };
-} else {
-  window.app.modal.frame.reply = function (data) {
-    console.warn('I cant reply if there is no parent window :(');
-  };
-} // ....
+} // Initialize application
 
+
+document.addEventListener('DOMContentLoaded', window.app.init); // ....
 
 function postData() {
   return _postData.apply(this, arguments);
@@ -2223,24 +2301,11 @@ document.addEventListener('change', function (e) {
     }
   }
 });
-document.addEventListener('DOMContentLoaded', function () {
-  document.body.addEventListener("error", function (event) {
-    if (event.target.tagName === 'IMG') {
-      event.target.src = '/img/404.svg';
-    }
-  }, true);
-});
 document.addEventListener('click', function (e) {
   var target = e.target;
 
   if (target.tagName === 'I') {
     target = target.parentElement;
-  }
-
-  if (target.dataset.iframeInput) {
-    window.app.modal.frame(target.dataset.iframeInput, function (data) {
-      target.value = data.value;
-    });
   }
 
   if (target.dataset.submitFormAction && target.form !== undefined && target.form.elements['form-action']) {
@@ -2267,12 +2332,12 @@ document.addEventListener('click', function (e) {
     var ref = document.getElementById(target.htmlFor);
     if (!ref) return;
 
-    var _iterator = _createForOfIteratorHelper(target.form.elements),
-        _step;
+    var _iterator3 = _createForOfIteratorHelper(target.form.elements),
+        _step3;
 
     try {
-      for (_iterator.s(); !(_step = _iterator.n()).done;) {
-        var element = _step.value;
+      for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+        var element = _step3.value;
         var name = element.name;
 
         if (name && name.startsWith && name.startsWith(target.dataset.switchAll)) {
@@ -2280,13 +2345,14 @@ document.addEventListener('click', function (e) {
         }
       }
     } catch (err) {
-      _iterator.e(err);
+      _iterator3.e(err);
     } finally {
-      _iterator.f();
+      _iterator3.f();
     }
   }
 });
 window.api = {
+  // todo move to app api
   wiki: {
     preview: function () {
       var _preview = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(_ref) {

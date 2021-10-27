@@ -58,7 +58,7 @@
             @php($user = \Illuminate\Support\Facades\Auth::user())
             <li class="nav-item dropdown with-arrow">
                 <a class="nav-link" data-toggle="dropdown" id="nav-link-dropdown-toggle">
-                    <img src="{{$user->avatar}}" class="img-fluid rounded-circle" alt="rounded circle image" style="max-width: 24px;margin-right:1rem;">
+                    <img src="{{$user->display_avatar}}" class="img-fluid rounded-circle" alt="rounded circle image" style="max-width: 24px;margin-right:1rem;">
                     <span>{{$user->name}}</span>
                     <i class="fa fa-angle-down ml-5" aria-hidden="true"></i> <!-- ml-5= margin-left: 0.5rem (5px) -->
                 </a>

@@ -2,7 +2,7 @@
 $fields = $form->getFields();
 $model = $form->getModel();
 @endphp
-<input type="text" data-iframe-input="{{scoped_route('uploads.browse', ['locale' => $locale])}}">
+
 <form action="{{$form->getAction()}}" method="{{$form->getMethod()}}" class="mw-full" enctype="multipart/form-data">
     @csrf
     @foreach ($fields as $field)
@@ -21,14 +21,17 @@ $model = $form->getModel();
         @case(\App\Forms\ModelField::STYLE_TEXT)
         <input type="text" name="{{$form->getID()}}[{{$field->getID()}}]" class="form-control" id="{{$field->getID()}}" placeholder="{{$field->getTitle()}}" @if($field->isRequired()) required="required" @endif value="{{$field->getValue($model)}}">
         @break
-        @case(\App\Forms\ModelField::STYLE_IMAGE)
-        <div class="d-flex">
-            <img src="{{$field->getValue($model)}}" class="w-300 rounded" id="{{$field->getID()}}-preview" style="object-fit: contain">
-            <div class="custom-file p-10">
-                <input name="{{$form->getID()}}[{{$field->getID()}}]" type="file" data-img-preview="{{$field->getID()}}-preview" class="form-control" id="{{$field->getID()}}" @if($field->isRequired()) required="required" @endif>
-                <label for="{{$field->getID()}}">Choose picture</label>
-            </div>
-        </div>
+        @case(\App\Forms\ModelField::STYLE_UPLOAD)
+        <label
+            class="d-flex btn h-200"
+            for="{{$field->getID()}}"
+            data-iframe-modal="{{scoped_route('uploads.browse', ['locale' => $locale])}}"
+            data-iframe-return-id="value{{'@#'.$field->getID()}}"
+            data-iframe-return-url="src{{'@#'.$field->getID()}}-preview"
+        >
+            <img src="{{$field->getValue($model)}}" class="w-full h-200 rounded" id="{{$field->getID()}}-preview" style="object-fit: contain">
+            <input name="{{$form->getID()}}[{{$field->getID()}}]" type="hidden" id="{{$field->getID()}}" @if($field->isRequired()) required="required" @endif>
+        </label>
         @break
         @case(\App\Forms\ModelField::STYLE_SELECT)
         <select name="{{$form->getID()}}[{{$field->getID()}}]" class="form-control">
