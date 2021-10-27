@@ -69,6 +69,8 @@ use Ramsey\Uuid\Uuid;
  * @property string|null $custom_avatar_id
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCustomAvatarId($value)
  * @property-read \App\Models\Upload|null $customAvatar
+ * @property string|null $display_avatar
+ * @property string $display_name
  */
 class User extends Authenticatable
 {
@@ -98,6 +100,16 @@ class User extends Authenticatable
    public function customAvatar(): BelongsTo
    {
        return $this->belongsTo(Upload::class, 'custom_avatar_id');
+   }
+
+   public function getDisplayNameAttribute(): string
+   {
+       return $this->name;
+   }
+
+   public function setDisplayNameAttribute(string $name): void
+   {
+       $this->name = $name;
    }
 
    public function getDisplayAvatarAttribute(): string|null

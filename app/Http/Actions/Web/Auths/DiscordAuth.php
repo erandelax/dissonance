@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Actions\Web\Auths;
 
 use App\Repositories\UserRepository;
+use App\Utils\Alert;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -43,6 +44,11 @@ final class DiscordAuth
             $returnURL = implode('?', [$parts[0], implode('&', array_filter(["auth_token=$token", $parts[1] ?? null]))]);
         } else {
             Auth::login($user);
+            (new Alert(
+                content: 'You have successfully logged in to your account!',
+                title: "Welcome, {$user->display_name}",
+                alertType: Alert::TYPE_SUCCESS,
+            ))->dispatch();
         }
         Session::forget('request-return-url');
         return redirect($returnURL);
