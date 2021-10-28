@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace App\Services\Wiki;
 
+use App\Models\Upload;
 use App\Repositories\PageRepository;
 use App\Services\Wiki\Markup\MarkupConverter;
 use Illuminate\Support\Str;
 use League\CommonMark\Extension\CommonMark\Node\Block\Heading;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Image;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
 use League\CommonMark\Node\Block\Document;
 use League\CommonMark\Node\Inline\Text;
+use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use Ramsey\Uuid\Uuid;
 
 final class MarkupRender
@@ -69,6 +72,19 @@ final class MarkupRender
         return $result;
     }
 
+    private function getImages($block): array
+    {
+        $result = [];
+        if ($block instanceof Image) {
+            $result[] = $block;
+        } else {
+            foreach ($block->children() as $child) {
+                $result = array_merge($result, $this->getImages($child));
+            }
+        }
+        return $result;
+    }
+
     public function morphDocument(Document $document): void
     {
         $this->lastHeaders = [];
@@ -113,6 +129,17 @@ final class MarkupRender
                 'page' => $url,
                 'locale' => $this->locale ?? config('app.locale'),
             ]));
+        }
+        //
+        $images = $this->getImages($document);
+        /** @var Image $image */
+        foreach ($images as $image) {
+            $url = $image->getUrl();
+            try {
+                Uuid::fromString($url);
+                $upload = Upload::find($url);
+                $image->setUrl($upload->preview_url ?? $url);
+            } catch (InvalidUuidStringException) {}
         }
     }
 

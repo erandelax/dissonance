@@ -83,6 +83,11 @@
                 const percent = event.target.scrollTop / event.target.scrollHeight;
                 editor.session.setScrollTop((editor.session.getScreenLength() * editor.renderer.lineHeight) * percent);
             });
+            document.getElementById('aceImage').addEventListener('click', function(e) {
+                app.modal.frame('{{scoped_route('uploads.browse', ['locale' => $locale])}}', function(data){
+                    editor.insert('![]('+data.id+')')
+                });
+            });
         })
     </script>
 @endpush
@@ -109,7 +114,10 @@
                         <div class="form-group">
                             <label for="field-content">Content</label>
                             <input type="hidden" class="form-control" id="field-content" name="content" value="{{$page?->content}}">
-                            <div class="form-control" style="height:auto"><div id="field-content-ace">{{$page?->content}}</div></div>
+                            <div class="form-control" style="height:auto">
+                                <div id="field-content-ace">{{$page?->content}}</div>
+                            </div>
+                            <button id="aceImage" type="button" class="btn btn-primary"><i class="fas fa-image"></i></button>
                         </div>
                     </form>
                 </div>
