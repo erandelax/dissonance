@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Wiki\Markup;
 
+use App\Services\Wiki\Markup\Parsers\AttributeModifierParser;
 use League\CommonMark\Extension\Autolink\AutolinkExtension;
 use League\CommonMark\Extension\DisallowedRawHtml\DisallowedRawHtmlExtension;
 use League\CommonMark\Extension\Strikethrough\StrikethroughExtension;
@@ -36,6 +37,7 @@ final class ExtendedMarkdownSchema implements ConfigurableExtensionInterface
             ->addBlockStartParser(new CommonMark\Parser\Block\ThematicBreakStartParser(), 20)
             ->addBlockStartParser(new CommonMark\Parser\Block\ListBlockStartParser(), 10)
             ->addBlockStartParser(new CommonMark\Parser\Block\IndentedCodeStartParser(), -100)
+            ->addInlineParser(new AttributeModifierParser(), 300)
             ->addInlineParser(new CoreParser\Inline\NewlineParser(), 200)
             ->addInlineParser(new CommonMark\Parser\Inline\BacktickParser(), 150)
             ->addInlineParser(new CommonMark\Parser\Inline\EscapableParser(), 80)

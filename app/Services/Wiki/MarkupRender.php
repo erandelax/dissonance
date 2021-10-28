@@ -98,9 +98,9 @@ final class MarkupRender
                 if (++$counts[$id] > 1) {
                     $id .= '-' . $counts[$id];
                 }
-                $element->data->set('attributes', [
+                $element->data->set('attributes', array_merge($element->data->get('attributes'), [
                     'id' => $id,
-                ]);
+                ]));
                 $this->lastHeaders[$id] = [
                     'id' => $id,
                     'header' => $text,
@@ -117,13 +117,13 @@ final class MarkupRender
         foreach ($links as $link) {
             $url = $link->getUrl();
             if (isset($confirmedSlugs[$url])) {
-                $link->data->set('attributes', [
+                $link->data->set('attributes', array_merge($link->data->get('attributes'), [
                     'class' => 'ex',
-                ]);
+                ]));
             } else {
-                $link->data->set('attributes', [
+                $link->data->set('attributes', array_merge($link->data->get('attributes'), [
                     'class' => 'nex',
-                ]);
+                ]));
             }
             $link->setUrl(scoped_route('pages.read', [
                 'page' => $url,
@@ -140,17 +140,6 @@ final class MarkupRender
                 $upload = Upload::find($url);
                 $image->setUrl($upload->preview_url ?? $url);
             } catch (InvalidUuidStringException) {}
-            $child = $image->firstChild();
-            $attributes = $image->data->get('attributes');
-            if ($child instanceof Text) {
-                $title = $child->getLiteral();
-                $parts = explode('|', $title);
-                $child->setLiteral($parts[0]);
-                if (count($parts) > 1) {
-                    $attributes['class'] = $parts[1];
-                }
-            }
-            $image->data->set('attributes', $attributes);
         }
     }
 
