@@ -140,6 +140,17 @@ final class MarkupRender
                 $upload = Upload::find($url);
                 $image->setUrl($upload->preview_url ?? $url);
             } catch (InvalidUuidStringException) {}
+            $child = $image->firstChild();
+            $attributes = $image->data->get('attributes');
+            if ($child instanceof Text) {
+                $title = $child->getLiteral();
+                $parts = explode('|', $title);
+                $child->setLiteral($parts[0]);
+                if (count($parts) > 1) {
+                    $attributes['class'] = $parts[1];
+                }
+            }
+            $image->data->set('attributes', $attributes);
         }
     }
 
