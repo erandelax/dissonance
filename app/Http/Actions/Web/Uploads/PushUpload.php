@@ -21,6 +21,6 @@ final class PushUpload
         foreach ($uploads as $upload) {
             $this->uploadRepository->upload($upload);
         }
-        return redirect()->refresh();
+        return redirect()->back();
     }
 }

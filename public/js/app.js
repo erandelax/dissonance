@@ -2182,6 +2182,7 @@ window.app = {
     // Request get parameters getter
     get: function get(name) {
       var url = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : window.location.href;
+      console.log(window.location.href);
       name = name.replace(/[\[\]]/g, '\\$&');
       var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
           results = regex.exec(url);

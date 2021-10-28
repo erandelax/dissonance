@@ -36,7 +36,7 @@ $items = $uploads->items();
 @endphp
 
 @section('navbar')
-<form method="post" action="{{scoped_route('uploads.push', ['locale' => $locale, 'iframe' => $iframe])}}#{{$iframe}}" enctype="multipart/form-data" class="navbar-nav d-lg-flex w-full">
+<form method="post" action="{{scoped_route('uploads.push', ['locale' => $locale, 'iframe' => $iframe])}}" enctype="multipart/form-data" class="navbar-nav d-lg-flex w-full">
     @csrf
     <label class="btn btn-action m-0 w-full" type="button" for="field-upload">
         <i class="fas fa-upload" aria-hidden="true"></i>&nbsp;Upload files

@@ -51,6 +51,7 @@ window.app = {
     request: {
         // Request get parameters getter
         get(name, url = window.location.href) {
+            console.log(window.location.href);
             name = name.replace(/[\[\]]/g, '\\$&');
             var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
                 results = regex.exec(url);
