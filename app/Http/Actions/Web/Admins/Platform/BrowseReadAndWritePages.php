@@ -6,6 +6,9 @@ namespace App\Http\Actions\Web\Admins\Platform;
 
 use App\Contracts\FormContract;
 use App\Forms\ModelAction;
+use App\Forms\FormField;
+use App\Forms\FormFieldMarkdownPreview;
+use App\Forms\ModelForm;
 use App\Forms\ModelUrlAction;
 use App\Forms\QueryFilter;
 use App\Forms\FormAction;
@@ -14,11 +17,14 @@ use App\Forms\BatchAction;
 use App\Forms\ModelColumn;
 use App\Forms\QueryTable;
 use App\Helpers\LocaleHelper;
+use App\Models\Config;
 use App\Models\Page;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
-final class ReadPages
+final class BrowseReadAndWritePages
 {
     public function browse()
     {
@@ -40,10 +46,10 @@ final class ReadPages
                     actions: [
                         new ModelUrlAction(
                             title: '<i class="fa fa-pencil"></i>',
-                            urlMaker: fn(Page $model) => scoped_route('pages.read', [
-                                'page' => $model->slug,
+                            urlMaker: fn(Page $model) => scoped_route('admins.read', [
                                 'locale' => app()->getLocale(),
-                                'mode' => 'edit',
+                                'page' => 'pages',
+                                'id' => $model->getKey(),
                             ]),
                             style: ModelUrlAction::STYLE_WARNING,
                         ),
@@ -120,5 +126,70 @@ final class ReadPages
             )
         );
         return $table;
+    }
+
+
+    public function read(string $id)
+    {
+        return view('web.admins.read', [
+            'title' => 'Pages',
+            'form' => $this->form(Page::find($id)),
+        ]);
+    }
+
+    public function edit(string $id, Request $request)
+    {
+        return view('web.admins.read', [
+            'title' => 'Pages',
+            'form' => $this->form(Page::find($id))->submitRequest($request),
+        ]);
+    }
+
+    public function form(Page $page): ModelForm
+    {
+        return new ModelForm(
+            id: 'pages',
+            model: $page,
+            fields: [
+                new FormField(
+                    attribute: 'id',
+                    title: 'ID',
+                    readOnly: true,
+                ),
+                new FormField(
+                    attribute: 'slug',
+                    title: 'Slug',
+                ),
+                new FormField(
+                    attribute: 'locale',
+                    style: FormField::STYLE_SELECT,
+                    title: 'Locale',
+                    options: LocaleHelper::getOptions()
+                ),
+                new FormField(
+                    attribute: 'title',
+                    title: 'Title',
+                ),
+                $source = new FormField(
+                    attribute: 'content',
+                    style: FormField::STYLE_MARKDOWN,
+                    title: 'Content',
+                ),
+                new FormFieldMarkdownPreview(
+                    source: $source,
+                    title: 'Preview',
+                ),
+                new FormField(
+                    attribute: 'created_at',
+                    title: 'Created at',
+                    readOnly: true,
+                ),
+                new FormField(
+                    attribute: 'updated_at',
+                    title: 'Updated at',
+                    readOnly: true,
+                ),
+            ],
+        );
     }
 }

@@ -8,6 +8,7 @@
       rel="stylesheet">
 <link href="{{asset('vendor/halfmoon/css/halfmoon-variables.css')}}" rel="stylesheet"/>
 <script src="https://kit.fontawesome.com/7bc3a55a74.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/gh/ajaxorg/ace-builds@latest/src-min-noconflict/ace.js"></script>
 <script src="{{asset('js/app.js')}}"></script>
 <style>
     p img {

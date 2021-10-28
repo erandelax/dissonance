@@ -1,6 +1,6 @@
 @php
 /** @var \App\Forms\ModelForm $form */
-/** @var \App\Forms\ModelField $field */
+/** @var \App\Forms\FormField $field */
     $fields = $form->getFields();
     $model = $form->getModel();
 @endphp
@@ -18,8 +18,8 @@
                 >{{$field->getTitle()}}</label>
             </div>
             <div class="column col-10">
-                @switch($field->getStyle())
-                    @case(\App\Forms\ModelField::STYLE_TEXT)
+                {{--@switch($field->getStyle())
+                    @case(\App\Forms\FormField::STYLE_TEXT)
                     <input
                         type="text"
                         @if (!$field->isReadOnly()) name="{{$form->getID()}}[{{$field->getID()}}]" @endif
@@ -30,7 +30,7 @@
                         @if ($field->isReadOnly()) readonly @endif
                     >
                     @break
-                    @case(\App\Forms\ModelField::STYLE_TEXTAREA)
+                    @case(\App\Forms\FormField::STYLE_TEXTAREA)
                     <textarea
                         type="text"
                         @if (!$field->isReadOnly()) name="{{$form->getID()}}[{{$field->getID()}}]" @endif
@@ -40,7 +40,20 @@
                         @if ($field->isReadOnly()) readonly @endif
                     >{{$field->getValue($model)}}</textarea>
                     @break
-                    @case(\App\Forms\ModelField::STYLE_UPLOAD)
+                    @case(\App\Forms\FormField::STYLE_MARKDOWN)
+                    <input
+                        type="hidden"
+                        id="{{$field->getID()}}"
+                        @if (!$field->isReadOnly()) name="{{$form->getID()}}[{{$field->getID()}}]" @endif
+                        value="{{$field->getValue($model)}}"
+                        @if($field->isRequired()) required="required" @endif
+                        @if ($field->isReadOnly()) readonly @endif
+                        placeholder="{{$field->getTitle()}}"
+                        data-markdown-editor="{{$field->getID()}}-editor"
+                    >
+                    <div id="{{$field->getID()}}-editor">{{$field->getValue($model)}}</div>
+                    @break
+                    @case(\App\Forms\FormField::STYLE_UPLOAD)
                     <label
                         class="d-flex h-200 @if (!$field->isReadOnly()) btn @endif "
                         for="{{$field->getID()}}"
@@ -72,7 +85,7 @@
                         >
                     </label>
                     @break
-                    @case(\App\Forms\ModelField::STYLE_SELECT)
+                    @case(\App\Forms\FormField::STYLE_SELECT)
                     <select
                         @if (!$field->isReadOnly()) name="{{$form->getID()}}[{{$field->getID()}}]" @endif
                     class="form-control"
@@ -86,7 +99,8 @@
                         @endforeach
                     </select>
                     @break
-                @endswitch
+                @endswitch--}}
+                {!! $field->render() !!}
                 @if($field->hasErrors())
                     <ul class="invalid-feedback mb-0">
                         @foreach ($field->getErrors() as $error)

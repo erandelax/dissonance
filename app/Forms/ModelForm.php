@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Forms;
 
+use App\Contracts\FormFieldContract;
 use App\Utils\Alert;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\View\View;
 
 final class ModelForm extends Form
@@ -32,6 +34,14 @@ final class ModelForm extends Form
         return $this->model;
     }
 
+    public function addField(FormFieldContract|null $field): self
+    {
+        if (null !== $this->model && $field instanceof FormField) {
+            $field->setValue($this->getModelFieldValue($this->model, $field));
+        }
+        return parent::addField($field);
+    }
+
     public function submitRequest(Request $request): self
     {
         if (!$this->canSubmit) {
@@ -45,13 +55,19 @@ final class ModelForm extends Form
         if (null === $model) {
             return $this;
         }
-        /** @var \App\Forms\ModelField $field */
+        /** @var \App\Forms\FormField $field */
         $hasErrors = false;
         foreach ($this->fields as $field) {
             if ($field->isReadOnly()) {
                 continue;
             }
-            $field->submitValue($model, $data[$field->getID()] ?? null);
+            $value = $data[$field->getID()] ?? null;
+            if (null === $value && $field->getStyle() === FormField::STYLE_UPLOAD) {
+                continue;
+            }
+            if ($field->setAndValidateValue($value)) {
+                $this->setModelFieldValue($this->model, $field, $data[$field->getID()]);
+            }
             if ($field->hasErrors()) {
                 $hasErrors = true;
                 (new Alert(content: 'Failure', alertType: Alert::TYPE_DANGER))->dispatch();
@@ -61,6 +77,28 @@ final class ModelForm extends Form
             $model->save();
             (new Alert(content: 'Success', alertType: Alert::TYPE_SUCCESS))->dispatch();
         }
+        return $this;
+    }
+
+    private function getModelFieldValue(Model|null $model, FormField $field): mixed
+    {
+        if (null === $model) {
+            return null;
+        }
+        return Arr::get($model, $field->getAttribute());
+    }
+
+    private function setModelFieldValue(Model|null $model, FormField $field, mixed $value): self
+    {
+        $path = explode('.', $field->getAttribute(), 2);
+        if (isset($path[1])) {
+            $data = $model->{$path[0]};
+            Arr::set($data, $path[1], $value);
+            $model->{$path[0]} = $data;
+        } else {
+            Arr::set($model, $field->getAttribute(), $value);
+        }
+
         return $this;
     }
 }

@@ -6,7 +6,7 @@ namespace App\Http\Actions\Web\Admins\Platform;
 
 use App\Contracts\FormContract;
 use App\Forms\ModelColumn;
-use App\Forms\ModelField;
+use App\Forms\FormField;
 use App\Forms\ModelForm;
 use App\Forms\ModelUrlAction;
 use App\Forms\QueryFilter;
@@ -113,67 +113,67 @@ final class BrowseReadAndEditUsers
             id: $id,
             model: User::find($id),
             fields: [
-                new ModelField(
+                new FormField(
                     attribute: 'id',
                     title: 'ID',
                     readOnly: true,
                 ),
-                new ModelField(
+                new FormField(
                     attribute: 'name',
                     title: 'Name'
                 ),
-                new ModelField(
+                new FormField(
                     attribute: 'displayAvatar',
-                    style: ModelField::STYLE_UPLOAD,
+                    style: FormField::STYLE_UPLOAD,
                     title: 'Avatar'
                 ),
-                new ModelField(
+                new FormField(
                     attribute: 'custom_avatar_id',
                     title: 'Avatar upload ID',
                     readOnly: true,
                 ),
-                new ModelField(
+                new FormField(
                     attribute: 'timezone',
-                    style: ModelField::STYLE_SELECT,
+                    style: FormField::STYLE_SELECT,
                     title: 'Timezone',
                     options: array_combine($timezones = \DateTimeZone::listIdentifiers(), $timezones)
                 ),
-                new ModelField(
+                new FormField(
                     attribute: 'locale',
-                    style: ModelField::STYLE_SELECT,
+                    style: FormField::STYLE_SELECT,
                     title: 'Locale',
                     options: LocaleHelper::getOptions()
                 ),
-                new ModelField(
+                new FormField(
                     attribute: 'email',
                     title: 'Email',
                     description: 'Not editable (is imported from Discord on every auth)',
                     readOnly: true,
                 ),
-                new ModelField(
+                new FormField(
                     attribute: 'discord_id',
                     title: 'Discord ID',
                     description: 'Not editable (is imported from Discord on every auth)',
                     readOnly: true,
                 ),
-                new ModelField(
+                new FormField(
                     attribute: 'nickname',
                     title: 'Discord Nickname',
                     description: 'Not editable (is imported from Discord on every auth)',
                     readOnly: true,
                 ),
-                new ModelField(
+                new FormField(
                     attribute: 'avatar',
                     title: 'Discord avatar',
                     description: 'Not editable (is imported from Discord on every auth)',
                     readOnly: true,
                 ),
-                new ModelField(
+                new FormField(
                     attribute: 'created_at',
                     title: 'Created at',
                     readOnly: true,
                 ),
-                new ModelField(
+                new FormField(
                     attribute: 'updated_at',
                     title: 'Updated at',
                     readOnly: true,

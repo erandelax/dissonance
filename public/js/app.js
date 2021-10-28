@@ -2166,11 +2166,48 @@ window.app = {
       for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
         var alert = _step3.value;
         halfmoon.initStickyAlert(alert);
-      }
+      } // 4. Initialize ace editor
+
     } catch (err) {
       _iterator3.e(err);
     } finally {
       _iterator3.f();
+    }
+
+    var theme = "ace/theme/tomorrow_night";
+
+    if (halfmoon.getPreferredMode() === "light-mode" || halfmoon.getPreferredMode() === "not-set") {
+      theme = "ace/theme/chrome";
+    }
+
+    var _iterator4 = _createForOfIteratorHelper(document.querySelectorAll('[data-markdown-editor]')),
+        _step4;
+
+    try {
+      for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+        var editorField = _step4.value;
+        var editorDom = document.getElementById(editorField.dataset.markdownEditor);
+        var editor = ace.edit(editorDom, {
+          theme: theme,
+          mode: "ace/mode/markdown",
+          minLines: 10,
+          maxLines: 25,
+          showLineNumbers: true,
+          cursorStyle: "smooth",
+          fontSize: "14px",
+          fontFamily: "monospace",
+          highlightActiveLine: true,
+          highlightGutterLine: false,
+          printMargin: true,
+          wrap: true,
+          indentedSoftWrap: true,
+          showGutter: false
+        });
+      }
+    } catch (err) {
+      _iterator4.e(err);
+    } finally {
+      _iterator4.f();
     }
   },
   // Return if this window is popup / iframe
@@ -2350,12 +2387,12 @@ document.addEventListener('click', function (e) {
     var ref = document.getElementById(target.htmlFor);
     if (!ref) return;
 
-    var _iterator4 = _createForOfIteratorHelper(target.form.elements),
-        _step4;
+    var _iterator5 = _createForOfIteratorHelper(target.form.elements),
+        _step5;
 
     try {
-      for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
-        var element = _step4.value;
+      for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
+        var element = _step5.value;
         var name = element.name;
 
         if (name && name.startsWith && name.startsWith(target.dataset.switchAll)) {
@@ -2363,9 +2400,9 @@ document.addEventListener('click', function (e) {
         }
       }
     } catch (err) {
-      _iterator4.e(err);
+      _iterator5.e(err);
     } finally {
-      _iterator4.f();
+      _iterator5.f();
     }
   }
 });

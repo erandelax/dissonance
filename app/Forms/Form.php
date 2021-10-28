@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Forms;
 
 use App\Contracts\FormContract;
+use App\Contracts\FormFieldContract;
 use Illuminate\View\View;
 
 abstract class Form implements FormContract
@@ -37,12 +38,13 @@ abstract class Form implements FormContract
         return $this->method;
     }
 
-    public function addField(ModelField|null $field): self
+    public function addField(FormFieldContract|null $field): self
     {
         if (null === $field) {
             return $this;
         }
         $this->fields[spl_object_id($field)] = $field;
+        $field->setForm($this);
         return $this;
     }
 

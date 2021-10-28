@@ -6,7 +6,7 @@ namespace App\Http\Actions\Web\Admins\Platform;
 
 use App\Contracts\FormContract;
 use App\Forms\ModelColumn;
-use App\Forms\ModelField;
+use App\Forms\FormField;
 use App\Forms\ModelForm;
 use App\Forms\ModelUrlAction;
 use App\Forms\QueryTable;
@@ -83,26 +83,26 @@ final class BrowseReadAndEditProjects
             id: $id,
             model: Project::find($id),
             fields: [
-                new ModelField(
+                new FormField(
                     attribute: 'id',
                     title: 'ID',
                     readOnly: true,
                 ),
-                new ModelField(
+                new FormField(
                     attribute: 'title',
                     title: 'Title'
                 ),
-                new ModelField(
+                new FormField(
                     attribute: 'description',
-                    style: ModelField::STYLE_TEXTAREA,
+                    style: FormField::STYLE_TEXTAREA,
                     title: 'Description',
                 ),
-                new ModelField(
+                new FormField(
                     attribute: 'created_at',
                     title: 'Created at',
                     readOnly: true,
                 ),
-                new ModelField(
+                new FormField(
                     attribute: 'updated_at',
                     title: 'Updated at',
                     readOnly: true,

@@ -42,6 +42,30 @@ window.app = {
         for (const alert of alerts) {
             halfmoon.initStickyAlert(alert);
         }
+        // 4. Initialize ace editor
+        var theme = "ace/theme/tomorrow_night"
+        if (halfmoon.getPreferredMode() === "light-mode" || halfmoon.getPreferredMode() === "not-set") {
+            theme = "ace/theme/chrome"
+        }
+        for (const editorField of document.querySelectorAll('[data-markdown-editor]')) {
+            const editorDom = document.getElementById(editorField.dataset.markdownEditor)
+            const editor = ace.edit(editorDom, {
+                theme: theme,
+                mode: "ace/mode/markdown",
+                minLines: 10,
+                maxLines: 25,
+                showLineNumbers: true,
+                cursorStyle: "smooth",
+                fontSize: "14px",
+                fontFamily: "monospace",
+                highlightActiveLine: true,
+                highlightGutterLine: false,
+                printMargin: true,
+                wrap: true,
+                indentedSoftWrap: true,
+                showGutter: false,
+            })
+        }
     },
     // Return if this window is popup / iframe
     isFrame() {

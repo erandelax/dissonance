@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Actions\Web\Admins\Platform;
 
-use App\Forms\ModelField;
+use App\Forms\FormField;
 use App\Forms\ModelForm;
 use App\Models\Config;
 use Illuminate\Http\Request;
@@ -30,20 +30,20 @@ final class ReadAndEditSettings
             id: 'settings',
             model: $config,
             fields: [
-                new ModelField (
+                new FormField (
                     attribute: 'data.app.name',
                     title: 'Site name',
                     rules: [],
                 ),
-                new ModelField (
+                new FormField (
                     attribute: 'data.app.logo',
-                    style: ModelField::STYLE_UPLOAD,
+                    style: FormField::STYLE_UPLOAD,
                     title: 'Site logo',
                     rules: [],
                 ),
-                new ModelField (
+                new FormField (
                     attribute: 'data.app.icon',
-                    style: ModelField::STYLE_UPLOAD,
+                    style: FormField::STYLE_UPLOAD,
                     title: 'Site icon',
                     rules: [],
                 ),

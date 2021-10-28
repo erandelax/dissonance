@@ -7,7 +7,7 @@ namespace App\Http\Actions\Web\Users;
 use App\Entities\Locale;
 use App\Entities\ProjectReference;
 use App\Entities\UserReference;
-use App\Forms\ModelField;
+use App\Forms\FormField;
 use App\Forms\ModelForm;
 use App\Helpers\LocaleHelper;
 use App\Models\User;
@@ -42,67 +42,67 @@ final class ReadOrEditUser
             model: $user,
             canSubmit: !$isReadOnly,
             fields: [
-                new ModelField(
+                new FormField(
                     attribute: 'displayAvatar',
-                    style: ModelField::STYLE_UPLOAD,
+                    style: FormField::STYLE_UPLOAD,
                     title: 'Avatar',
                     readOnly: $isReadOnly,
                 ),
-                new ModelField(
+                new FormField(
                     attribute: 'name',
                     title: 'Name',
                     readOnly: $isReadOnly,
                 ),
-                new ModelField(
+                new FormField(
                     attribute: 'custom_avatar_id',
                     title: 'Avatar upload ID',
                     readOnly: true,
                 ),
-                new ModelField(
+                new FormField(
                     attribute: 'timezone',
-                    style: ModelField::STYLE_SELECT,
+                    style: FormField::STYLE_SELECT,
                     title: 'Timezone',
                     options: array_combine($timezones = \DateTimeZone::listIdentifiers(), $timezones),
                     readOnly: $isReadOnly,
                 ),
-                new ModelField(
+                new FormField(
                     attribute: 'locale',
-                    style: ModelField::STYLE_SELECT,
+                    style: FormField::STYLE_SELECT,
                     title: 'Locale',
                     options: LocaleHelper::getOptions(),
                     readOnly: $isReadOnly,
                 ),
-                new ModelField(
+                new FormField(
                     attribute: 'id',
                     title: 'ID',
                     readOnly: true,
                 ),
-                !$isReadOnly ? new ModelField(
+                !$isReadOnly ? new FormField(
                     attribute: 'email',
                     title: 'Email',
                     readOnly: true,
                 ) : null,
-                new ModelField(
+                new FormField(
                     attribute: 'discord_id',
                     title: 'Discord ID',
                     readOnly: true,
                 ),
-                new ModelField(
+                new FormField(
                     attribute: 'nickname',
                     title: 'Discord Nickname',
                     readOnly: true,
                 ),
-                !$isReadOnly ? new ModelField(
+                !$isReadOnly ? new FormField(
                     attribute: 'avatar',
                     title: 'Discord avatar',
                     readOnly: true,
                 ) : null,
-                new ModelField(
+                new FormField(
                     attribute: 'created_at',
                     title: 'Created at',
                     readOnly: true,
                 ),
-                new ModelField(
+                new FormField(
                     attribute: 'updated_at',
                     title: 'Updated at',
                     readOnly: true,
