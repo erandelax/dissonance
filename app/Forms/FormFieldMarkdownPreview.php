@@ -6,7 +6,6 @@ namespace App\Forms;
 
 use App\Contracts\FormContract;
 use App\Contracts\FormFieldContract;
-use App\Services\Wiki\MarkupRender;
 use Illuminate\View\View;
 
 final class FormFieldMarkdownPreview implements FormFieldContract
@@ -17,10 +16,15 @@ final class FormFieldMarkdownPreview implements FormFieldContract
         private FormFieldContract $source,
         private string|null       $title = null,
         private string|null       $description = null,
+        private bool              $useLabelColumn = true,
     )
     {
     }
 
+    public function hasLabelColumn(): bool
+    {
+        return $this->useLabelColumn;
+    }
 
     public function setForm(FormContract|null $form): self
     {
@@ -98,5 +102,10 @@ final class FormFieldMarkdownPreview implements FormFieldContract
     public function getMarkdownPreviewApiRoute(): string
     {
         return scoped_route('tools.markdown-preview');
+    }
+
+    public function isReadOnly(): bool
+    {
+        return true;
     }
 }

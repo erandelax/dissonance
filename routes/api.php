@@ -13,7 +13,7 @@ $namePrefixSubdomain = ScopedRouteFactory::SCOPE_SUBDOMAIN;
 $scopedRoutesFactory = static function (string $namePrefix): callable {
     return static function (Router $router) use ($namePrefix): void {
         // svg placeholder
-        $router->get('/tools/markdown-preview', Api\PreviewMarkdown::class)->name("$namePrefix:tools.markdown-preview");
+        $router->post('/tools/markdown-preview', Api\PreviewMarkdown::class)->name("$namePrefix:tools.markdown-preview");
         // edit here end
     };
 };
@@ -27,7 +27,7 @@ Route::domain(
     parse_url(config('app.url'), PHP_URL_HOST)
 )->group(static function (Router $router) use ($namePrefixRoot): void {
     // edit here start
-    $router->get('/tools/markdown-preview', Api\PreviewMarkdown::class)->name("$namePrefixRoot:tools.markdown-preview");
+    $router->post('/tools/markdown-preview', Api\PreviewMarkdown::class)->name("$namePrefixRoot:tools.markdown-preview");
     // edit here end
 });
 // ===========================================================================

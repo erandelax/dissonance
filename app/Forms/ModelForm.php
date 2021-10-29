@@ -34,12 +34,13 @@ final class ModelForm extends Form
         return $this->model;
     }
 
-    public function addField(FormFieldContract|null $field): self
+    public function addField(FormFieldContract|array|null $field, int|string $column = 0): self
     {
+        $result = parent::addField($field, $column);
         if (null !== $this->model && $field instanceof FormField) {
             $field->setValue($this->getModelFieldValue($this->model, $field));
         }
-        return parent::addField($field);
+        return $result;
     }
 
     public function submitRequest(Request $request): self

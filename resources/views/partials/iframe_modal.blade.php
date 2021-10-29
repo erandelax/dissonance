@@ -5,7 +5,7 @@
                 <span aria-hidden="true">&times;</span>
             </a>
             <div class="container">
-                <iframe id="iframe-modal-body" style="width:90vw; height:90vh; border: none; background: rgba(0,0,0,.1)"></iframe>
+                <iframe id="iframe-modal-body" style="width:100%; height:90vh; border: none; background: rgba(0,0,0,.1)"></iframe>
             </div>
         </div>
     </div>

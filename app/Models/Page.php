@@ -58,4 +58,9 @@ final class Page extends Model
     {
         return app()->make(MarkupRender::class)->toHtml($this->content ?? '');
     }
+
+    public function setSlugAttribute(string|null $slug): void
+    {
+        $this->attributes['slug'] = (string)$slug;
+    }
 }

@@ -29,8 +29,14 @@ final class FormField implements FormFieldContract
         private array       $rules = [],
         private bool        $readOnly = false,
         private mixed       $value = null,
+        private bool        $useLabelColumn = true,
     )
     {
+    }
+
+    public function hasLabelColumn(): bool
+    {
+        return $this->useLabelColumn;
     }
 
     public function setForm(FormContract|null $form): self

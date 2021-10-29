@@ -19,7 +19,9 @@ abstract class Form implements FormContract
         protected bool $canSubmit = true,
         array $fields = [],
     ) {
-        foreach ($fields as $field) $this->addField($field);
+        foreach ($fields as $column => $field) {
+            $this->addField(field: $field, column: $column);
+        }
         if (null === $this->action) $this->action = url()->current();
     }
 
@@ -38,17 +40,31 @@ abstract class Form implements FormContract
         return $this->method;
     }
 
-    public function addField(FormFieldContract|null $field): self
+    public function addField(FormFieldContract|array|null $field, int|string $column = 0): self
     {
+        if (is_array($field)) {
+            foreach ($field as $colField) {
+                $this->addField(field: $colField, column: $column);
+            }
+            return $this;
+        }
         if (null === $field) {
             return $this;
         }
-        $this->fields[spl_object_id($field)] = $field;
+        if (!isset($this->fields[$column])) {
+            $this->fields[$column] = [];
+        }
+        $this->fields[$column][spl_object_id($field)] = $field;
         $field->setForm($this);
         return $this;
     }
 
     public function getFields(): array
+    {
+        return array_merge(...$this->fields);
+    }
+
+    public function getColumns(): array
     {
         return $this->fields;
     }

@@ -2184,7 +2184,7 @@ window.app = {
         _step4;
 
     try {
-      for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+      var _loop2 = function _loop2() {
         var editorField = _step4.value;
         var editorDom = document.getElementById(editorField.dataset.markdownEditor);
         var editor = ace.edit(editorDom, {
@@ -2203,11 +2203,99 @@ window.app = {
           indentedSoftWrap: true,
           showGutter: false
         });
+        editor.on('change', /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+          var event;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+            while (1) {
+              switch (_context.prev = _context.next) {
+                case 0:
+                  event = document.createEvent('Event');
+                  event.initEvent('change', true, true);
+                  editorField.value = editor.getValue();
+                  editorField.dispatchEvent(event);
+
+                case 4:
+                case "end":
+                  return _context.stop();
+              }
+            }
+          }, _callee);
+        })));
+      };
+
+      for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+        _loop2();
       }
     } catch (err) {
       _iterator4.e(err);
     } finally {
       _iterator4.f();
+    }
+
+    var _iterator5 = _createForOfIteratorHelper(document.querySelectorAll('[data-markdown-preview]')),
+        _step5;
+
+    try {
+      var _loop3 = function _loop3() {
+        var previewDom = _step5.value;
+        var target = document.getElementById(previewDom.dataset.markdownPreviewTarget);
+        var previewAPI = previewDom.dataset.markdownPreviewApi;
+        delete previewDom.dataset.markdownPreviewTarget;
+        delete previewDom.dataset.markdownPreview;
+        delete previewDom.dataset.markdownPreviewApi;
+
+        if (target) {
+          var previewer = /*#__PURE__*/function () {
+            var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+              var resp;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+                while (1) {
+                  switch (_context2.prev = _context2.next) {
+                    case 0:
+                      _context2.next = 2;
+                      return window.app.request.post(previewAPI, {
+                        content: target.value
+                      });
+
+                    case 2:
+                      resp = _context2.sent;
+
+                      if (resp && resp.content) {
+                        previewDom.innerHTML = resp.content;
+                      }
+
+                    case 4:
+                    case "end":
+                      return _context2.stop();
+                  }
+                }
+              }, _callee2);
+            }));
+
+            return function previewer() {
+              return _ref2.apply(this, arguments);
+            };
+          }();
+
+          previewer(); // initial load
+
+          timeout = null;
+          target.addEventListener('change', function (e) {
+            if (timeout) clearTimeout(timeout);
+            timeout = setTimeout(previewer, 800);
+          });
+        }
+      };
+
+      for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
+        var timeout;
+
+        _loop3();
+      }
+    } catch (err) {
+      _iterator5.e(err);
+    } finally {
+      _iterator5.f();
     }
   },
   // Return if this window is popup / iframe
@@ -2226,6 +2314,50 @@ window.app = {
       if (!results) return null;
       if (!results[2]) return '';
       return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    },
+    post: function post() {
+      var _arguments = arguments;
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        var uri, data, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                uri = _arguments.length > 0 && _arguments[0] !== undefined ? _arguments[0] : '';
+                data = _arguments.length > 1 && _arguments[1] !== undefined ? _arguments[1] : {};
+                _context3.next = 4;
+                return fetch(uri, {
+                  method: 'POST',
+                  // *GET, POST, PUT, DELETE, etc.
+                  mode: 'cors',
+                  // no-cors, *cors, same-origin
+                  cache: 'no-cache',
+                  // *default, no-cache, reload, force-cache, only-if-cached
+                  credentials: 'same-origin',
+                  // include, *same-origin, omit
+                  headers: {
+                    'Content-Type': 'application/json' // 'Content-Type': 'application/x-www-form-urlencoded',
+
+                  },
+                  redirect: 'follow',
+                  // manual, *follow, error
+                  referrerPolicy: 'no-referrer',
+                  // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+                  body: JSON.stringify(data) // body data type must match "Content-Type" header
+
+                });
+
+              case 4:
+                response = _context3.sent;
+                return _context3.abrupt("return", response.json());
+
+              case 6:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }))();
     }
   },
   // Modal helpers
@@ -2289,58 +2421,6 @@ if (window.app.isFrame()) {
 
 document.addEventListener('DOMContentLoaded', window.app.init); // ....
 
-function postData() {
-  return _postData.apply(this, arguments);
-}
-
-function _postData() {
-  _postData = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-    var url,
-        data,
-        response,
-        _args2 = arguments;
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            url = _args2.length > 0 && _args2[0] !== undefined ? _args2[0] : '';
-            data = _args2.length > 1 && _args2[1] !== undefined ? _args2[1] : {};
-            _context2.next = 4;
-            return fetch(url, {
-              method: 'POST',
-              // *GET, POST, PUT, DELETE, etc.
-              mode: 'cors',
-              // no-cors, *cors, same-origin
-              cache: 'no-cache',
-              // *default, no-cache, reload, force-cache, only-if-cached
-              credentials: 'same-origin',
-              // include, *same-origin, omit
-              headers: {
-                'Content-Type': 'application/json' // 'Content-Type': 'application/x-www-form-urlencoded',
-
-              },
-              redirect: 'follow',
-              // manual, *follow, error
-              referrerPolicy: 'no-referrer',
-              // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-              body: JSON.stringify(data) // body data type must match "Content-Type" header
-
-            });
-
-          case 4:
-            response = _context2.sent;
-            return _context2.abrupt("return", response.json());
-
-          case 6:
-          case "end":
-            return _context2.stop();
-        }
-      }
-    }, _callee2);
-  }));
-  return _postData.apply(this, arguments);
-}
-
 document.addEventListener('change', function (e) {
   var target = e.target;
 
@@ -2387,12 +2467,12 @@ document.addEventListener('click', function (e) {
     var ref = document.getElementById(target.htmlFor);
     if (!ref) return;
 
-    var _iterator5 = _createForOfIteratorHelper(target.form.elements),
-        _step5;
+    var _iterator6 = _createForOfIteratorHelper(target.form.elements),
+        _step6;
 
     try {
-      for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
-        var element = _step5.value;
+      for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
+        var element = _step6.value;
         var name = element.name;
 
         if (name && name.startsWith && name.startsWith(target.dataset.switchAll)) {
@@ -2400,47 +2480,12 @@ document.addEventListener('click', function (e) {
         }
       }
     } catch (err) {
-      _iterator5.e(err);
+      _iterator6.e(err);
     } finally {
-      _iterator5.f();
+      _iterator6.f();
     }
   }
 });
-window.api = {
-  // todo move to app api
-  wiki: {
-    preview: function () {
-      var _preview = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(_ref) {
-        var content;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                content = _ref.content;
-                _context.next = 3;
-                return postData(route('api:wiki.preview'), {
-                  content: content
-                });
-
-              case 3:
-                return _context.abrupt("return", _context.sent);
-
-              case 4:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }));
-
-      function preview(_x) {
-        return _preview.apply(this, arguments);
-      }
-
-      return preview;
-    }()
-  }
-};
 
 /***/ }),
 

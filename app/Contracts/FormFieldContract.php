@@ -17,4 +17,6 @@ interface FormFieldContract extends FormContract
     public function getValue(): mixed;
     public function setValue(mixed $value): self;
     public function getName(): string;
+    public function isReadOnly(): bool;
+    public function hasLabelColumn(): bool;
 }

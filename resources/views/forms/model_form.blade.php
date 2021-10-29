@@ -1,8 +1,9 @@
 @php
 /** @var \App\Forms\ModelForm $form */
 /** @var \App\Forms\FormField $field */
-    $fields = $form->getFields();
+    $columns = $form->getColumns();
     $model = $form->getModel();
+    $colWidth = floor(12/count($columns));
 @endphp
 @if ($form->hasSubmit())
 <form action="{{$form->getAction()}}" method="{{$form->getMethod()}}" class="container-fluid" enctype="multipart/form-data">
@@ -10,96 +11,23 @@
 @else
 <div class="container-fluid">
 @endif
-    @foreach ($fields as $field)
-        <div class="row form-group @if($field->hasErrors()) is-invalid @endif">
-            <div class="column col-2 text-right p-5 pr-20">
+    <div class="row">
+    @foreach($columns as $fields)
+    <div class="col-{{$colWidth}}">
+        @foreach ($fields as $field)
+            <div class="row form-group @if($field->hasErrors()) is-invalid @endif @if (!$field->hasLabelColumn()) pl-10 @endif">
+                @if ($field->hasLabelColumn())
+                <div class="column col-2 text-right p-5 pr-20">
+                @endif
+                @if ($field->getTitle())
                 <label for="{{$field->getID()}}"
                        class="@if($field->isRequired()) required @endif"
                 >{{$field->getTitle()}}</label>
-            </div>
-            <div class="column col-10">
-                {{--@switch($field->getStyle())
-                    @case(\App\Forms\FormField::STYLE_TEXT)
-                    <input
-                        type="text"
-                        @if (!$field->isReadOnly()) name="{{$form->getID()}}[{{$field->getID()}}]" @endif
-                        class="form-control" id="{{$field->getID()}}"
-                        placeholder="{{$field->getTitle()}}"
-                        @if($field->isRequired()) required="required" @endif
-                        value="{{$field->getValue($model)}}"
-                        @if ($field->isReadOnly()) readonly @endif
-                    >
-                    @break
-                    @case(\App\Forms\FormField::STYLE_TEXTAREA)
-                    <textarea
-                        type="text"
-                        @if (!$field->isReadOnly()) name="{{$form->getID()}}[{{$field->getID()}}]" @endif
-                        class="form-control" id="{{$field->getID()}}"
-                        placeholder="{{$field->getTitle()}}"
-                        @if($field->isRequired()) required="required" @endif
-                        @if ($field->isReadOnly()) readonly @endif
-                    >{{$field->getValue($model)}}</textarea>
-                    @break
-                    @case(\App\Forms\FormField::STYLE_MARKDOWN)
-                    <input
-                        type="hidden"
-                        id="{{$field->getID()}}"
-                        @if (!$field->isReadOnly()) name="{{$form->getID()}}[{{$field->getID()}}]" @endif
-                        value="{{$field->getValue($model)}}"
-                        @if($field->isRequired()) required="required" @endif
-                        @if ($field->isReadOnly()) readonly @endif
-                        placeholder="{{$field->getTitle()}}"
-                        data-markdown-editor="{{$field->getID()}}-editor"
-                    >
-                    <div id="{{$field->getID()}}-editor">{{$field->getValue($model)}}</div>
-                    @break
-                    @case(\App\Forms\FormField::STYLE_UPLOAD)
-                    <label
-                        class="d-flex h-200 @if (!$field->isReadOnly()) btn @endif "
-                        for="{{$field->getID()}}"
-                        @if (!$field->isReadOnly())
-                        data-iframe-modal="{{scoped_route('uploads.browse', ['locale' => $locale])}}"
-                        data-iframe-return-id="value{{'@#'.$field->getID()}}"
-                        data-iframe-return-url="src{{'@#'.$field->getID()}}-preview"
-                        @endif
-                    >
-                        @php
-                        $previewUrl = $field->getValue($model) ?? scoped_route('svg', ['value' => 'N/A']);
-                        try {
-                            \Ramsey\Uuid\Uuid::fromString($previewUrl);
-                            $previewUrl = \App\Models\Upload::find($previewUrl)?->preview_url;
-                        } catch (\Ramsey\Uuid\Exception\InvalidUuidStringException) {}
-                        @endphp
-                        <img
-                            src="{{$previewUrl}}"
-                            class="w-full h-200 rounded"
-                            id="{{$field->getID()}}-preview"
-                            style="object-fit: contain"
-                        >
-                        <input
-                            @if (!$field->isReadOnly()) name="{{$form->getID()}}[{{$field->getID()}}]" @endif
-                        type="hidden"
-                            id="{{$field->getID()}}"
-                            @if($field->isRequired()) required="required" @endif
-                            @if ($field->isReadOnly()) readonly @endif
-                        >
-                    </label>
-                    @break
-                    @case(\App\Forms\FormField::STYLE_SELECT)
-                    <select
-                        @if (!$field->isReadOnly()) name="{{$form->getID()}}[{{$field->getID()}}]" @endif
-                    class="form-control"
-                        @if ($field->isReadOnly()) readonly @endif
-                    >
-                        @foreach($field->getOptions() as $key => $label)
-                            <option
-                                @if($key === $field->getValue($model)) selected @endif
-                            value="{{$key}}"
-                            >{{$label}}</option>
-                        @endforeach
-                    </select>
-                    @break
-                @endswitch--}}
+                @endif
+                @if ($field->hasLabelColumn())
+                </div>
+                <div class="column col-10">
+                @endif
                 {!! $field->render() !!}
                 @if($field->hasErrors())
                     <ul class="invalid-feedback mb-0">
@@ -112,27 +40,16 @@
                         {!! $field->getDescription() !!}
                     </div>
                 @endif
+
+                @if ($field->hasLabelColumn())
+                </div>
+                @endif
             </div>
-        </div>
+        @endforeach
+    </div>
     @endforeach
+    </div>
     @if ($form->hasSubmit())
     <input class="btn btn-primary btn-block" type="submit" value="Save">
     @endif
-    {{--<div class="form-group">
-        <label for="password" class="required">Password</label>
-        <input type="password" class="form-control" id="password" placeholder="Password" required="required" value="my-password">
-        <div class="form-text">
-            Must be at least 8 characters long, and contain at least one special character.
-        </div>
-    </div>
-    <div class="form-group is-invalid">
-        <label for="confirm-password" class="required">Confirm password</label>
-        <div class="invalid-feedback">
-            Does not match with the password above.
-        </div>
-        <input type="password" class="form-control" id="confirm-password" placeholder="Confirm password" required="required" value="mmyy-ppasswordd">
-        <div class="form-text">
-            Must match the above password exactly.
-        </div>
-    </div>--}}
 @if ($form->hasSubmit()) </div> @else </form> @endif

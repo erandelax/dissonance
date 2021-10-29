@@ -151,44 +151,48 @@ final class BrowseReadAndWritePages
             id: 'pages',
             model: $page,
             fields: [
-                new FormField(
-                    attribute: 'id',
-                    title: 'ID',
-                    readOnly: true,
-                ),
-                new FormField(
-                    attribute: 'slug',
-                    title: 'Slug',
-                ),
-                new FormField(
-                    attribute: 'locale',
-                    style: FormField::STYLE_SELECT,
-                    title: 'Locale',
-                    options: LocaleHelper::getOptions()
-                ),
-                new FormField(
-                    attribute: 'title',
-                    title: 'Title',
-                ),
-                $source = new FormField(
-                    attribute: 'content',
-                    style: FormField::STYLE_MARKDOWN,
-                    title: 'Content',
-                ),
-                new FormFieldMarkdownPreview(
-                    source: $source,
-                    title: 'Preview',
-                ),
-                new FormField(
-                    attribute: 'created_at',
-                    title: 'Created at',
-                    readOnly: true,
-                ),
-                new FormField(
-                    attribute: 'updated_at',
-                    title: 'Updated at',
-                    readOnly: true,
-                ),
+                [
+                    new FormField(
+                        attribute: 'id',
+                        title: 'ID',
+                        readOnly: true,
+                    ),
+                    new FormField(
+                        attribute: 'slug',
+                        title: 'Slug',
+                    ),
+                    new FormField(
+                        attribute: 'locale',
+                        style: FormField::STYLE_SELECT,
+                        title: 'Locale',
+                        options: LocaleHelper::getOptions()
+                    ),
+                    new FormField(
+                        attribute: 'title',
+                        title: 'Title',
+                    ),
+                    $source = new FormField(
+                        attribute: 'content',
+                        style: FormField::STYLE_MARKDOWN,
+                        title: 'Content',
+                    ),
+                    new FormField(
+                        attribute: 'created_at',
+                        title: 'Created at',
+                        readOnly: true,
+                    ),
+                    new FormField(
+                        attribute: 'updated_at',
+                        title: 'Updated at',
+                        readOnly: true,
+                    ),
+                ],
+                [
+                    new FormFieldMarkdownPreview(
+                        source: $source,
+                        useLabelColumn: false,
+                    ),
+                ]
             ],
         );
     }
