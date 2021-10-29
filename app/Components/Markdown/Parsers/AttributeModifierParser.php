@@ -21,7 +21,11 @@ final class AttributeModifierParser implements Inline\InlineParserInterface
         $inlineContext->getCursor()->advanceBy($inlineContext->getFullMatchLength());
         $matches = $inlineContext->getMatches();
         $attributes = $matches[1] ?? '';
-        $attributes = ((array)(new \SimpleXMLElement("<element $attributes />"))->attributes())['@attributes']??[];
+        try {
+            $attributes = ((array)(new \SimpleXMLElement("<element $attributes />"))->attributes())['@attributes'] ?? [];
+        } catch (\Exception) {
+            $attributes = [];
+        }
         $target = $inlineContext->getContainer()->lastChild() ?? $inlineContext->getContainer();
         if ($target instanceof Text) {
             $target = $target->parent();
