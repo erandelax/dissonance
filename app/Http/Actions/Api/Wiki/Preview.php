@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Actions\Api\Wiki;
 
 use App\Http\Actions\Action;
-use App\Services\Wiki\MarkupRender;
+use App\Services\Markdown\MarkupRender;
 use Illuminate\Http\Request;
 use Spatie\RouteAttributes\Attributes\Post;
 

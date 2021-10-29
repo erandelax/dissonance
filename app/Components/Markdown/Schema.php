@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Wiki\Markup;
+namespace App\Components\Markdown;
 
-use App\Services\Wiki\Markup\Parsers\AttributeModifierParser;
+use App\Components\Markdown\Extensions\Underline\UnderlineExtension;
+use App\Components\Markdown\Parsers\AttributeModifierParser;
 use League\CommonMark\Extension\Autolink\AutolinkExtension;
 use League\CommonMark\Extension\DisallowedRawHtml\DisallowedRawHtmlExtension;
+use League\CommonMark\Extension\SmartPunct\SmartPunctExtension;
 use League\CommonMark\Extension\Strikethrough\StrikethroughExtension;
 use League\CommonMark\Extension\Table\TableExtension;
 use League\CommonMark\Extension\TaskList\TaskListExtension;
@@ -20,16 +22,18 @@ use Nette\Schema\Expect;
 use League\CommonMark\Environment\EnvironmentBuilderInterface;
 use League\CommonMark\Extension\CommonMark;
 
-final class ExtendedMarkdownSchema implements ConfigurableExtensionInterface
+final class Schema implements ConfigurableExtensionInterface
 {
     public function register(EnvironmentBuilderInterface $environment): void
     {
         $environment
+            ->addExtension(new SmartPunctExtension)
             ->addExtension(new AutolinkExtension())
             ->addExtension(new DisallowedRawHtmlExtension())
             ->addExtension(new StrikethroughExtension())
             ->addExtension(new TableExtension())
             ->addExtension(new TaskListExtension())
+            ->addExtension(new UnderlineExtension())
             ->addBlockStartParser(new CommonMark\Parser\Block\BlockQuoteStartParser(), 70)
             ->addBlockStartParser(new CommonMark\Parser\Block\HeadingStartParser(), 60)
             ->addBlockStartParser(new CommonMark\Parser\Block\FencedCodeStartParser(), 50)

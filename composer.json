@@ -19,7 +19,8 @@
         "socialiteproviders/discord": "^4.1",
         "spatie/laravel-route-attributes": "^1.8",
         "spiral/roadrunner": "^2.5",
-        "tightenco/ziggy": "^1.4"
+        "tightenco/ziggy": "^1.4",
+      "ext-simplexml": "*"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.10",

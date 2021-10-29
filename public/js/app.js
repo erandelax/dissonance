@@ -2095,10 +2095,11 @@ var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
 var frameCallbacks = {};
 window.app = {
   init: function init() {
-    // 1. Iframe modal window:
+    ace.config.loadModule('ace/ext/language_tools'); // 1. Iframe modal window:
     // use <data-frame-modal=URL> to call for IFRAME popup and then use
     // <data-iframe-return-url="attribute@selector"> to map the values
     // send back from iframe via {window.app.frame.reply}.
+
     var iframeModals = document.querySelectorAll('[data-iframe-modal]');
 
     if (iframeModals) {
@@ -2187,6 +2188,7 @@ window.app = {
       var _loop2 = function _loop2() {
         var editorField = _step4.value;
         var editorDom = document.getElementById(editorField.dataset.markdownEditor);
+        var parent = editorDom.parentElement;
         var editor = ace.edit(editorDom, {
           theme: theme,
           mode: "ace/mode/markdown",
@@ -2221,6 +2223,88 @@ window.app = {
             }
           }, _callee);
         })));
+
+        if (parent) {
+          (function () {
+            var _iterator6 = _createForOfIteratorHelper(parent.querySelectorAll('[data-ace-upload]')),
+                _step6;
+
+            try {
+              for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
+                var insertImageBtn = _step6.value;
+
+                if (insertImageBtn.dataset.aceUpload) {
+                  (function () {
+                    var url = insertImageBtn.dataset.aceUpload;
+                    delete insertImageBtn.dataset.aceUpload;
+                    insertImageBtn.addEventListener('click', function (e) {
+                      e.preventDefault();
+                      app.modal.frame(url, function (data) {
+                        editor.insert('![Alt](' + data.id + ')');
+                        editor.renderer.scrollCursorIntoView();
+                      });
+                    });
+                  })();
+                }
+              }
+            } catch (err) {
+              _iterator6.e(err);
+            } finally {
+              _iterator6.f();
+            }
+
+            var actions = {
+              redo: function redo(e) {
+                editor.redo();
+              },
+              undo: function undo(e) {
+                editor.undo();
+              },
+              formatBold: function formatBold(e) {
+                editor.insertSnippet("**${1:$SELECTION}**");
+                editor.renderer.scrollCursorIntoView();
+              },
+              formatItalic: function formatItalic(e) {
+                editor.insertSnippet("*${1:$SELECTION}*");
+                editor.renderer.scrollCursorIntoView();
+              },
+              formatUnderline: function formatUnderline(e) {
+                editor.insertSnippet("__${1:$SELECTION}__");
+                editor.renderer.scrollCursorIntoView();
+              },
+              formatStrikethrough: function formatStrikethrough(e) {
+                editor.insertSnippet("~~${1:$SELECTION}~~");
+                editor.renderer.scrollCursorIntoView();
+              }
+            };
+
+            var _iterator7 = _createForOfIteratorHelper(parent.querySelectorAll('[data-ace-action]')),
+                _step7;
+
+            try {
+              var _loop3 = function _loop3() {
+                var actionBtn = _step7.value;
+                var action = actionBtn.dataset.aceAction;
+                delete actionBtn.dataset.aceAction;
+                actionBtn.addEventListener('click', function (e) {
+                  e.preventDefault();
+
+                  if (actions[action]) {
+                    actions[action](e);
+                  }
+                });
+              };
+
+              for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
+                _loop3();
+              }
+            } catch (err) {
+              _iterator7.e(err);
+            } finally {
+              _iterator7.f();
+            }
+          })();
+        }
       };
 
       for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
@@ -2236,7 +2320,7 @@ window.app = {
         _step5;
 
     try {
-      var _loop3 = function _loop3() {
+      var _loop4 = function _loop4() {
         var previewDom = _step5.value;
         var target = document.getElementById(previewDom.dataset.markdownPreviewTarget);
         var previewAPI = previewDom.dataset.markdownPreviewApi;
@@ -2290,7 +2374,7 @@ window.app = {
       for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
         var timeout;
 
-        _loop3();
+        _loop4();
       }
     } catch (err) {
       _iterator5.e(err);
@@ -2467,12 +2551,12 @@ document.addEventListener('click', function (e) {
     var ref = document.getElementById(target.htmlFor);
     if (!ref) return;
 
-    var _iterator6 = _createForOfIteratorHelper(target.form.elements),
-        _step6;
+    var _iterator8 = _createForOfIteratorHelper(target.form.elements),
+        _step8;
 
     try {
-      for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
-        var element = _step6.value;
+      for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {
+        var element = _step8.value;
         var name = element.name;
 
         if (name && name.startsWith && name.startsWith(target.dataset.switchAll)) {
@@ -2480,9 +2564,9 @@ document.addEventListener('click', function (e) {
         }
       }
     } catch (err) {
-      _iterator6.e(err);
+      _iterator8.e(err);
     } finally {
-      _iterator6.f();
+      _iterator8.f();
     }
   }
 });

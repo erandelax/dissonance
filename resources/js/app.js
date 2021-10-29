@@ -6,6 +6,7 @@ const messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
 const frameCallbacks = {};
 window.app = {
     init() {
+        ace.config.loadModule('ace/ext/language_tools');
         // 1. Iframe modal window:
         // use <data-frame-modal=URL> to call for IFRAME popup and then use
         // <data-iframe-return-url="attribute@selector"> to map the values
@@ -49,6 +50,7 @@ window.app = {
         }
         for (const editorField of document.querySelectorAll('[data-markdown-editor]')) {
             const editorDom = document.getElementById(editorField.dataset.markdownEditor)
+            const parent = editorDom.parentElement;
             const editor = ace.edit(editorDom, {
                 theme: theme,
                 mode: "ace/mode/markdown",
@@ -71,6 +73,55 @@ window.app = {
                 editorField.value = editor.getValue();
                 editorField.dispatchEvent(event);
             })
+            if (parent) {
+                for (const insertImageBtn of parent.querySelectorAll('[data-ace-upload]')) {
+                    if (insertImageBtn.dataset.aceUpload) {
+                        const url = insertImageBtn.dataset.aceUpload;
+                        delete insertImageBtn.dataset.aceUpload;
+                        insertImageBtn.addEventListener('click', function(e){
+                            e.preventDefault();
+                            app.modal.frame(url, function(data){
+                                editor.insert('![Alt]('+data.id+')')
+                                editor.renderer.scrollCursorIntoView()
+                            });
+                        })
+                    }
+                }
+                const actions = {
+                    redo(e) {
+                        editor.redo();
+                    },
+                    undo(e) {
+                        editor.undo();
+                    },
+                    formatBold(e) {
+                        editor.insertSnippet("**${1:$SELECTION}**");
+                        editor.renderer.scrollCursorIntoView()
+                    },
+                    formatItalic(e) {
+                        editor.insertSnippet("*${1:$SELECTION}*");
+                        editor.renderer.scrollCursorIntoView()
+                    },
+                    formatUnderline(e) {
+                        editor.insertSnippet("__${1:$SELECTION}__");
+                        editor.renderer.scrollCursorIntoView()
+                    },
+                    formatStrikethrough(e) {
+                        editor.insertSnippet("~~${1:$SELECTION}~~");
+                        editor.renderer.scrollCursorIntoView()
+                    },
+                };
+                for (const actionBtn of parent.querySelectorAll('[data-ace-action]')) {
+                    const action = actionBtn.dataset.aceAction;
+                    delete actionBtn.dataset.aceAction;
+                    actionBtn.addEventListener('click', function(e){
+                        e.preventDefault();
+                        if (actions[action]) {
+                            actions[action](e);
+                        }
+                    })
+                }
+            }
         }
         for (const previewDom of document.querySelectorAll('[data-markdown-preview]')) {
             const target = document.getElementById(previewDom.dataset.markdownPreviewTarget)

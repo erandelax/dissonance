@@ -1,6 +1,7 @@
 @php
 /** @var \App\Components\FormFieldMarkdownPreview $field */
 @endphp
+
 <div
     id="{{$field->getID()}}"
     data-markdown-preview

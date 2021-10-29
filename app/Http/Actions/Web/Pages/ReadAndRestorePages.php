@@ -7,17 +7,11 @@ namespace App\Http\Actions\Web\Pages;
 use App\Entities\Locale;
 use App\Entities\PageReference;
 use App\Entities\ProjectReference;
-use App\Components\Forms\FormField;
-use App\Components\Forms\FormFieldMarkdownPreview;
-use App\Components\Forms\ModelForm;
-use App\Helpers\LocaleHelper;
 use App\Http\Forms\Pages\PageForm;
-use App\Models\Page;
 use App\Repositories\PageRepository;
 use App\Repositories\PageRevisionRepository;
 use App\Repositories\ProjectRepository;
-use App\Services\Wiki\DiffRender;
-use App\Services\Wiki\MarkupRender;
+use App\Services\Markdown\MarkupRender;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -28,7 +22,6 @@ final class ReadAndRestorePages
         private ProjectRepository $projectRepository,
         private PageRepository $pageRepository,
         private MarkupRender $markupRender,
-        private DiffRender $diffRender,
     ) {}
 
     public function __invoke(ProjectReference $project, Locale $locale, PageReference $page, Request $request)

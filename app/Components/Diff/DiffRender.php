@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Wiki;
+namespace App\Components\Diff;
 
 use Jfcherng\Diff\Differ;
 use Jfcherng\Diff\Factory\RendererFactory;

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Actions\Api;
 
-use App\Services\Wiki\MarkupRender;
+use App\Services\Markdown\MarkupRender;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 final class PreviewMarkdown
 {
     /**
-     * @param \App\Services\Wiki\MarkupRender $markupRender
+     * @param \App\Services\Markdown\MarkupRender $markupRender
      */
     public function __construct(
         private MarkupRender $markupRender,

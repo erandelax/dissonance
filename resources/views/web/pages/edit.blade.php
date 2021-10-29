@@ -30,11 +30,6 @@ document.getElementById('aceImage').addEventListener('click', function(e) {
         editor.insert('![]('+data.id+')')
     });
 });
-document.getElementById('aceImage').addEventListener('click', function(e) {
-    app.modal.frame('{{scoped_route('uploads.browse', ['locale' => $locale])}}', function(data){
-        editor.insert('![]('+data.id+')')
-    });
-});
 --}}
 
 @section('body')

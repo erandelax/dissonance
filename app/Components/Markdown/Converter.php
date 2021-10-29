@@ -2,18 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Wiki\Markup;
+namespace App\Components\Markdown;
 
 use League\CommonMark\Environment\Environment;
-use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\MarkdownConverter;
 use League\CommonMark\Node\Block\Document;
 use League\CommonMark\Output\RenderedContentInterface;
 
-/**
- * Converts GitHub Flavored Markdown to HTML.
- */
-final class MarkupConverter extends MarkdownConverter
+
+final class Converter extends MarkdownConverter
 {
     /** @var callable|null */
     private mixed $documentMorpher = null;
@@ -31,7 +28,7 @@ final class MarkupConverter extends MarkdownConverter
     public function __construct(array $config = [])
     {
         $environment = new Environment($config);
-        $environment->addExtension(new ExtendedMarkdownSchema());
+        $environment->addExtension(new Schema());
         parent::__construct($environment);
     }
 

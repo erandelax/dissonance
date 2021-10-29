@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Wiki;
+namespace App\Services\Markdown;
 
+use App\Components\Markdown\Converter;
 use App\Models\Upload;
 use App\Repositories\PageRepository;
-use App\Services\Wiki\Markup\MarkupConverter;
 use Illuminate\Support\Str;
 use League\CommonMark\Extension\CommonMark\Node\Block\Heading;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Image;
@@ -22,7 +22,7 @@ final class MarkupRender
     private string|null $locale = null;
 
     public function __construct(
-        private MarkupConverter $converter,
+        private Converter $converter,
         private PageRepository $pageRepository,
         private array $lastHeaders = [],
     ) {
