@@ -81,7 +81,7 @@ window.app = {
                         insertImageBtn.addEventListener('click', function(e){
                             e.preventDefault();
                             app.modal.frame(url, function(data){
-                                editor.insert('![Alt]('+data.id+')')
+                                editor.insert('![Alt]('+data.id+' "Title")')
                                 editor.renderer.scrollCursorIntoView()
                             });
                         })
