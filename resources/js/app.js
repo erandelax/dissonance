@@ -1,5 +1,7 @@
 require('./bootstrap');
-
+/**
+ * https://ace.c9.io/api/editor.html#Editor.remove
+ */
 const eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
 const eventer = window[eventMethod];
 const messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
@@ -108,6 +110,38 @@ window.app = {
                     },
                     formatStrikethrough(e) {
                         editor.insertSnippet("~~${1:$SELECTION}~~");
+                        editor.renderer.scrollCursorIntoView()
+                    },
+                    formatH1(e) {
+                        const row = editor.getSelectionRange().start.row;
+                        const line = editor.session.getLine(row);
+                        if (!line.startsWith('# ')) {
+                            editor.session.insert({row:row, column:0}, '# ')
+                        }
+                    },
+                    formatH2(e) {
+                        const row = editor.getSelectionRange().start.row;
+                        const line = editor.session.getLine(row);
+                        if (!line.startsWith('## ')) {
+                            editor.session.insert({row:row, column:0}, '## ')
+                        }
+                    },
+                    listIndexed(e) {
+                        const row = editor.getSelectionRange().start.row;
+                        const line = editor.session.getLine(row);
+                        if (!line.startsWith("1.\t")) {
+                            editor.session.insert({row:row, column:0}, "1.\t")
+                        }
+                    },
+                    listMarked(e) {
+                        const row = editor.getSelectionRange().start.row;
+                        const line = editor.session.getLine(row);
+                        if (!line.startsWith("*\t")) {
+                            editor.session.insert({row:row, column:0}, "*\t")
+                        }
+                    },
+                    href(e) {
+                        editor.insertSnippet("[${1:$SELECTION}](${1:$SELECTION} \"${1:$SELECTION}\")");
                         editor.renderer.scrollCursorIntoView()
                     },
                 };

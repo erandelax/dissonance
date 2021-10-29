@@ -2088,6 +2088,10 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+/**
+ * https://ace.c9.io/api/editor.html#Editor.remove
+ */
+
 
 var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
 var eventer = window[eventMethod];
@@ -2274,6 +2278,54 @@ window.app = {
               },
               formatStrikethrough: function formatStrikethrough(e) {
                 editor.insertSnippet("~~${1:$SELECTION}~~");
+                editor.renderer.scrollCursorIntoView();
+              },
+              formatH1: function formatH1(e) {
+                var row = editor.getSelectionRange().start.row;
+                var line = editor.session.getLine(row);
+
+                if (!line.startsWith('# ')) {
+                  editor.session.insert({
+                    row: row,
+                    column: 0
+                  }, '# ');
+                }
+              },
+              formatH2: function formatH2(e) {
+                var row = editor.getSelectionRange().start.row;
+                var line = editor.session.getLine(row);
+
+                if (!line.startsWith('## ')) {
+                  editor.session.insert({
+                    row: row,
+                    column: 0
+                  }, '## ');
+                }
+              },
+              listIndexed: function listIndexed(e) {
+                var row = editor.getSelectionRange().start.row;
+                var line = editor.session.getLine(row);
+
+                if (!line.startsWith("1.\t")) {
+                  editor.session.insert({
+                    row: row,
+                    column: 0
+                  }, "1.\t");
+                }
+              },
+              listMarked: function listMarked(e) {
+                var row = editor.getSelectionRange().start.row;
+                var line = editor.session.getLine(row);
+
+                if (!line.startsWith("*\t")) {
+                  editor.session.insert({
+                    row: row,
+                    column: 0
+                  }, "*\t");
+                }
+              },
+              href: function href(e) {
+                editor.insertSnippet("[${1:$SELECTION}](${1:$SELECTION} \"${1:$SELECTION}\")");
                 editor.renderer.scrollCursorIntoView();
               }
             };

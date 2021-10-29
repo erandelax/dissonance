@@ -29,10 +29,12 @@
                 </div>--}}
             </div>
         </div>
+        <button data-ace-action="listMarked" class="btn" type="button"><i class="fa fa-list-ul"></i></button>
+        <button data-ace-action="listIndexed" class="btn" type="button"><i class="fa fa-list-ol"></i></button>
     </div>
     <div class="btn-group btn-group-sm" role="group" aria-label="Embeds">
+        <button data-ace-action="href" class="btn" type="button"><i class="fa fa-link"></i></button>
         <button data-ace-upload="{{scoped_route('uploads.browse', ['locale' => $locale])}}" class="btn" type="button"><i class="fa fa-photo"></i></button>
-        <button class="btn" type="button"><i class="fa fa-link"></i></button>
     </div>
 </div>
 <input
