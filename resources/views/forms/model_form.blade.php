@@ -1,6 +1,6 @@
 @php
-/** @var \App\Forms\ModelForm $form */
-/** @var \App\Forms\FormField $field */
+/** @var \App\Components\ModelForm $form */
+/** @var \App\Components\FormField $field */
     $columns = $form->getColumns();
     $model = $form->getModel();
     $colWidth = floor(12/count($columns));
@@ -21,7 +21,7 @@
                 @endif
                 @if ($field->getTitle())
                 <label for="{{$field->getID()}}"
-                       class="@if($field->isRequired()) required @endif"
+                       class="@if($field->isRequired() && !$field->isReadOnly()) required @endif"
                 >{{$field->getTitle()}}</label>
                 @endif
                 @if ($field->hasLabelColumn())

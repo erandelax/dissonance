@@ -1,5 +1,5 @@
 @php
-    /** @var \App\Forms\FormField $field */
+    /** @var \App\Components\FormField $field */
 @endphp
 <input
     type="text"

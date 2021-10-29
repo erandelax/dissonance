@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Forms;
+namespace App\Components\Forms;
 
 use App\Contracts\FormContract;
 use App\Contracts\FormFieldContract;
@@ -19,8 +19,12 @@ abstract class Form implements FormContract
         protected bool $canSubmit = true,
         array $fields = [],
     ) {
-        foreach ($fields as $column => $field) {
+        $column = 0;
+        foreach ($fields as $field) {
             $this->addField(field: $field, column: $column);
+            if (is_array($field)) {
+                $column++;
+            }
         }
         if (null === $this->action) $this->action = url()->current();
     }

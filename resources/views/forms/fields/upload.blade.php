@@ -1,5 +1,5 @@
 @php
-    /** @var \App\Forms\FormField $field */
+    /** @var \App\Components\FormField $field */
 @endphp
 <label
     class="d-flex h-200 @if (!$field->isReadOnly()) btn @endif "

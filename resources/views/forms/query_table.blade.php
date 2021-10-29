@@ -1,6 +1,6 @@
 @php
-/** @var \App\Forms\QueryTable $table */
-/** @var \App\Forms\ModelColumn $column */
+/** @var \App\Components\Tables\QueryTable $table */
+/** @var \App\Components\Tables\ModelColumn $column */
 $paginator = $table->getPaginator();
 $items = $paginator->items();
 $columns = $table->getColumns();
@@ -74,10 +74,10 @@ $notice = $table->getNotice();
                                     {!! $column->getStyle()($column->getValue($item)) !!}
                                 @else
                                     @switch($column->getStyle())
-                                        @case(\App\Forms\ModelColumn::STYLE_TEXT)
+                                        @case(\App\Components\Tables\ModelColumn::STYLE_TEXT)
                                         {{$column->getValue($item)}}
                                         @break
-                                        @case(\App\Forms\ModelColumn::STYLE_IMAGE)
+                                        @case(\App\Components\Tables\ModelColumn::STYLE_IMAGE)
                                         <img class="img-fluid w-100" src="{{$column->getValue($item)}}" style="object-fit: contain">
                                         @break
                                     @endswitch
@@ -86,7 +86,7 @@ $notice = $table->getNotice();
                             @if ($column->hasModelActions())
                             <div class="btn-group" role="group" aria-label="row actions">
                                 @foreach ($column->getModelActions() as $modelAction)
-                                    @if ($modelAction instanceof \App\Forms\ModelUrlAction)
+                                    @if ($modelAction instanceof \App\Components\Actions\ModelUrlAction)
                                         <a class="btn btn-block {{$modelAction->getStyle()}}" type="button" target="_blank" href="{{$modelAction->makeUrl($item)}}">{!! $modelAction->getTitle() !!}</a>
                                     @elseif($modelAction->isModal())
                                         @push('modals'){!! $modelAction->getAction()->render() !!}@endpush

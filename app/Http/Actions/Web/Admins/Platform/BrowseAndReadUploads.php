@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Actions\Web\Admins\Platform;
 
 use App\Contracts\FormContract;
-use App\Forms\ModelColumn;
-use App\Forms\ModelUrlAction;
-use App\Forms\QueryFilter;
-use App\Forms\QueryTable;
+use App\Components\Tables\ModelColumn;
+use App\Components\Actions\ModelUrlAction;
+use App\Components\Tables\QueryFilter;
+use App\Components\Tables\QueryTable;
 use App\Models\Upload;
 
 final class BrowseAndReadUploads

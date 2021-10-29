@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Forms;
+namespace App\Components\Tables;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use App\Components\Actions\ModelAction;
 
 final class ModelColumn
 {

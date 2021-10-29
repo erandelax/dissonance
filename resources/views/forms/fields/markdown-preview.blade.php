@@ -1,5 +1,5 @@
 @php
-/** @var \App\Forms\FormFieldMarkdownPreview $field */
+/** @var \App\Components\FormFieldMarkdownPreview $field */
 @endphp
 <div
     id="{{$field->getID()}}"

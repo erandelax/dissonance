@@ -47,7 +47,7 @@ $scopedRoutesFactory = static function (string $namePrefix): callable {
                 $router->post('/', Web\Uploads\PushUpload::class)->name("$namePrefix:uploads.push");
             });
             // pages
-            $router->get('/{page?}', Web\Pages\ReadPage::class)->name("$namePrefix:pages.read");
+            $router->get('/{page?}', Web\Pages\ReadAndRestorePages::class)->name("$namePrefix:pages.read");
             $router->post('/{page?}', Web\Pages\EditPage::class)->name("$namePrefix:pages.edit");
         });
         // edit here end
@@ -99,7 +99,7 @@ Route::domain(
             $router->post('/', Web\Uploads\PushUpload::class)->name("$namePrefixRoot:uploads.push");
         });
         // pages
-        $router->get('/{page?}', Web\Pages\ReadPage::class)->name("$namePrefixRoot:pages.read");
+        $router->get('/{page?}', Web\Pages\ReadAndRestorePages::class)->name("$namePrefixRoot:pages.read");
         $router->post('/{page?}', Web\Pages\EditPage::class)->name("$namePrefixRoot:pages.edit");
     });
     // edit here end

@@ -7,7 +7,12 @@ namespace App\Http\Actions\Web\Pages;
 use App\Entities\Locale;
 use App\Entities\PageReference;
 use App\Entities\ProjectReference;
-use App\Factories\ScopedRouteFactory;
+use App\Components\Forms\FormField;
+use App\Components\Forms\FormFieldMarkdownPreview;
+use App\Components\Forms\ModelForm;
+use App\Helpers\LocaleHelper;
+use App\Http\Forms\Pages\PageForm;
+use App\Models\Page;
 use App\Repositories\PageRepository;
 use App\Repositories\PageRevisionRepository;
 use App\Repositories\ProjectRepository;
@@ -16,7 +21,7 @@ use App\Services\Wiki\MarkupRender;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-final class ReadPage
+final class ReadAndRestorePages
 {
     public function __construct(
         private PageRevisionRepository $pageRevisionRepository,
@@ -42,16 +47,18 @@ final class ReadPage
 
         if ($user?->can('update-page', $pageModel) && 'edit' === $mode) {
             return view('web.pages.edit', [
-                'page' => $pageModel,
-                'pageReference' => $page,
-                'html' => $this->markupRender->toHtml($pageModel->content),
+                'form' => new PageForm($pageModel),
             ]);
         }
 
         if ($mode === 'restore' && $revisionID = $request->get('revision')) {
             $revision = $this->pageRevisionRepository->findByID($revisionID);
             if (null !== $revision) {
-                $from = $pageModel->content;
+                $pageModel->fill($revision->data);
+                return view('web.pages.edit', [
+                    'form' => new PageForm($pageModel),
+                ]);
+                /*$from = $pageModel->content;
                 $to = $revision->data['content'] ?? $pageModel->content;
                 $diff = $this->diffRender->diff($from, $to);
                 return view('web.pages.restore', [
@@ -61,7 +68,7 @@ final class ReadPage
                     'revision' => $revision,
                     'diff' => $diff,
                     'headers' => $this->markupRender->getLastHeaders(),
-                ]);
+                ]);*/
             }
         }
 

@@ -1,5 +1,5 @@
 @php
-    /** @var \App\Forms\FormField $field */
+    /** @var \App\Components\FormField $field */
 @endphp
 <select
     @if (!$field->isReadOnly()) name="{{$field->getName()}}" @endif

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Forms;
+namespace App\Components\Tables;
 
 use App\Contracts\FormFilterContract;
 use Illuminate\Database\Eloquent\Builder;

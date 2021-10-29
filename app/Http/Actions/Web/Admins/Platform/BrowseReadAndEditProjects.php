@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Actions\Web\Admins\Platform;
 
 use App\Contracts\FormContract;
-use App\Forms\ModelColumn;
-use App\Forms\FormField;
-use App\Forms\ModelForm;
-use App\Forms\ModelUrlAction;
-use App\Forms\QueryTable;
-use App\Helpers\LocaleHelper;
+use App\Components\Tables\ModelColumn;
+use App\Components\Forms\FormField;
+use App\Components\Forms\ModelForm;
+use App\Components\Actions\ModelUrlAction;
+use App\Components\Tables\QueryTable;
 use App\Models\Project;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 final class BrowseReadAndEditProjects

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Forms;
+namespace App\Components\Forms;
 
 use App\Contracts\FormContract;
 use Illuminate\View\View;

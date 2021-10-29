@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Actions\Web\Admins\Platform;
 
-use App\Forms\FormField;
-use App\Forms\ModelForm;
+use App\Components\Forms\FormField;
+use App\Components\Forms\ModelForm;
 use App\Models\Config;
 use Illuminate\Http\Request;
 

@@ -2,13 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Forms;
+namespace App\Components\Tables;
 
+use App\Components\Forms\FormError;
 use App\Contracts\FormContract;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use App\Components\Notice;
+use App\Components\Actions\BatchAction;
 
 final class QueryTable implements FormContract
 {
@@ -118,7 +121,7 @@ final class QueryTable implements FormContract
     private function processRequest(): void
     {
         $filters = $this->request->input('form-filter', []);
-        /** @var \App\Forms\ModelColumn|null $column */
+        /** @var \App\Components\Tables\ModelColumn|null $column */
         foreach ($this->columns as $column) {
             if ($column && $column->hasFilter()) {
                 $filter = $column->getFilter();

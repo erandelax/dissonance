@@ -4,15 +4,15 @@
 @endphp
 <div style="min-width: 9rem" class="input-group">
     @switch($filter->getStyle())
-        @case(\App\Forms\QueryFilter::STYLE_TEXT)
+        @case(\App\Components\Tables\QueryFilter::STYLE_TEXT)
         <input type="text" class="form-control {{$errorClass}}" name="form-filter[{{$filter->getID()}}]"
                value="{{$value}}">
         @break
-        @case(\App\Forms\QueryFilter::STYLE_DATE)
+        @case(\App\Components\Tables\QueryFilter::STYLE_DATE)
         <input type="date" class="form-control {{ $errorClass }}" name="form-filter[{{$filter->getID()}}]" onchange="event.target.form.submit()"
                value="{{$value}}">
         @break
-        @case(\App\Forms\QueryFilter::STYLE_OPTIONS)
+        @case(\App\Components\Tables\QueryFilter::STYLE_OPTIONS)
         <select class="form-control {{$errorClass}}"  name="form-filter[{{$filter->getID()}}]" onchange="event.target.form.submit()">
             @foreach($filter->getOptions() as $key => $label)
                 <option @if($key === $value) selected @endif value="{{$key}}">{{$label}}</option>
@@ -20,7 +20,7 @@
         </select>
         @break
     @endswitch
-    @if (\App\Forms\QueryFilter::STYLE_OPTIONS !== $filter->getStyle())
+    @if (\App\Components\Tables\QueryFilter::STYLE_OPTIONS !== $filter->getStyle())
     <div class="input-group-append">
         <button class="btn" type="button" data-name-flush="form-filter[{{$filter->getID()}}]"><i class="fa fa-close"></i></button>
     </div>

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Forms;
+namespace App\Components\Forms;
 
 use App\Contracts\FormFieldContract;
 use App\Utils\Alert;
@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\View\View;
 
-final class ModelForm extends Form
+class ModelForm extends Form
 {
     public function __construct(
         string $id,
@@ -56,9 +56,9 @@ final class ModelForm extends Form
         if (null === $model) {
             return $this;
         }
-        /** @var \App\Forms\FormField $field */
+        /** @var \App\Components\FormField $field */
         $hasErrors = false;
-        foreach ($this->fields as $field) {
+        foreach ($this->getFields() as $field) {
             if ($field->isReadOnly()) {
                 continue;
             }
