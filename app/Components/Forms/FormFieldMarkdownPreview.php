@@ -108,4 +108,9 @@ final class FormFieldMarkdownPreview implements FormFieldContract
     {
         return true;
     }
+
+    public function isNullIgnored(): bool
+    {
+        return false;
+    }
 }

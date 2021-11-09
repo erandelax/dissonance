@@ -12,6 +12,7 @@ use App\Components\Actions\ModelUrlAction;
 use App\Components\Tables\QueryTable;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use App\Components\Forms\Fields;
 
 final class BrowseReadAndEditProjects
 {
@@ -81,26 +82,25 @@ final class BrowseReadAndEditProjects
             id: $id,
             model: Project::find($id),
             fields: [
-                new FormField(
+                new Fields\TextField(
                     attribute: 'id',
                     title: 'ID',
                     readOnly: true,
                 ),
-                new FormField(
+                new Fields\TextField(
                     attribute: 'title',
                     title: 'Title'
                 ),
-                new FormField(
+                new Fields\TextAreaField(
                     attribute: 'description',
-                    style: FormField::STYLE_TEXTAREA,
                     title: 'Description',
                 ),
-                new FormField(
+                new Fields\TextField(
                     attribute: 'created_at',
                     title: 'Created at',
                     readOnly: true,
                 ),
-                new FormField(
+                new Fields\TextField(
                     attribute: 'updated_at',
                     title: 'Updated at',
                     readOnly: true,

@@ -20,11 +20,12 @@ final class ReadAdmin
         'pages' => [Platform\BrowseReadAndWritePages::class, 'browse'],
         'posts' => [Platform\ReadPosts::class, 'browse'],
         'uploads' => [Platform\BrowseAndReadUploads::class, 'browse'],
-        'project-settings' => [Project\ReadSettings::class, 'read'],
-        'project-users' => [Project\ReadUsers::class, 'browse'],
-        'project-pages' => [Project\ReadPages::class, 'browse'],
-        'project-posts' => [Project\ReadPosts::class, 'browse'],
-        'project-uploads' => [Project\ReadUploads::class, 'browse'],
+        'raws' => [Platform\ReadAndEditRaws::class, 'browse'],
+        #'project-settings' => [Project\ReadSettings::class, 'read'],
+        #'project-users' => [Project\ReadUsers::class, 'browse'],
+        #'project-pages' => [Project\ReadPages::class, 'browse'],
+        #'project-posts' => [Project\ReadPosts::class, 'browse'],
+        #'project-uploads' => [Project\ReadUploads::class, 'browse'],
     ];
 
     public function __invoke(ProjectReference $project, Locale $locale, PageReference $page, Config $config, string|null $id = null)

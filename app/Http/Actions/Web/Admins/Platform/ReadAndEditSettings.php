@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace App\Http\Actions\Web\Admins\Platform;
 
-use App\Components\Forms\FormField;
 use App\Components\Forms\ModelForm;
 use App\Models\Config;
 use Illuminate\Http\Request;
+use App\Components\Forms\Fields;
 
 final class ReadAndEditSettings
 {
-    public function __construct (
-    ) {}
+    public function __construct()
+    {
+    }
 
     public function read(Config $config)
     {
@@ -30,20 +31,18 @@ final class ReadAndEditSettings
             id: 'settings',
             model: $config,
             fields: [
-                new FormField (
+                new Fields\TextField(
                     attribute: 'data.app.name',
                     title: 'Site name',
                     rules: [],
                 ),
-                new FormField (
+                new Fields\UploadField(
                     attribute: 'data.app.logo',
-                    style: FormField::STYLE_UPLOAD,
                     title: 'Site logo',
                     rules: [],
                 ),
-                new FormField (
+                new Fields\UploadField(
                     attribute: 'data.app.icon',
-                    style: FormField::STYLE_UPLOAD,
                     title: 'Site icon',
                     rules: [],
                 ),

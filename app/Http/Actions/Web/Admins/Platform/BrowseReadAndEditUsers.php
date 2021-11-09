@@ -6,7 +6,6 @@ namespace App\Http\Actions\Web\Admins\Platform;
 
 use App\Contracts\FormContract;
 use App\Components\Tables\ModelColumn;
-use App\Components\Forms\FormField;
 use App\Components\Forms\ModelForm;
 use App\Components\Actions\ModelUrlAction;
 use App\Components\Tables\QueryFilter;
@@ -14,6 +13,7 @@ use App\Components\Tables\QueryTable;
 use App\Helpers\LocaleHelper;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Components\Forms\Fields;
 
 final class BrowseReadAndEditUsers
 {
@@ -113,67 +113,64 @@ final class BrowseReadAndEditUsers
             id: $id,
             model: User::find($id),
             fields: [
-                new FormField(
+                new Fields\TextField(
                     attribute: 'id',
                     title: 'ID',
                     readOnly: true,
                 ),
-                new FormField(
+                new Fields\TextField(
                     attribute: 'name',
                     title: 'Name'
                 ),
-                new FormField(
+                new Fields\UploadField(
                     attribute: 'displayAvatar',
-                    style: FormField::STYLE_UPLOAD,
                     title: 'Avatar'
                 ),
-                new FormField(
+                new Fields\TextField(
                     attribute: 'custom_avatar_id',
                     title: 'Avatar upload ID',
                     readOnly: true,
                 ),
-                new FormField(
+                new Fields\SelectField(
+                    options: array_combine($timezones = \DateTimeZone::listIdentifiers(), $timezones),
                     attribute: 'timezone',
-                    style: FormField::STYLE_SELECT,
-                    title: 'Timezone',
-                    options: array_combine($timezones = \DateTimeZone::listIdentifiers(), $timezones)
+                    title: 'Timezone'
                 ),
-                new FormField(
+                new Fields\SelectField(
+                    options: LocaleHelper::getOptions(),
                     attribute: 'locale',
-                    style: FormField::STYLE_SELECT,
-                    title: 'Locale',
-                    options: LocaleHelper::getOptions()
+                    title: 'Locale'
                 ),
-                new FormField(
+                new Fields\TextField(
                     attribute: 'email',
                     title: 'Email',
                     description: 'Not editable (is imported from Discord on every auth)',
                     readOnly: true,
                 ),
-                new FormField(
+                new Fields\TextField(
                     attribute: 'discord_id',
                     title: 'Discord ID',
                     description: 'Not editable (is imported from Discord on every auth)',
                     readOnly: true,
                 ),
-                new FormField(
+                new Fields\TextField(
                     attribute: 'nickname',
                     title: 'Discord Nickname',
                     description: 'Not editable (is imported from Discord on every auth)',
                     readOnly: true,
                 ),
-                new FormField(
+                new Fields\TextField(
                     attribute: 'avatar',
                     title: 'Discord avatar',
                     description: 'Not editable (is imported from Discord on every auth)',
                     readOnly: true,
                 ),
-                new FormField(
+                new Fields\TextField(
                     attribute: 'created_at',
                     title: 'Created at',
                     readOnly: true,
                 ),
-                new FormField(
+                new Fields\TextField(
                     attribute: 'updated_at',
                     title: 'Updated at',
                     readOnly: true,

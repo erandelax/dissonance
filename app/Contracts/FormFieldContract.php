@@ -11,7 +11,7 @@ interface FormFieldContract extends FormContract
     public function hasErrors(): bool;
     public function isRequired(): bool;
     public function getTitle(): string;
-    public function getStyle(): string;
+    //public function getStyle(): string;
     public function getDescription(): string;
     public function hasDescription(): bool;
     public function getValue(): mixed;
@@ -19,4 +19,5 @@ interface FormFieldContract extends FormContract
     public function getName(): string;
     public function isReadOnly(): bool;
     public function hasLabelColumn(): bool;
+    public function isNullIgnored(): bool;
 }

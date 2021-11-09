@@ -26,6 +26,7 @@ final class QueryTable implements FormContract
         private int          $pageSize = 10,
         private Request|null $request = null,
         private Notice|null  $notice = null,
+        private string|null  $addURI = null,
         array                $columns = [],
         array                $batchActions = [],
         array                $batchActionCallbacks = [],
@@ -37,6 +38,16 @@ final class QueryTable implements FormContract
         foreach ($batchActionCallbacks as $action => $actionCallback) $this->setBatchActionCallback($action, $actionCallback);
         foreach ($modelActionCallbacks as $action => $actionCallback) $this->setModelActionCallback($action, $actionCallback);
         if (null === $this->request) $this->request = request();
+    }
+
+    public function hasAddURI(): bool
+    {
+        return $this->addURI !== null;
+    }
+
+    public function getAddURI(): string|null
+    {
+        return $this->addURI;
     }
 
     public function setBatchActionCallback(string $action, callable $callback): self

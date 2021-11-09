@@ -2181,21 +2181,18 @@ window.app = {
 
     var theme = "ace/theme/tomorrow_night";
 
-    if (halfmoon.getPreferredMode() === "light-mode" || halfmoon.getPreferredMode() === "not-set") {
-      theme = "ace/theme/chrome";
-    }
-
-    var _iterator4 = _createForOfIteratorHelper(document.querySelectorAll('[data-markdown-editor]')),
+    var _iterator4 = _createForOfIteratorHelper(document.querySelectorAll('[data-editor],[data-markdown-editor]')),
         _step4;
 
     try {
       var _loop2 = function _loop2() {
         var editorField = _step4.value;
-        var editorDom = document.getElementById(editorField.dataset.markdownEditor);
+        var editorDom = document.getElementById(editorField.dataset.markdownEditor || editorField.dataset.editor);
+        var defaultMime = editorField.dataset.mime || 'text/markdown';
         var parent = editorDom.parentElement;
         var editor = ace.edit(editorDom, {
           theme: theme,
-          mode: "ace/mode/markdown",
+          mode: app.ace.getModeByMime(defaultMime),
           minLines: 10,
           maxLines: 25,
           showLineNumbers: true,
@@ -2437,6 +2434,23 @@ window.app = {
   // Return if this window is popup / iframe
   isFrame: function isFrame() {
     return window.parent || window.opener;
+  },
+  // Ace editor helpers
+  ace: {
+    getModeByMime: function getModeByMime(mime) {
+      switch (mime) {
+        case 'text/html':
+          return 'ace/mode/html';
+
+        case 'script/blade':
+          return 'ace/mode/php_laravel_blade';
+
+        case 'text/markdown':
+          return 'ace/mode/markdown';
+      }
+
+      return 'ace/mode/text';
+    }
   },
   // Request helpers
   request: {

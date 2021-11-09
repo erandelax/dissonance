@@ -56,14 +56,14 @@ class ModelForm extends Form
         if (null === $model) {
             return $this;
         }
-        /** @var \App\Components\FormField $field */
+        /** @var \App\Components\Forms\FormField $field */
         $hasErrors = false;
         foreach ($this->getFields() as $field) {
             if ($field->isReadOnly()) {
                 continue;
             }
             $value = $data[$field->getID()] ?? null;
-            if (null === $value && $field->getStyle() === FormField::STYLE_UPLOAD) {
+            if (null === $value && $field->isNullIgnored()) {
                 continue;
             }
             if ($field->setAndValidateValue($value)) {
